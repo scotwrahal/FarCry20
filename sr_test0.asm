@@ -21,16 +21,21 @@ input
 	beq exit
 	
 	cmp #17	;A
-	beq	increment						;until "A"
+	beq	increment					;until "A"
 	
 	cmp #34 ;C
 	beq trippy
 	jmp input
+
+inc
+	lda $900f
+	clc
+	adc #1							;increment the color
+	sta $900f						;push to the screen color address
+	rts
 	
 increment
-	lda $900f
-	adc #01							;increment the color
-	sta $900f						;push to the screen color address
+	jsr inc
 	
 release
 	lda $00c5						;get char pressed down
@@ -39,10 +44,7 @@ release
 	jmp input						
 		
 trippy
-	lda $900f
-	adc #01							;increment the color
-	sta $900f						;push to the screen color address
-	
+	jsr inc
 	jmp input
 	
 exit
