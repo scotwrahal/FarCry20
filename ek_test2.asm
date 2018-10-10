@@ -17,14 +17,20 @@ loop0
 	bne loop0	;loop while < 1024 clock ticks have occurred (1024/60 = ~17 seconds at regular speed)
 	
 	lda #68							;load ascii 'D' into Accumulator
-	jsr $ffd2		
+	jsr $ffd2						;print
 	lda #79							;load ascii 'O' into Accumulator
-	jsr $ffd2	
+	jsr $ffd2						;print
 	lda #78							;load ascii 'N' into Accumulator
-	jsr $ffd2
+	jsr $ffd2						;print
 	lda #69							;load ascii 'E' into Accumulator
 	jsr $ffd2
 inf	
+	lda $00c5		;get char pressed down
+	cmp #48 ;Q (quit)
+	beq exit
 	jmp inf
+exit
+	rts
+	
 	
 	
