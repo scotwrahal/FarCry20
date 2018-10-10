@@ -11,7 +11,8 @@
 end_basic
 	dc.w		0					;indicating end of BASIC stub
 	
-	;The start of assembly
+	;;;;;;;;;;;;;;;;;;;;The start of assembly;;;;;;;;;;;;;;;;;;;;;;;;;
+
 	lda #00							;load 00 for the screen color
 	sta $900f						;push to the screen color address
 	
@@ -19,10 +20,8 @@ input
 	lda $00c5						;get char pressed down
 	cmp #48 ;Q (quit)
 	beq exit
-	
 	cmp #17	;A
 	beq	increment					;until "A"
-	
 	cmp #34 ;C
 	beq trippy
 	jmp input

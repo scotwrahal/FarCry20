@@ -13,75 +13,33 @@ end_basic
 	
 	;;;;;;;;;;;;;;;;;;;;The start of assembly;;;;;;;;;;;;;;;;;;;;;;;;;
 	
-	lda #0					;fill character
+	lda #0					; fill character
 	ldx #0
 fill
-	sta $1e00,x				;store in character of screen
+	sta $1e00,x				; store in character of screen
 	clc
-	adc #1					;increment the character to be written
+	adc #1					; increment the character to be written
 	inx
 	bne fill
 
 fill2
-	sta $1f00,x				;continue filling screen
-	tay
+	sta $1f00,x				; continue filling screen
+	tay						; register flipping for indexing with A and cmp with A
 	txa
-	cmp #$f9				;end of screen
-	beq color				;start coloring if done
+	cmp #$f9				; end of screen
+	beq input				;start coloring if done
 	tax
 	tya
 	clc
-	adc #1					;increment the character to be written
+	adc #1					; increment the character to be written
 	inx
 	bne fill2
 	
-; the color loop is very similar to the fill loop except it writes to a
-; diffrent area in memory
-color
-	lda #0
-	ldx #0
-	tay
-	jmp color_top
-	
-increment
-	iny
-	tya
-	ldx #0
-
-color_top
-	sta $9600,x
-	inx
-	bne color_top
-
-color_bottom
-	sta $9700,x
-	tay
-	txa
-	cmp #$f9		;end of screen
-	beq release
-	tax
-	tya
-	inx
-	bne color_bottom
-	
-	
-; input for the user to control the program
-release
-	lda $00c5						;get char pressed down
-	cmp #17	;A
-	beq	release							
-	jmp input		
-	
-input
-	lda $00c5						;get char pressed down
+input ;scancodes found pg 179
+	lda $00c5				; get char pressed down
 	cmp #48 ;Q (quit)
 	beq exit
-	cmp #17	;A (advance)
-	beq	increment					;until "A"
 	jmp input
 	
 exit
 	brk								;end
-	
-	
-	;aux color 36878
