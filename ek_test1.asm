@@ -1,4 +1,5 @@
 ;ek_test1.asm
+;Plays a low 'C' note in an infinite loop
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
@@ -9,9 +10,9 @@
 end_basic
 	dc.w		0					;indicating end of BASIC stub
 start
-	lda #$0f		;load 15 (max volume) into Accumulator
-	sta $900e		;Set max volume
-	lda #$87		;load 135 into Accumulator (low C note)
-	sta $900a		;play low C
+	lda 		#$0f		;load 15 (max volume) into Accumulator
+	sta 		$900e		;Set max volume
+	lda 		#$87		;load 135 into Accumulator (low C note)
+	sta 		$900a		;play low C
 loopy
-	jmp loopy		;loop forever
+	jmp 		loopy		;loop forever
