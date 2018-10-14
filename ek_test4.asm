@@ -11,7 +11,7 @@ end_basic
 	dc.w		0					;indicating end of BASIC stub
 start
 	ldy #10		;program loops 10 times
-loop2
+loop2			;screen origin vertical/horizontal locations according to VIC-20 Programmer's Guide p. 213-214
 	lda #13		;define offset for screen origin vertical (book says standard value of 5 but I think it's 12)
 	sta 36864	;poke screen origin horizontal with offset
 	jsr quick_pause
