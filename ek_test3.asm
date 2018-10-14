@@ -1,4 +1,7 @@
 ;ek_test3.asm
+;Plays notes from the C major scale. User may change the music note being played by pressing the following keys:
+; 'C','D','E','F','G','A','B'
+;Press 'Q' to exit the program
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
@@ -12,7 +15,7 @@ start
 	lda #$0f		;load 15 (max volume) into Accumulator
 	sta $900e		;set max volume
 loop0
-	lda $00c5		;get char pressed down
+	lda $00c5		;get char pressed down -- Music notes taken from VIC-20 Programmer's Guide p. 97
 	cmp #34	;C
 	beq	playc
 	cmp #18	;D
