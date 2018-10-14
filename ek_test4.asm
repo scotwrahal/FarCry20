@@ -1,4 +1,5 @@
-;ek_test1.asm
+;ek_test4.asm
+;Shake the on-screen visuals for a few seconds
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
@@ -47,4 +48,4 @@ loop1			;nested loop1 executes 255 times
 	cmp #$00
 	bne loop0
 	
-	rts			;return after (255*30) = 7650 loops total
+	rts			;return after (255*30) = 7650 loops total -- slows down the visual effect a bit
