@@ -1,5 +1,5 @@
 ;ek_test5.asm
-;a timer which restarts every n clock ticks, where n is a pre-defined constant
+;A timer which restarts every n clock ticks, where n is a pre-defined constant
 
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
