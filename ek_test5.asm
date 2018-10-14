@@ -56,3 +56,4 @@ consmid:			;middle byte of constant timer value
 	dc.b $02
 conslow:			;low byte of constant timer value
 	dc.b $58
+	;$258 == 600 clock ticks: ~10 seconds
