@@ -1,4 +1,7 @@
 ;sr_test0.asm
+; Allows the user to set the color of the screen and background 
+; cycle thorugh using 'A'
+; Press 'Q' to exit the program
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
