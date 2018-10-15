@@ -1,6 +1,6 @@
 CPSC 599.82 Term Project Test Programs
 Erich Kirchner #30016988
-Scot Rahal # 10130792
+Scot Rahal     #10130792
 
 Test Program Details:
 
@@ -52,3 +52,37 @@ Testing:
 -How to read/store information from zero page
 -How to perform subtraction over multi-byte numbers located in memory
 -How to perform some event based on a timer loop - will likely be extremely useful (for music/sound effects, in-game enemy spawning, timing of "menu" screens, etc.)
+
+7. sr_test0.asm
+Changing the color of the background and playfield through user input 'A' cycles through the colors 'C' increments through the colors fast
+'Q' quits the program.
+
+Testing:
+-How to change the color of the screen
+-What happens if you update it really fast, could be used for effects.
+
+8. sr_test1.asm
+fills the screen with all of the characters that are available 
+'Q' quits
+
+Testing:
+-How many characters are on the screen and understanding how to place them.
+-understanding how many characters there are and what is available in the default characters
+
+9. sr_test2.asm
+changes the color of the fonts 'A' changes the primary color of the text 'Z' changes the auxiliary color in multicolor mode
+'Q' quits
+
+Testing:
+-How the colors of the text look
+-Multicolor mode
+-Changing colors of certain characters on the screen
+
+10. sr_test3.asm
+changes where the characters are read from in memory and reads some custom characters
+uses code from previous programs to demonstrate.
+'Q' quits
+
+Testing:
+-How characters are stored
+-How to use custom characters
