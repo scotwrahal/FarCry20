@@ -1,4 +1,8 @@
-;sr_test0.asm
+;sr_test2.asm
+; coloring the text on the screen
+; 'A' cycle throught the colors
+; 'Z' cycle the auxillary color
+; 'Q' to quit
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
