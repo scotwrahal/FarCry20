@@ -1,4 +1,6 @@
-;sr_test0.asm
+;sr_test1.asm
+; filling the screen with characters 
+; 'Q' to quit
 	processor	6502				;assembling for 6502
 	org			$1001				;standard organization	
 	dc.w		end_basic			;pointer to end of BASIC stub
@@ -21,6 +23,7 @@ fill
 	adc #1					; increment the character to be written
 	inx
 	bne fill
+	
 
 fill2
 	sta $1f00,x				; continue filling screen
