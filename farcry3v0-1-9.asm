@@ -40,6 +40,8 @@ set_timers
     ; for all updatable entities make their clock the current clock
     lda clock
     sta player_clock
+    sta enemy1_clock
+    sta enemy2_clock
     sta music_clock_c1
     sta music_clock_c2
 
@@ -47,7 +49,12 @@ play_loop
     jsr updateClock
     jsr updateMusic
     jsr input
-    jsr movePlayer
+    lda #0
+    jsr moveEntity
+    lda #3
+    jsr moveEntity
+    lda #4
+    jsr moveEntity
     jmp play_loop
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,46 +65,41 @@ updateNote
     tax                 	; save the index
     lsr                 	; divide by 2
     ldy #0              	; the song length is stored at 0
-    cmp ($fe),y         	; compare with the song length
+    cmp ($fc),y         	; compare with the song length
     bne NoSongWrap      	; if you are not on the last not don't wrap
     ldx #2              	; this is the looped index shifted
     lda #1              	; starts at the begining
 NoSongWrap
     ldy #1
-    sta ($fc),y           	; A store the index the new index
+    sta ($fe),y           	; A store the index the new index
     txa
     tay                 	; restores the proper index for calculations
-    lda ($fe),y
+    lda ($fc),y
     ldy clock_offset
     iny
-    sta ($fc),y             ; set the clock update to how long the next note needs to play for
+    sta ($fe),y             ; set the clock update to how long the next note needs to play for
     rts
 
 ; helper function for update music
 loadNote
-    asl                     ; multiply by 2 (entity address is 2 bytes)
-    tay
-    lda updatable_entity_mem,y  ; stores the music player in $fc
-    sta $fc
-    iny
-    lda updatable_entity_mem,y
-    sta $fd
+    jsr loadUpdatableEntity
+    
     ldy #0                  ; get the track number
-    lda ($fc),y 
+    lda ($fe),y 
     asl                 	; multiply by 2 (music address is 2 bytes)
     tay
     lda song_memory,y		; store the song address in $fe
-    sta $fe
+    sta $fc
     iny
     lda song_memory,y
-    sta $ff
+    sta $fd
     
     ldy #1                  ; load the note index
-    lda ($fc),y             
+    lda ($fe),y             
     asl                     ; multiply by 2 (notes are 2 bytes)
     tay
     iny                     ; the key is stored in the 1st location of a note 
-    lda ($fe),y             ; get the key to be played
+    lda ($fc),y             ; get the key to be played
     rts
 
 ; update music will update the current track playing
@@ -251,19 +253,15 @@ load_row
 ; end of loading function
 
 
-movePlayer
+moveEntity
     pha
-    tya
-    pha
-    lda #0                  ; the player is the 0th updatable entity
     jsr checkClock          ; check if you are ready to update
     cmp #0
     beq EndOfPlayerMove
-    lda #0                  ; the player is the 0th updatable entity
+    pla                         ; the player is the 0th updatable entity
     jsr move
+    rts
 EndOfPlayerMove
-    pla
-    tay
     pla
     rts
 
@@ -280,16 +278,9 @@ checkClock
     lda $fe
     pha
     lda holder
-
-    ; load the entity
-    asl                     ; multiply by 2 (entity address is 2 bytes)
-    tay
-    lda updatable_entity_mem,y
-    sta $fe
-    iny
-    lda updatable_entity_mem,y
-    sta $ff
-
+    
+    jsr loadUpdatableEntity
+    
     ldy clock_offset
     lda ($fe),y             ; get the clock time
     sec
@@ -321,6 +312,16 @@ UpdateClock                 ; if the gameclock is larger than the entity clock m
     lda #1
     rts                     ; restore values and return the result of the check
 
+loadUpdatableEntity
+    asl                     ; multiply by 2 (updateable entity address is 2 bytes)
+    tay
+    lda updatable_entitys,y
+    sta $fe
+    iny
+    lda updatable_entitys,y
+    sta $ff
+    rts
+    
 ; moves an updatable entity based on the direction they are moving and if the low bit is set
 ;   A index of the updatable entity to be moved
 move
@@ -331,17 +332,11 @@ move
     tya
     pha
     lda holder
-
-    asl                     ; multiply by 2 (updateable entity address is 2 bytes)
-    tay
-    lda updatable_entity_mem,y
-    sta $fe
-    iny
-    lda updatable_entity_mem,y
-    sta $ff
+    
+    jsr loadUpdatableEntity
 
     ldy position_offset     ; this is the offest for the position in the structure
-
+    
     ; transfer the old position to the new position
     lda ($fe),y             ; load the location
     sta new_position
@@ -379,13 +374,14 @@ MoveUp
     jmp FinishMove
 MoveUpBorder
     lda new_position
-    beq FinishMove          ; if you are in the top then you cant move up
+    beq NoMoveUp          ; if you are in the top then you cant move up
     lda #0                  ; you are now in the top
     sta new_position        ; save in new positon
     lda new_position,y
     sec
     sbc #22                 ; move up one row
     sta new_position,y      ; save new position
+NoMoveUp
     jmp FinishMove
 MoveDown
 	lda #4
@@ -398,13 +394,14 @@ MoveDown
     jmp FinishMove
 MoveDownBorder
     lda new_position
-    bne FinishMove
+    bne NoMoveDown
     lda #1
     sta new_position
     lda new_position,y
     clc
     adc #22
     sta new_position,y
+NoMoveDown
     jmp FinishMove
 MoveLeft
 	lda #2
@@ -412,34 +409,35 @@ MoveLeft
     lda new_position,y
     sec
     sbc #1
-;    bcc MoveLeftBorder			;Had to get rid of these last 2 because of a compiler error (doesn't seem to matter if they're gone?)
+    bcc MoveLeftBorder
     sta new_position,y
     jmp FinishMove
-;MoveLeftBorder
-;    lda new_position
-;    beq FinishMove
-;    lda #0
-;    sta new_position
-;    lda #$ff
-;    sta new_position,y
-;    jmp FinishMove
+MoveLeftBorder
+   lda new_position
+   beq NoMoveLeft
+   lda #0
+   sta new_position
+   lda #$ff
+   sta new_position,y
+NoMoveLeft
+   jmp FinishMove
 MoveRight
 	lda #1
 	sta player_char
     lda new_position,y
     clc
     adc #1
-;    bcs MoveRightBorder
+    bcs MoveRightBorder
     sta new_position,y
     jmp FinishMove
-;MoveRightBorder
-;    lda new_position
-;    bne FinishMove
-;    lda #1
-;    sta new_position
-;    lda #0
-;    sta new_position,y
-;    jmp FinishMove
+MoveRightBorder
+   lda new_position
+   bne NoMoveRight
+   lda #1
+   sta new_position
+   lda #0
+   sta new_position,y
+NoMoveRight
 FinishMove
     jsr check_collision     ; check for collisions
     cmp #0
@@ -453,7 +451,7 @@ NoCollision
     lda ($fe),y
     jsr drawGround          ; draw the ground in the old position
                             ; may want to update this so that the entity keeps track what is under it
-    ldy #1                  ; move the new position to the old position
+    ldy #1                  ; move the new position to the entity position and set up for draw
     lda new_position,y
     ldy position_offset
     iny
@@ -463,7 +461,6 @@ NoCollision
     lda new_position
     sta ($fe),y
     jsr draw                ; draw the entity
-
 Collision
     ; handle collisions here right now it just doesnt move
 
@@ -474,6 +471,7 @@ EndMove
     tax
     pla
     rts
+
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 check_collision
@@ -650,6 +648,8 @@ Right
 nothin
     lda player_direction
 InputRetrun
+    sta enemy1_direction
+    sta enemy2_direction
     sta player_direction
     pla
     rts
@@ -692,23 +692,57 @@ position_offset
 clock_offset
     dc.b    $05
 
-updatable_entity_mem ; keep the order of the list
-    dc.w    player_char
+updatable_entitys ; keep the order of the list
+    dc.w    player
     dc.w    music_player_c1
     dc.w    music_player_c2
+enemy_entitys
+    dc.w    enemy1
+    dc.w    enemy2
+    
 
+player
 player_char
     dc.b    $02
 player_color
     dc.b    $06
 player_position
-    dc.b    $00, $22
+    dc.b    $00, #23
 player_direction
     dc.b    $00
 player_clock
     dc.b    $00
 player_clock_updates
     dc.b    $07
+
+enemy1
+enemy1_char
+    dc.b    $02
+enemy1_color
+    dc.b    $08
+enemy1_position
+    dc.b    $00, #46
+enemy1_direction
+    dc.b    $00
+enemy1_clock
+    dc.b    $00
+enemy1_clock_updates
+    dc.b    $03
+    
+    
+enemy2
+enemy2_char
+    dc.b    $02
+enemy2_color
+    dc.b    $07
+enemy2_position
+    dc.b    $00, #68
+enemy2_direction
+    dc.b    $00
+enemy2_clock
+    dc.b    $00
+enemy2_clock_updates
+    dc.b    $05
 
 music_player_c1
 track_index_c1
@@ -847,28 +881,28 @@ level1
     dc.b    $00, $00, $00
 
 level2
-    dc.b    $00, $00, $00
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $f0, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $f0, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $f0, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $f0, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $f0, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $7f, $ff, $f8
-    dc.b    $00, $00, $00
+    dc.b $00, $00, $00 
+    dc.b $7f, $ff, $f8 
+    dc.b $7f, $ff, $f8 
+    dc.b $7f, $ff, $f8 
+    dc.b $67, $fb, $f8 
+    dc.b $77, $f9, $f8 
+    dc.b $7b, $fd, $f8 
+    dc.b $7b, $fd, $f8 
+    dc.b $7d, $fe, $f8 
+    dc.b $7e, $fe, $f8 
+    dc.b $7e, $7e, $f8 
+    dc.b $7f, $3e, $f8 
+    dc.b $7f, $9e, $78 
+    dc.b $7f, $df, $f8 
+    dc.b $7f, $ff, $f8 
+    dc.b $7f, $ff, $e8 
+    dc.b $73, $ff, $98 
+    dc.b $78, $01, $38 
+    dc.b $7f, $fc, $78 
+    dc.b $7f, $ff, $f8 
+    dc.b $7f, $ff, $f8 
+    dc.b $00, $00, $00
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SOUND MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 song_memory
