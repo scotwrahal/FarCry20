@@ -1,3 +1,20 @@
+; TODO make a list of functions
+updateEntity
+    jsr moveEntity
+    jsr drawEntity
+    rts
+    
+setClockEntity
+    lda clock
+    ldy clock_offset
+    sta ($fe),y    
+    rts
+   
+loadEntity
+    clc 
+    adc entity_offset
+    jmp loadDrawable
+    
 moveEntity
     pha
     jsr checkClock          ; check if you are ready to update
@@ -8,15 +25,54 @@ EndOfEntityMove
     pla
     rts
     
-moveBullet
-    clc
-    adc bullet_offset
-    jsr moveEntity
-    ldy direction_offset
-    lda #1
-    ora ($fe),y
-    sta ($fe),y
+drawEntity
+    pha
+    txa                  
+    pha
+    tya
+    pha
+    ldy position_offset
+    iny
+    lda ($fe),y 
+    tax
+    dey 
+    lda ($fe),y 
+    jsr draw
+    pla
+    tay
+    pla
+    tax
+    pla
     rts
+    
+animateEntity
+	pla
+	sta return_add_hi
+	pla
+	sta return_add_low
+	pla
+	sta num_frames
+	pla
+    
+	sta graphic_offset
+	lda jason_animation_state
+	adc graphic_offset
+	sta player_char				;assign new image
+	sbc graphic_offset						;remove offset
+	ldx num_frames
+	cmp num_frames						
+	bne StoreNoReset
+	sbc #1
+	sbc num_frames
+StoreNoReset
+	adc #1
+	sta jason_animation_state
+    
+	lda return_add_low
+	pha
+	lda return_add_hi
+	pha
+	rts
 
 ; moves an updatable entity based on the direction they are moving and if the low bit is set
 ;   A index of the updatable entity to be moved
@@ -130,9 +186,21 @@ FinishMove
     tax
     dey
     lda ($fe),y
-    ;change to a draw_on function
-    jsr drawGround          ; draw the ground in the old position
+    jsr drawOn          ; draw the ground in the old position
+    
+    
     ldy #1                  ; move the new position to the entity position and set up for draw
+    lda new_position,y
+    tax
+    lda new_position
+    jsr getFromPosition
+    ldy on_char_offset
+    sta ($fe),y
+    txa
+    ldy on_color_offset
+    sta ($fe),y   
+    
+    ldy #1
     lda new_position,y
     ldy position_offset
     iny
@@ -145,6 +213,84 @@ EndMove
     pla
     tay
     pla
+    tax
+    pla
+    rts
+    
+drawOn
+    pha
+    tya
+    pha
+    txa
+    pha
+    
+    ldy on_char_offset
+    lda ($fe),y
+    sta on_char
+    ldy on_color_offset
+    lda ($fe),y
+    sta on_color
+    
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+
+    ldy on_holder_offset
+    jsr drawDrawable
+    pla
+    tax
+    pla
+    tay
+    pla    
+    rts
+    
+; Check for what is in the new location and determines if it has collided
+; right now it only checks if it is the ground of not
+check_collision
+    pha
+    tya
+    pha
+    lda new_position
+    ldy #1
+    ldx new_position,y
+    jsr getFromPosition     ; gets the character on the screen in the new position
+    ; need to make a collide list maybe
+    cmp ground_char
+    beq NoCollide
+    pla
+    tay
+    pla
+    lda #1
+    rts
+NoCollide
+    pla
+    tay
+    pla
+    lda #0
+    rts
+	
+; getFromPosition returns the color and the character at a locaiton on the screen
+;   A: top/bottom location 0 ; = top
+;   X: location
+;   return
+;   A: character
+;   X: color
+getFromPosition
+    cmp #0
+    bne readBottom
+    lda $1e00,x
+    pha
+    lda $9600,x
+    tax
+    pla
+    rts
+readBottom
+    lda $1f00,x
+    pha
+    lda $9700,x
     tax
     pla
     rts
