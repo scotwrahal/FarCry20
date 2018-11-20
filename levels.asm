@@ -78,7 +78,7 @@ load_level
 load_row
     pha                     ; push A to preserve the location
     lda $fc
-    cmp #66                 ; check if you have loaded 66 bytes (3 bytes per line 22 lines)
+    cmp level_size          ; check if you have loaded the level
     beq LevelLoadDone       ; BREAK out of load
     pla                     ; restore the location
 
