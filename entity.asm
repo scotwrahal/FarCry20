@@ -7,12 +7,12 @@ updateEntity
     jsr check_collision
     cmp #1
     bne NoCollide
-    ;jsr invertDirection
+    jsr invertDirection
     ldy direction_offset
     lda ($fe),y
     ora #$01
     sta ($fe),y
-    jsr moveEntity
+    jsr move
     jsr invertDirection
     
 NoCollide
@@ -34,13 +34,11 @@ loadEntity
     jmp loadDrawable
     
 moveEntity
-    pha
     jsr checkClock          ; check if ready to update
     cmp #0
     beq EndOfEntityMove
     jsr move
 EndOfEntityMove
-    pla
     rts
     
 drawEntity
