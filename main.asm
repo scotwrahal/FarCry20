@@ -36,9 +36,30 @@ set_up_music
 
 set_timers
     jsr updateClock
+        
+    ldx #0
+SetEntityClocks
+    txa
+    jsr loadEntity
+    lda $ff
+    cmp #0
+    beq EntityClocksSet
+    jsr setClockEntity
+    inx
+    jmp SetEntityClocks
+EntityClocksSet
 
-    ; for all updatable entities make their clock the current clock
-    ; change this to a loop
+    ldx #0
+SetMusicClocks
+    txa
+    jsr loadMusicEntity
+    lda $ff
+    cmp #0
+    beq MusicClocksSet
+    jsr setClockEntity
+    inx
+    jmp SetMusicClocks
+MusicClocksSet
 
 play_loop
     jsr updateClock
@@ -67,8 +88,15 @@ play_loop
 updateEntitys
     
 
-
-
+setClockEntity
+    lda clock
+    ldy clock_offset
+    sta ($fe),y    
+    rts
+    
+loadMusicEntity
+    clc 
+    adc music_offset
 loadEntity
     clc 
     adc entity_offset
