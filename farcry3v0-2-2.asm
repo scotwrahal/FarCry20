@@ -520,12 +520,10 @@ animate
 	sta num_frames
 	pla
 	sta graphic_offset
-	ldx graphic_offset
 	lda jason_animation_state
-	stx $fb
-	adc $fb						;2nd animation offset
+	adc graphic_offset
 	sta player_char				;assign new image
-	sbc $fb						;remove offset
+	sbc graphic_offset						;remove offset
 	ldx num_frames
 	cmp num_frames						
 	bne StoreNoReset
