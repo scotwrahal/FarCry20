@@ -3,27 +3,23 @@
 updateNote
     iny                 	            ; store the next note duration when you update
     tya
-    tax                 	            ; save the index
-    lsr                 	            ; divide by 2
     ldy length_offset
     cmp ($fc),y         	            ; compare with the song length
     bne NoSongWrap      	            ; if you are not on the last not don't wrap
-    ldx #2              	            ; this is the looped index shifted
-    lda #1              	            ; starts at the begining
+    lda #2              	            ; starts at the begining
 NoSongWrap
     ldy notei_offset
     sta ($fe),y           	            ; update the note index
-    txa
-    tay                 	            ; restores the proper index for calculations
-    lda ($fc),y
+    tay
+    lda ($fc),y                         ; load the clock time for the next note
     ldy clock_update_offset
-    sta ($fe),y                         ; set the clock update to how long the next note needs to play for
+    sta ($fe),y                         ; set the clock update to how long the next note needs to play
     rts
 
 ; helper function for update music
 loadNote
     ldy tracki_offset                   ; get the track number
-    lda ($fe),y 
+    lda ($fe),y
     asl                 	            ; multiply by 2 (music address is 2 bytes)
     tay
     lda song_memory,y		            ; store the song address in $fc
@@ -32,9 +28,8 @@ loadNote
     lda song_memory,y
     sta $fd
 
-    ldy notei_offset                    ; load the note index
-    lda ($fe),y             
-    asl                                 ; multiply by 2 (notes are 2 bytes)
+    ldy notei_offset                    
+    lda ($fe),y                         ; load the note index
     tay
     iny                                 ; the key is stored in the 1st location of a note 
     lda ($fc),y                         ; get the key to be played
@@ -56,7 +51,8 @@ updateMusic
     lda $fc
     pha
 
-    
+
+    ; TODO make this itterate over the music players
     lda mp1offset; this is the offset for the music player entity
     jsr loadEntity
     jsr checkClock

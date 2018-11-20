@@ -27,7 +27,7 @@ load_screen_colour
     sta $900f               ; load value into screen and border colour register (p. 175)
 
 level_load
-    lda #2                  ; this will select what level you want loaded
+    lda #0                  ; this will select what level you want loaded
     jsr load_level
 
 set_up_music

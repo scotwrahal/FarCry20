@@ -106,22 +106,22 @@ music_template
 track_index
 track_index_1           byte $00
 note_index
-note_index_1            byte $01
+note_index_1            byte $02        ; starts at 2 for all music players
 music_clock_1           byte $00
 music_clock_updates_1   byte $01
     
 track_index_2           byte $01
-note_index_2            byte $01
+note_index_2            byte $02
 music_clock_2           byte $00
 music_clock_updates_2   byte $01
 
 track_index_3           byte $01
-note_index_3            byte $01
+note_index_3            byte $02
 music_clock_3           byte $00
 music_clock_updates_3   byte $01
 
 track_index_4           byte $01
-note_index_4            byte $01
+note_index_4            byte $02
 music_clock_4           byte $00
 music_clock_updates_4   byte $01
     
@@ -166,9 +166,8 @@ jason_animation_state:
 ; ideally to be stored on a disk and loaded in later
 level_mem
     word level0
-    word level1
-    word level2
 
+level_start
 level0
     byte $00, $00, $00
     byte $7f, $aa, $f8
@@ -192,55 +191,7 @@ level0
     byte $7f, $ff, $f8
     byte $75, $55, $58
     byte $00, $00, $00
-
-
-level1
-    byte $00, $00, $00
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $f0, $f8
-    byte $7f, $f0, $f8
-    byte $7f, $f0, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $7f, $ff, $f8
-    byte $00, $00, $00
-
-level2
-    byte $00, $00, $00 
-    byte $7f, $ff, $f8 
-    byte $7f, $ff, $f8 
-    byte $7f, $ff, $f8 
-    byte $67, $fb, $f8 
-    byte $77, $f9, $f8 
-    byte $7b, $fd, $f8 
-    byte $7b, $fd, $f8 
-    byte $7d, $fe, $f8 
-    byte $7e, $fe, $f8 
-    byte $7e, $7e, $f8 
-    byte $7f, $3e, $f8 
-    byte $7f, $9e, $78 
-    byte $7f, $df, $f8 
-    byte $7f, $ff, $f8 
-    byte $7f, $ff, $e8 
-    byte $73, $ff, $98 
-    byte $78, $01, $38 
-    byte $7f, $fc, $78 
-    byte $7f, $ff, $f8 
-    byte $7f, $ff, $f8 
-    byte $00, $00, $00
+level_end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SOUND MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 song_memory
@@ -250,7 +201,7 @@ song1    word song1_length
 track_template
 track_length
 song0_length
-    byte 20 , $00    ; number of notes plus one
+    byte song0_end - song0_notes, $00    ; number of notes plus one
 track_notes
 song0_notes
     ;     duration note
@@ -274,9 +225,10 @@ song0_notes
     byte #5, #237
     byte #5, #239
     byte #5, #241
+song0_end
     
 song1_length
-    byte 20 , $00    ; number of notes plus one
+    byte  song1_end - song1_notes, $00    ; number of notes plus one
 song1_notes
     ;     duration note
     byte #8, #135
@@ -299,6 +251,7 @@ song1_notes
     byte #8, #237
     byte #8, #239
     byte #8, #241
+song1_end
     
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
@@ -322,3 +275,4 @@ notei_offset        byte note_index - music_template
 length_offset       byte track_length - track_template
 track_offset        byte track_notes - track_template
 state_offset        byte state - template
+level_size          byte level_end - level_start
