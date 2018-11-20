@@ -1,7 +1,25 @@
 ; TODO make a list of functions
 updateEntity
+    pha
+    tya
+    pha
     jsr moveEntity
+    jsr check_collision
+    cmp #1
+    bne NoCollide
+    ;jsr invertDirection
+    ldy direction_offset
+    lda ($fe),y
+    ora #$01
+    sta ($fe),y
+    jsr moveEntity
+    jsr invertDirection
+    
+NoCollide
     jsr drawEntity
+    pla
+    tay
+    pla
     rts
     
 setClockEntity
@@ -17,7 +35,7 @@ loadEntity
     
 moveEntity
     pha
-    jsr checkClock          ; check if you are ready to update
+    jsr checkClock          ; check if ready to update
     cmp #0
     beq EndOfEntityMove
     jsr move
@@ -116,13 +134,13 @@ MoveUp
     lda new_position,y
     sec
     sbc #22                 ; move by one row
-    bcc MoveUpBorder        ; check if you cross the upper lower border
-    sta new_position,y      ; if you didn't, store the new locaiton
+    bcc MoveUpBorder        ; check the upper lower border
+    sta new_position,y      ; if  didn't, store the new locaiton
     jmp FinishMove
 MoveUpBorder
     lda new_position
-    beq NoMoveUp            ; if you are in the top then you cant move up
-    lda #0                  ; you are now in the top
+    beq NoMoveUp            ; in the top cant move up
+    lda #0                  ; now in the top
     sta new_position        ; save in new positon
     lda new_position,y
     sec
@@ -186,7 +204,7 @@ FinishMove
     tax
     dey
     lda ($fe),y
-    jsr drawOn          ; draw the ground in the old position
+    jsr drawOn              ; draw the ground in the old position
     
     
     ldy #1                  ; move the new position to the entity position and set up for draw
@@ -250,27 +268,48 @@ drawOn
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 check_collision
+    tya
+    pha
+    ldy on_char_offset
+    lda ($fe),y
+    cmp terrain_char
+    beq Collide
+    pla
+    tay
+    lda #0
+    rts
+Collide
+    pla
+    tay
+    lda #1
+    rts
+    
+; inverts the direction of the entity
+invertDirection
     pha
     tya
     pha
-    lda new_position
-    ldy #1
-    ldx new_position,y
-    jsr getFromPosition     ; gets the character on the screen in the new position
-    ; need to make a collide list maybe
-    cmp ground_char
-    beq NoCollide
+    ldy direction_offset
+    lda ($fe),y
+    sta holder
+    asl
+    bcs FlipUD
+    asl
+    bcs FlipUD
+FlipLR
+    lda ($fe),y
+    eor #$30
+    jmp EndFlip
+FlipUD
+    lda ($fe),y
+    eor #$c0
+EndFlip
+    sta ($fe),y
     pla
     tay
     pla
-    lda #1
     rts
-NoCollide
-    pla
-    tay
-    pla
-    lda #0
-    rts
+    
 	
 ; getFromPosition returns the color and the character at a locaiton on the screen
 ;   A: top/bottom location 0 ; = top

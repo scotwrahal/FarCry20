@@ -160,6 +160,7 @@ shrub0:
     byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:
     byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
+end_graphics
 	
 jason_animation_state:
 	byte $00
@@ -281,3 +282,4 @@ length_offset       byte song_length - song_template
 track_offset        byte song_notes - song_template
 state_offset        byte state - template
 level_size          byte level_end - level_start
+graphics_size       byte end_graphics - graphics

@@ -19,7 +19,7 @@ write_byte_line:
     sta $1c08,x
     inx
     txa
-    sbc #127                ; (8*(number of bitmaps) - 1)
+    sbc graphics_size                ; (8*(number of bitmaps) - 1)
     bne write_byte_line     ; loop until all bitmaps loaded into custom char memory
 
 load_screen_colour
