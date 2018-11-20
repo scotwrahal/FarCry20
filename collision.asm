@@ -22,33 +22,6 @@ NoCollide
     pla
     lda #0
     rts
-
-animate
-	pla
-	sta return_add_hi
-	pla
-	sta return_add_low
-	pla
-	sta num_frames
-	pla
-	sta graphic_offset
-	lda jason_animation_state
-	adc graphic_offset
-	sta player_char				;assign new image
-	sbc graphic_offset						;remove offset
-	ldx num_frames
-	cmp num_frames						
-	bne StoreNoReset
-	sbc #1
-	sbc num_frames
-StoreNoReset
-	adc #1
-	sta jason_animation_state
-	lda return_add_low
-	pha
-	lda return_add_hi
-	pha
-	rts
 	
 ; getFromPosition returns the color and the character at a locaiton on the screen
 ;   A: top/bottom location 0 ; = top
