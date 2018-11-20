@@ -17,7 +17,7 @@ NoSongWrap
     rts
 
 ; helper function for update music
-loadNote
+loadSong
     ldy tracki_offset                   ; get the track number
     lda ($fe),y
     asl                 	            ; multiply by 2 (music address is 2 bytes)
@@ -27,7 +27,9 @@ loadNote
     iny
     lda song_memory,y
     sta $fd
-
+    rts
+    
+loadNote
     ldy notei_offset                    
     lda ($fe),y                         ; load the note index
     tay
@@ -59,33 +61,13 @@ updateMusic
     cmp #0
     beq NoChannel1Update
 
-    lda mp1offset
+    jsr loadSong
     jsr loadNote             
     sta $900a          		; store the note in the register
     jsr updateNote          ; advances the music system to the next note
 
 NoChannel1Update
-    lda mp2offset
-    jsr checkClock
-    cmp #0
-    beq NoChannel2Update
-    
-    lda mp2offset
-    jsr loadNote
-    sta $900b          		; store the note in the register for 2
-    jsr updateNote
-    
-NoChannel2Update
-    lda mp3offset
-    jsr checkClock
-    cmp #0
-    beq NoChannel3Update
-    
-    lda mp3offset
-    jsr loadNote
-    sta $900b          		; store the note in the register for 2
-    jsr updateNote
-NoChannel3Update
+
     pla
     sta $fc
     pla
