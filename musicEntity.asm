@@ -16,13 +16,13 @@ updateMusic
     pha
     lda $fc
     pha
-    ; TODO make this itterate over the music players
+
     ldx #0
 ChannelUpdate
     txa
     jsr loadMusicEntity
-    lda $ff
-    cmp #0
+    lda $ff                 ; only need to check the page
+    cmp #0                  ; null terminated list
     beq NoMoreChannels
     jsr checkClock
     cmp #0
@@ -31,18 +31,18 @@ ChannelUpdate
     jsr loadSong
     jsr loadNote   
     sta holder
-    txa
+    txa             
     pha
-    lsr
+    lsr                     ; since the offset for the register is half the note index
     tax
     lda holder
-    sta $900a,x         		; store the note in the register
+    sta $900a,x             ; store the note in the register
     pla
     tax
     jsr updateNote          ; advances the music system to the next note
     
 NoChannelUpdate
-    inx
+    inx                     ; increment the index by 2 becuase notes are 2 bytes
     inx
     jmp ChannelUpdate 
     
@@ -69,6 +69,17 @@ loadMusicEntity
     clc 
     adc music_offset
     jmp loadEntity
+    
+loadTrack
+    sta holder
+    tya 
+    pha
+    lda holder
+    ldy tracki_offset
+    sta ($fe),y
+    pla
+    tay
+    rts
 
 ; helper function for update music
 updateNote
