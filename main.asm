@@ -69,6 +69,7 @@ loadEntity
 
 loadDrawable
     sta holder
+    pha
     tya
     pha
     lda holder
@@ -81,4 +82,5 @@ loadDrawable
     pla 
     tya
     lda holder
+    pla
     rts

@@ -68,29 +68,76 @@ drawGround
 ; Y: index
 drawDrawable
     sta holder
-    pha
     lda $ff
     pha
     lda $fe
     pha
-    tya                     ; makes the index stored into A for loading
+    lda holder
     pha
-    ;load the drawable
-    tay
-    lda drawables,y
+    tya
+    jsr loadDrawable
+    pla              ; restore the position
+    jsr draw
+    pla
     sta $fe
-    iny
-    lda drawables,y
+    pla
     sta $ff
-    lda holder              ; restore the position
+    rts
+    
+    
+drawEntity
+    sta holder
+    lda $ff
+    pha
+    lda $fe
+    pha
+    txa                  
+    pha
+    tya
+    pha
+    lda holder              ; holds the index for the entity
+    jsr loadEntity
+    lda position_offset
+    tay
+    iny
+    lda ($fe),y 
+    tax
+    dey 
+    lda ($fe),y 
     jsr draw
     pla
     tay
     pla
+    tax
+    pla
     sta $fe
     pla
-    sta $ff
+    sta $ff  
+    rts
+    
+drawOn
+    pha
+    tya
+    pha
+    txa
+    pha
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+    pha
+    ldy on_offset
+    lda ($fe),y
+    tay
     pla
+    jsr drawDrawable
+    pla
+    tax
+    pla
+    tay
+    pla    
     rts
     
 animate
