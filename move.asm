@@ -2,17 +2,25 @@ moveEntity
     pha
     jsr checkClock          ; check if you are ready to update
     cmp #0
-    beq EndOfPlayerMove
+    beq EndOfEntityMove
     pla
     jsr move
     rts
-EndOfPlayerMove
+EndOfEntityMove
     pla
     rts
+    
+moveBullet
+    clc
+    adc bullet_offset
+    jsr moveEntity
+    jsr loadEntity
+    ldy direction_offset
+    lda #1
+    ora ($fe),y
+    sta ($fe),y
+    rts
 
-    
-    
-    
 ; moves an updatable entity based on the direction they are moving and if the low bit is set
 ;   A index of the updatable entity to be moved
 move
@@ -24,7 +32,7 @@ move
     pha
     lda holder
     
-    jsr loadUpdatableEntity
+    jsr loadEntity
 
     ldy position_offset
     ; transfer the old position to the new position variable
@@ -153,6 +161,7 @@ NoCollision
     tax
     dey
     lda ($fe),y
+    ;change to a draw_on function
     jsr drawGround          ; draw the ground in the old position
                             ; may want to update this so that the entity keeps track what is under it
     ldy #1                  ; move the new position to the entity position and set up for draw
@@ -167,7 +176,6 @@ NoCollision
     jsr draw                ; draw the entity
 Collision
     ; handle collisions here right now it just doesnt move
-
 EndMove
     pla
     tay

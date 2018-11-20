@@ -22,7 +22,7 @@ NoSongWrap
 
 ; helper function for update music
 loadNote
-    jsr loadUpdatableEntity
+    jsr loadEntity
     
     ldy #0                  ; get the track number
     lda ($fe),y 

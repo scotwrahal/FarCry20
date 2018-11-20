@@ -61,11 +61,24 @@ play_loop
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-loadUpdatableEntity
+loadEntity
+    clc 
+    adc entity_offset
+    jsr loadDrawable
+    rts 
+
+loadDrawable
+    sta holder
+    tya
+    pha
+    lda holder
     tay
-    lda entities,y
+    lda drawables,y
     sta $fe
     iny
-    lda entities,y
+    lda drawables,y
     sta $ff
+    pla 
+    tya
+    lda holder
     rts

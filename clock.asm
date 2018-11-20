@@ -12,7 +12,7 @@ checkClock
     pha
     lda holder
     
-    jsr loadUpdatableEntity
+    jsr loadEntity
     
     ldy clock_offset
     lda ($fe),y             ; get the clock time
