@@ -42,7 +42,7 @@ music_player_1  word track_index_1
 music_player_2  word track_index_2
 music_player_3  word track_index_3
 music_player_4  word track_index_4
-                word 0
+                word #0
                 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terrain_char    byte #14
@@ -110,17 +110,17 @@ note_index_1            byte $02        ; starts at 2 for all music players
 music_clock_1           byte $00
 music_clock_updates_1   byte $01
     
-track_index_2           byte $01
+track_index_2           byte $00
 note_index_2            byte $02
 music_clock_2           byte $00
 music_clock_updates_2   byte $01
 
-track_index_3           byte $01
+track_index_3           byte $00
 note_index_3            byte $02
 music_clock_3           byte $00
 music_clock_updates_3   byte $01
 
-track_index_4           byte $01
+track_index_4           byte $00
 note_index_4            byte $02
 music_clock_4           byte $00
 music_clock_updates_4   byte $01
@@ -197,12 +197,13 @@ level_end
 song_memory
 song0    word song0_length
 song1    word song1_length
+         word #0
 
-track_template
-track_length
+song_template
+song_length
 song0_length
     byte song0_end - song0_notes, $00    ; number of notes plus one
-track_notes
+song_notes
 song0_notes
     ;     duration note
     byte #5, #135
@@ -272,7 +273,7 @@ mp2offset           byte music_player_2 - entities
 mp3offset           byte music_player_1 - entities
 tracki_offset       byte track_index - music_template
 notei_offset        byte note_index - music_template
-length_offset       byte track_length - track_template
-track_offset        byte track_notes - track_template
+length_offset       byte song_length - song_template
+track_offset        byte song_notes - song_template
 state_offset        byte state - template
 level_size          byte level_end - level_start
