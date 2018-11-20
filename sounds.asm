@@ -11,8 +11,8 @@ updateNote
     ldx #2              	            ; this is the looped index shifted
     lda #1              	            ; starts at the begining
 NoSongWrap
-    ldy #1
-    sta ($fe),y           	            ; A store the index the new index
+    ldy notei_offset
+    sta ($fe),y           	            ; update the note index
     txa
     tay                 	            ; restores the proper index for calculations
     lda ($fc),y
@@ -22,24 +22,22 @@ NoSongWrap
 
 ; helper function for update music
 loadNote
-    jsr loadEntity
-    
-    ldy #0                  ; get the track number
+    ldy tracki_offset                   ; get the track number
     lda ($fe),y 
-    asl                 	; multiply by 2 (music address is 2 bytes)
+    asl                 	            ; multiply by 2 (music address is 2 bytes)
     tay
-    lda song_memory,y		; store the song address in $fe
+    lda song_memory,y		            ; store the song address in $fc
     sta $fc
     iny
     lda song_memory,y
     sta $fd
 
-    ldy note_offset                 ; load the note index
+    ldy notei_offset                    ; load the note index
     lda ($fe),y             
-    asl                     ; multiply by 2 (notes are 2 bytes)
+    asl                                 ; multiply by 2 (notes are 2 bytes)
     tay
-    iny                     ; the key is stored in the 1st location of a note 
-    lda ($fc),y             ; get the key to be played
+    iny                                 ; the key is stored in the 1st location of a note 
+    lda ($fc),y                         ; get the key to be played
     rts
 
 ; update music will update the current track playing
@@ -58,7 +56,9 @@ updateMusic
     lda $fc
     pha
 
+    
     lda mp1offset; this is the offset for the music player entity
+    jsr loadEntity
     jsr checkClock
     cmp #0
     beq NoChannel1Update

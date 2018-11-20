@@ -1,19 +1,9 @@
 ; checks the clock of an updatable entity and updates it if needed
-;   A has the index of the updatable entity you are checking
+;   the entity needs to be loaded before you check the clock
 ;   returns 1 if the clock updated 0 otherwise
 checkClock
-    sta holder
-    pha
     tya
     pha
-    lda $ff
-    pha
-    lda $fe
-    pha
-    lda holder
-    
-    jsr loadEntity
-    
     ldy clock_offset
     lda ($fe),y             ; get the clock time
     sec
@@ -22,11 +12,6 @@ checkClock
 NoClock
     pla
     tay
-    pla
-    sta $fe
-    pla
-    sta $ff
-    pla
     lda #0
     rts                     ; restore values and return the result of the check
 UpdateClock                 ; if the gameclock is larger than the entity clock may need to update
@@ -37,11 +22,6 @@ UpdateClock                 ; if the gameclock is larger than the entity clock m
     sta ($fe),y
     pla
     tay
-    pla
-    sta $fe
-    pla
-    sta $ff
-    pla
     lda #1
     rts                     ; restore values and return the result of the check
 

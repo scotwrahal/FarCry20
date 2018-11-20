@@ -1,7 +1,7 @@
 ; draw
 ;   A: top/bottom location 0 ; = top
 ;   X: location
-;   $fe $ff: entity to draw
+;   $fe $ff: thing to draw
 draw
     sta holder              ; clear accumulator to store state
     pha
@@ -86,19 +86,12 @@ drawDrawable
     
     
 drawEntity
-    sta holder
-    lda $ff
-    pha
-    lda $fe
     pha
     txa                  
     pha
     tya
     pha
-    lda holder              ; holds the index for the entity
-    jsr loadEntity
-    lda position_offset
-    tay
+    ldy position_offset
     iny
     lda ($fe),y 
     tax
@@ -110,9 +103,6 @@ drawEntity
     pla
     tax
     pla
-    sta $fe
-    pla
-    sta $ff  
     rts
     
 drawOn
@@ -148,6 +138,7 @@ animate
 	pla
 	sta num_frames
 	pla
+    
 	sta graphic_offset
 	lda jason_animation_state
 	adc graphic_offset
@@ -161,6 +152,7 @@ animate
 StoreNoReset
 	adc #1
 	sta jason_animation_state
+    
 	lda return_add_low
 	pha
 	lda return_add_hi

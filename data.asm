@@ -20,6 +20,7 @@ clock           byte $00
 drawables:
 terrain     word terrain_char
 ground      word ground_char
+on_holder   word on_char
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE EXTEND DRAWABLE
@@ -40,6 +41,7 @@ music:
 music_player_1  word track_index_1
 music_player_2  word track_index_2
 music_player_3  word track_index_3
+music_player_4  word track_index_4
                 word 0
                 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -50,46 +52,54 @@ terrain_color   byte $00
 ground_char     byte #16
 ground_color    byte $05
 
+on_char         byte $00
+on_color        byte $00
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-template
+template                                ; this is used for calculating offsets
 char
 player_char             byte $02
 color
 player_color            byte $06
-position
-player_position         byte $00, #23
-direction
-player_direction        byte $00
-on
-player_on               byte $00
 t_clock
 player_clock            byte $00
 clock_updates
 player_clock_updates    byte $07
+position
+player_position         byte $00, #23
+direction
+player_direction        byte $00
+state
+player_state            byte $00
+on
+player_on               byte $00, $00
 
 enemy1_char             byte #2
 enemy1_color            byte $08
-enemy1_position         byte $00, #46
-enemy1_direction        byte $00
-enemy1_on               byte $00
 enemy1_clock            byte $00
 enemy1_clock_updates    byte $03
+enemy1_position         byte $00, #46
+enemy1_direction        byte $00
+enemy1_state            byte $00
+enemy1_on               byte $00, $00
     
 enemy2_char             byte #2
 enemy2_color            byte $07
-enemy2_position         byte $00, #68
-enemy2_direction        byte $00
-enemy2_on               byte $00
 enemy2_clock            byte $00
 enemy2_clock_updates    byte $05
+enemy2_position         byte $00, #68
+enemy2_direction        byte $00
+enemy2_state            byte $00
+enemy2_on               byte $00, $00
 
 bullet1_char            byte #2
 bullet1_color           byte $07
-bullet1_position        byte $00, #68
-bullet1_direction       byte $00
-bullet1_on              byte $00
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
+bullet1_position        byte $00, #68
+bullet1_direction       byte $00
+bullet1_state           byte $00
+bullet1_on              byte $00, $00
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -97,23 +107,24 @@ track_index
 track_index_1           byte $00
 note_index
 note_index_1            byte $01
+music_clock_1           byte $00
+music_clock_updates_1   byte $01
     
 track_index_2           byte $01
 note_index_2            byte $01
-
-track_index_3           byte $01
-note_index_3            byte $01
-    
-music_clock_1           byte $00
-music_clock_updates_1   byte $01
-
 music_clock_2           byte $00
 music_clock_updates_2   byte $01
 
+track_index_3           byte $01
+note_index_3            byte $01
 music_clock_3           byte $00
 music_clock_updates_3   byte $01
 
-
+track_index_4           byte $01
+note_index_4            byte $01
+music_clock_4           byte $00
+music_clock_updates_4   byte $01
+    
 graphics:
 jason_right0:
     byte $18, $18, $13, $3e, $58, $18, $34, $46
@@ -239,7 +250,7 @@ song1    word song1_length
 track_template
 track_length
 song0_length
-    byte #20, $00    ; number of notes plus one
+    byte 20 , $00    ; number of notes plus one
 track_notes
 song0_notes
     ;     duration note
@@ -265,7 +276,7 @@ song0_notes
     byte #5, #241
     
 song1_length
-    byte #20, $00    ; number of notes plus one
+    byte 20 , $00    ; number of notes plus one
 song1_notes
     ;     duration note
     byte #8, #135
@@ -289,7 +300,8 @@ song1_notes
     byte #8, #239
     byte #8, #241
     
-;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE 
+;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
+
 terrain_offset      byte terrain - drawables
 ground_offset       byte ground - drawables
 char_offset         byte char - template
@@ -301,9 +313,12 @@ clock_offset        byte t_clock - template
 clock_update_offset byte clock_updates - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
+music_offset        byte music - entities
 mp1offset           byte music_player_3 - entities
 mp2offset           byte music_player_2 - entities
 mp3offset           byte music_player_1 - entities
-track_offset        byte track_index - music_template
-note_offset         byte note_index - music_template
+tracki_offset       byte track_index - music_template
+notei_offset        byte note_index - music_template
 length_offset       byte track_length - track_template
+track_offset        byte track_notes - track_template
+state_offset        byte state - template

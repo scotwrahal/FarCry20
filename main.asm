@@ -45,8 +45,12 @@ play_loop
     jsr updateMusic
     jsr input
     ; change add update functions
+    ;jsr updateEntitys
     lda #0
+    jsr loadEntity
     jsr moveEntity
+    jsr drawEntity
+    
     jmp play_loop
 
     INCDIR  "farcry20"    
@@ -60,6 +64,10 @@ play_loop
     INCLUDE "data.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+updateEntitys
+    
+
+
 
 loadEntity
     clc 
