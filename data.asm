@@ -60,7 +60,7 @@ position
 player_position         byte $00, #23
 direction
 player_direction        byte $00
-tmeplate_on
+on
 player_on               byte $00
 t_clock
 player_clock            byte $00
@@ -290,20 +290,20 @@ song1_notes
     byte #8, #241
     
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE 
-terrain_offset      byte #0; = terrain - drawables
-ground_offset       byte #2; = ground - drawables
-char_offset         byte #0; = char - template
-color_offset        byte #1; = color - template
-position_offset     byte #2; = position - template
-direction_offset    byte #4; = direction - template
-on_offset           byte #5; = on - template
-clock_offset        byte #6; = clock - template
-clock_update_offset byte #7; = clock_updates - template
-entity_offset       byte #4; = entities - drawables
-bullet_offset       byte #6; = bullets - entities
-mp1offset           byte #10; = music_player_3 - entities
-mp2offset           byte #12; = music_player_2 - entities
-mp3offset           byte #14; = music_player_1 - entities
-track_offset        byte #0; = track_index - music_template
-note_offset         byte #1; = note_index - music_template
-length_offset       byte #0; = track_length - track_template
+terrain_offset      byte terrain - drawables
+ground_offset       byte ground - drawables
+char_offset         byte char - template
+color_offset        byte color - template
+position_offset     byte position - template
+direction_offset    byte direction - template
+on_offset           byte on - template
+clock_offset        byte t_clock - template
+clock_update_offset byte clock_updates - template
+entity_offset       byte entities - drawables
+bullet_offset       byte bullets - entities
+mp1offset           byte music_player_3 - entities
+mp2offset           byte music_player_2 - entities
+mp3offset           byte music_player_1 - entities
+track_offset        byte track_index - music_template
+note_offset         byte note_index - music_template
+length_offset       byte track_length - track_template
