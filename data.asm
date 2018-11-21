@@ -247,7 +247,7 @@ song1_end
 
 terrain_offset      byte terrain - drawables
 ground_offset       byte ground - drawables
-on_holder_offset    byte ground - drawables
+on_holder_offset    byte on_holder - drawables
 char_offset         byte char - template
 color_offset        byte color - template
 position_offset     byte position - template
