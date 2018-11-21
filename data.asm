@@ -26,7 +26,6 @@ on_holder   word on_char
 ; THESE EXTEND DRAWABLE
 entities:
 player      word player_char
-            word 0
 enemys:
 enemy1      word enemy1_char
 enemy2      word enemy2_char
@@ -39,7 +38,7 @@ bullet1     word bullet1_char
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
-music_player_1  ;word track_index_1
+music_player_1  word track_index_1
 music_player_2  ;word track_index_2
 music_player_3  ;word track_index_3
 music_player_4  ;word track_index_4
@@ -67,7 +66,7 @@ player_clock            byte $00
 clock_updates
 player_clock_updates    byte $08
 position
-player_position         byte $00, #23
+player_position         byte $00, #25
 direction
 player_direction        byte $80
 state
@@ -75,9 +74,9 @@ player_state            byte $00
 max_state
 player_max_state        byte $03
 on_char_template
-player_on_color         byte $01
+player_on_char          byte $16
 on_color_template
-player_on_char          byte $01
+player_on_color         byte $05
 
 enemy1_char             byte #2
 enemy1_color            byte $08
@@ -248,7 +247,7 @@ song1_end
 
 terrain_offset      byte terrain - drawables
 ground_offset       byte ground - drawables
-on_holder_offset    byte on_holder - drawables
+on_holder_offset    byte ground - drawables
 char_offset         byte char - template
 color_offset        byte color - template
 position_offset     byte position - template

@@ -45,6 +45,7 @@ play_loop
     INCDIR  "farcry20"
     INCLUDE "levels.asm"
     INCLUDE "entity.asm"
+    INCLUDE "collision.asm"
     INCLUDE "musicEntity.asm"
     INCLUDE "AI.asm"
     INCLUDE "bulletEntity.asm"
