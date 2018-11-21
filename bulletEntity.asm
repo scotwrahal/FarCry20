@@ -6,11 +6,15 @@ loadBulletEntity
 moveBullet
     clc
     adc bullet_offset
-    jsr moveEntity
+    jsr checkClock
+    cmp #0 
+    bne NoTime
+    jsr move
     ldy direction_offset
     lda #1
     ora ($fe),y
     sta ($fe),y
+NoTime
     rts
     
 drawBullet
