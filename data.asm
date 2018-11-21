@@ -26,10 +26,11 @@ on_holder   word on_char
 ; THESE EXTEND DRAWABLE
 entities:
 player      word player_char
-
+            word 0
 enemys:
 enemy1      word enemy1_char
 enemy2      word enemy2_char
+            word 0
     
 bullets:
 bullet1     word bullet1_char
@@ -38,10 +39,10 @@ bullet1     word bullet1_char
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
-music_player_1  word track_index_1
-music_player_2  word track_index_2
-music_player_3  word track_index_3
-music_player_4  word track_index_4
+music_player_1  ;word track_index_1
+music_player_2  ;word track_index_2
+music_player_3  ;word track_index_3
+music_player_4  ;word track_index_4
                 word #0
                 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,11 +65,11 @@ player_color            byte $06
 t_clock
 player_clock            byte $00
 clock_updates
-player_clock_updates    byte $07
+player_clock_updates    byte $08
 position
 player_position         byte $00, #23
 direction
-player_direction        byte $00
+player_direction        byte $80
 state
 player_state            byte $00
 on_char_template
@@ -128,38 +129,22 @@ music_clock_4           byte $00
 music_clock_updates_4   byte $01
     
 graphics:
-jason_right0:
-    byte $18, $18, $13, $3e, $58, $18, $34, $46
-jason_right1:
-	byte $18, $18, $13, $3e, $38, $18, $28, $2c
-jason_right2:
-	byte $18, $18, $13, $1e, $18, $18, $10, $18
-jason_left0:
-	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
-jason_left1:
-	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
-jason_left2:
-	byte $18, $18, $c8, $78, $18, $18, $08, $18
-jason_up0:
-	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
-jason_up1:
-	byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
-jason_up2:
-	byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
-jason_down0:
-	byte $18, $18, $18, $3c, $5a, $58, $58, $08
-jason_down1:
-	byte $18, $18, $18, $3c, $5c, $58, $58, $00
-jason_down2:
-	byte $18, $18, $18, $3c, $5a, $58, $58, $10
-jaguar_right0:
-    byte $02, $43, $43, $9e, $7f, $66, $62, $a1
-palm_tree0:
-    byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
-shrub0:
-    byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
-shrub1:
-    byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
+jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
+jason_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
+jason_down0:    byte $18, $18, $18, $3c, $5a, $58, $58, $08
+jason_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
+jason_right0:   byte $18, $18, $13, $3e, $58, $18, $34, $46
+jason_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
+jason_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
+jason_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
+jason_right1:	byte $18, $18, $13, $3e, $38, $18, $28, $2c
+jason_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
+jason_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
+jason_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
+jason_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
+palm_tree0:     byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
+shrub0:         byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
+shrub1:         byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
 end_graphics
 	
 jason_animation_state:
@@ -209,26 +194,22 @@ song0_length
 song_notes
 song0_notes
     ;     duration note
-    byte #5, #135
-    byte #5, #147
-    byte #5, #159
-    byte #5, #167
-    byte #5, #179
-    byte #5, #187
-    byte #5, #195
-    byte #5, #201
-    byte #5, #207
-    byte #5, #212
-    byte #5, #217
-    byte #5, #221
-    byte #5, #225
-    byte #5, #228
-    byte #5, #231
-    byte #5, #233
-    byte #5, #235
-    byte #5, #237
-    byte #5, #239
-    byte #5, #241
+    byte    #15, #231
+    byte    #15, #222
+    byte    #15, #231
+    byte    #15, #206
+    byte    #15, #231
+    byte    #15, #206
+    byte    #15, #218
+    byte    #15, #206
+    byte    #15, #229
+    byte    #15, #231
+    byte    #15, #220
+    byte    #15, #206
+    byte    #15, #181
+    byte    #15, #206
+    byte    #15, #218
+    byte    #15, #206
 song0_end
     
 song1_length
@@ -256,6 +237,7 @@ song1_notes
     byte #8, #239
     byte #8, #241
 song1_end
+
     
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
@@ -273,6 +255,7 @@ clock_update_offset byte clock_updates - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
 music_offset        byte music - entities
+enemy_offset        byte enemys - entities
 mp1offset           byte music_player_3 - entities
 mp2offset           byte music_player_2 - entities
 mp3offset           byte music_player_1 - entities

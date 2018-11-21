@@ -20,6 +20,7 @@ updateMusic
     ldx #0
 ChannelUpdate
     txa
+    asl
     jsr loadMusicEntity
     lda $ff                 ; only need to check the page
     cmp #0                  ; null terminated list
@@ -31,18 +32,10 @@ ChannelUpdate
     jsr loadSong
     jsr loadNote   
     sta holder
-    txa             
-    pha
-    lsr                     ; since the offset for the register is half the note index
-    tax
-    lda holder
     sta $900a,x             ; store the note in the register
-    pla
-    tax
     jsr updateNote          ; advances the music system to the next note
     
 NoChannelUpdate
-    inx                     ; increment the index by 2 becuase notes are 2 bytes
     inx
     jmp ChannelUpdate 
     

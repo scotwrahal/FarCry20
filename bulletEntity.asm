@@ -1,4 +1,4 @@
-loadBullet
+loadBulletEntity
     clc
     adc bullet_offset
     jmp loadEntity
@@ -15,3 +15,6 @@ moveBullet
     
 drawBullet
     jmp drawEntity
+    
+updateBulletEntity
+    rts

@@ -8,7 +8,6 @@
     byte     0                   ;null terminator for SYS statement
 end_basic
     word     0                   ;indicating end of BASIC stub
-
 start:
     lda #255                ; point to custom character set
     sta $9005
@@ -47,6 +46,7 @@ play_loop
     INCLUDE "levels.asm"
     INCLUDE "entity.asm"
     INCLUDE "musicEntity.asm"
+    INCLUDE "AI.asm"
     INCLUDE "bulletEntity.asm"
     INCLUDE "clock.asm"
     INCLUDE "drawable.asm"
@@ -54,47 +54,57 @@ play_loop
     INCLUDE "data.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-updateEntities
-    ldx #0
-UpdateEntity
-    txa
-    jsr loadEntity
-    lda $ff
-    cmp #0
-    beq EntitiesUpdated
-    jsr updateEntity
-    inx                 ;need to update the index by 2 because they are memory addresses
-    inx
-    jmp UpdateEntity
-EntitiesUpdated
-    rts
-   
-
 setTimers   
     jsr updateClock
         
-    ldx #0
+    ldx #0              ; index
 SetEntityClocks
-    txa
+    txa                 
+    asl                 ; multiply by 2 because they are addresses
     jsr loadEntity
-    lda $ff
-    cmp #0
-    beq EntityClocksSet
-    jsr setClockEntity
-    inx                 ;need to update the index by 2 because they are memory addresses
-    inx
+    lda $ff             ; load the page number of the entity
+    cmp #0              ; no entitys are on pg 0
+    beq EntityClocksSet ; so break out of the loop
+    jsr setClockEntity  ; sets the entity clock to the current clock
+    inx                 ; increase the index
     jmp SetEntityClocks
 EntityClocksSet
 
     ldx #0
+SetAIClocks
+    txa
+    asl
+    jsr loadAIEntity
+    lda $ff
+    cmp #0
+    beq AIClocksSet
+    jsr setClockEntity
+    inx
+    jmp SetAIClocks
+AIClocksSet
+
+    ldx #0
+SetBulletClocks
+    txa
+    asl
+    jsr loadBulletEntity
+    lda $ff
+    cmp #0
+    beq BulletClocksSet
+    jsr setClockEntity
+    inx
+    jmp SetBulletClocks
+BulletClocksSet
+
+    ldx #0
 SetMusicClocks
     txa
+    asl
     jsr loadMusicEntity
     lda $ff
     cmp #0
     beq MusicClocksSet
     jsr setClockEntity
-    inx                 ;need to update the index by 2 because they are memory addresses
     inx
     jmp SetMusicClocks
 MusicClocksSet

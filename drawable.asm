@@ -1,6 +1,4 @@
 ; TODO make a list of functions
-
-
 loadDrawable
     sta holder
     pha
@@ -102,5 +100,29 @@ DrawBottom
 EndDraw
     pla
     tay
+    pla
+    rts
+    
+    
+; getFromPosition returns the color and the character at a locaiton on the screen
+;   A: top/bottom location 0 ; = top
+;   X: location
+;   return
+;   A: character
+;   X: color
+getFromPosition
+    cmp #0
+    bne readBottom
+    lda $1e00,x
+    pha
+    lda $9600,x
+    tax
+    pla
+    rts
+readBottom
+    lda $1f00,x
+    pha
+    lda $9700,x
+    tax
     pla
     rts

@@ -1,12 +1,64 @@
 ; TODO make a list of functions
+
+updateEntities
+    ldx #0
+UpdateEntity
+    txa
+    asl
+    jsr loadEntity
+    lda $ff
+    cmp #0
+    beq EntitiesUpdated
+    jsr updateEntity
+    inx
+    jmp UpdateEntity
+EntitiesUpdated
+
+    ldx #0
+UpdateBullets
+    txa
+    asl
+    jsr loadBulletEntity
+    lda $ff
+    cmp #0
+    beq BulletEntitiesUpdated
+    jsr updateBulletEntity
+    inx
+    jmp UpdateBullets
+BulletEntitiesUpdated
+    
+        ldx #0
+UpdateAI
+    txa
+    asl
+    jsr loadAIEntity
+    lda $ff
+    cmp #0
+    beq AIEntitiesUpdated
+    jsr updateAIEntity
+    inx
+    jmp UpdateAI
+AIEntitiesUpdated
+    rts
+
 updateEntity
     pha
     tya
     pha
     jsr moveEntity
     jsr check_collision
+    ;collide with terrain
     cmp #1
-    bne NoCollide
+    ;beq TerrainCollide
+        
+NoCollide
+    jsr drawEntity
+    pla
+    tay
+    pla
+    rts
+    
+TerrainCollide
     jsr invertDirection
     ldy direction_offset
     lda ($fe),y
@@ -14,13 +66,8 @@ updateEntity
     sta ($fe),y
     jsr move
     jsr invertDirection
-    
-NoCollide
-    jsr drawEntity
-    pla
-    tay
-    pla
-    rts
+    jmp NoCollide
+
     
 setClockEntity
     lda clock
@@ -47,18 +94,69 @@ drawEntity
     pha
     tya
     pha
+    ldy state_offset
+    lda ($fe),y
+    asl
+    asl
+    pha
+    jsr getDirection
+    sta holder
+    pla
+    clc
+    adc holder
+    sta holder
+    pha
+    ldy char_offset
+    lda ($fe),y
+    clc
+    adc holder
+    sta ($fe),y
     ldy position_offset
     iny
     lda ($fe),y 
     tax
     dey 
-    lda ($fe),y 
+    lda ($fe),y
     jsr draw
+    pla
+    sta holder
+    ldy char_offset
+    lda ($fe),y
+    sec
+    sbc holder
+    sta ($fe),y
     pla
     tay
     pla
     tax
     pla
+    rts
+    
+getDirection
+    ldy direction_offset
+    lda ($fe),y
+_Up 
+    asl
+    bcc _Down
+    lda #0
+    rts 
+_Down
+    asl
+    bcc _Left
+    lda #1
+    rts 
+_Left
+    asl
+    bcc _Right
+    lda #2
+    rts 
+_Right
+    asl
+    bcc _None
+    lda #3
+    rts 
+_None
+    lda #$ff
     rts
     
 animateEntity
@@ -109,13 +207,29 @@ move
     ldx #1
     lda ($fe),y
     sta new_position,x
+    
 
     ldy direction_offset
     lda ($fe),y             ; load the direction into A
     lsr
-    bcc noMove
+    php
     asl
-    sta ($fe),y             ; update the direction to say that it has been moved
+    sta ($fe),y
+    plp
+    bcc noMove
+    
+    ldy state_offset
+    lda ($fe),y
+    clc
+    adc #1
+    cmp #3
+    bne skip
+    lda #0
+skip
+    sta ($fe),y
+    
+    ldy direction_offset
+    lda ($fe),y
     ldy #1                  ; load 1 for the low position, 0 is the high used in the move
     asl                     ; shift through the bits to get the direction
     bcs MoveUp
@@ -202,10 +316,9 @@ FinishMove
     tax
     dey
     lda ($fe),y
-    jsr drawOn              ; draw the ground in the old position
-    
-    
-    ldy #1                  ; move the new position to the entity position and set up for draw
+    jsr drawOn              ; draw the thing you were on in the old position
+        
+    ldy #1                  ; move the new position to the entity position
     lda new_position,y
     tax
     lda new_position
@@ -272,6 +385,10 @@ check_collision
     lda ($fe),y
     cmp terrain_char
     beq Collide
+    ; position based checks
+    
+    
+    
     pla
     tay
     lda #0
@@ -279,7 +396,7 @@ check_collision
 Collide
     pla
     tay
-    lda #1
+    lda #1              ; terrain collision
     rts
     
 ; inverts the direction of the entity
@@ -305,29 +422,5 @@ EndFlip
     sta ($fe),y
     pla
     tay
-    pla
-    rts
-    
-	
-; getFromPosition returns the color and the character at a locaiton on the screen
-;   A: top/bottom location 0 ; = top
-;   X: location
-;   return
-;   A: character
-;   X: color
-getFromPosition
-    cmp #0
-    bne readBottom
-    lda $1e00,x
-    pha
-    lda $9600,x
-    tax
-    pla
-    rts
-readBottom
-    lda $1f00,x
-    pha
-    lda $9700,x
-    tax
     pla
     rts
