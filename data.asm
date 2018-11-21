@@ -26,9 +26,9 @@ on_holder   word on_char
 ; THESE EXTEND DRAWABLE
 entities:
 player      word player_char
-enemys:
-enemy1      word enemy1_char
-enemy2      word enemy2_char
+AIs:
+AI1      word AI1_char
+AI2      word AI2_char
             word 0
     
 bullets:
@@ -78,25 +78,25 @@ player_on_char          byte $16
 on_color_template
 player_on_color         byte $05
 
-enemy1_char             byte #2
-enemy1_color            byte $08
-enemy1_clock            byte $00
-enemy1_clock_updates    byte $03
-enemy1_position         byte $00, #46
-enemy1_direction        byte $00
-enemy1_state            byte $00
-enemy1_max_state        byte $01
-enemy1_on               byte $00, $00
+AI1_char                byte #2
+AI1_color               byte $08
+AI1_clock               byte $00
+AI1_clock_updates       byte $03
+AI1_position            byte $00, #46
+AI1_direction           byte $00
+AI1_state               byte $00
+AI1_max_state           byte $01
+AI1_on                  byte $00, $00
     
-enemy2_char             byte #2
-enemy2_color            byte $07
-enemy2_clock            byte $00
-enemy2_clock_updates    byte $05
-enemy2_position         byte $00, #68
-enemy2_direction        byte $00
-enemy2_state            byte $00
-enemy2_max_state        byte $01
-enemy2_on               byte $00, $00
+AI2_char                byte #2
+AI2_color               byte $07
+AI2_clock               byte $00
+AI2_clock_updates       byte $05
+AI2_position            byte $00, #68
+AI2_direction           byte $00
+AI2_state               byte $00
+AI2_max_state           byte $01
+AI2_on                  byte $00, $00
 
 bullet1_char            byte #4
 bullet1_color           byte $07
@@ -259,7 +259,7 @@ clock_update_offset byte clock_updates - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
 music_offset        byte music - entities
-enemy_offset        byte enemys - entities
+AI_offset           byte AIs - entities
 mp1offset           byte music_player_3 - entities
 mp2offset           byte music_player_2 - entities
 mp3offset           byte music_player_1 - entities

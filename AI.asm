@@ -1,6 +1,6 @@
 loadAIEntity
         clc
-    adc enemy_offset
+    adc AI_offset
     jmp loadEntity
     
 updateAIEntity
