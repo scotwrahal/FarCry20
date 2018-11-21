@@ -222,10 +222,17 @@ move
     lda ($fe),y
     clc
     adc #1
-    cmp #3
+    sta holder
+    ldy max_state_offset
+    lda ($fe),y
+    cmp holder
     bne skip
     lda #0
+    jmp restore
 skip
+    lda holder
+restore
+    ldy state_offset
     sta ($fe),y
     
     ldy direction_offset
