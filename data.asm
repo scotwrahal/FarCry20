@@ -72,6 +72,8 @@ direction
 player_direction        byte $80
 state
 player_state            byte $00
+max_state
+player_max_state        byte $03
 on_char_template
 player_on_color         byte $01
 on_color_template
@@ -84,6 +86,7 @@ enemy1_clock_updates    byte $03
 enemy1_position         byte $00, #46
 enemy1_direction        byte $00
 enemy1_state            byte $00
+enemy1_max_state        byte $01
 enemy1_on               byte $00, $00
     
 enemy2_char             byte #2
@@ -93,6 +96,7 @@ enemy2_clock_updates    byte $05
 enemy2_position         byte $00, #68
 enemy2_direction        byte $00
 enemy2_state            byte $00
+enemy2_max_state        byte $01
 enemy2_on               byte $00, $00
 
 bullet1_char            byte #4
@@ -102,6 +106,7 @@ bullet1_clock_updates   byte $05
 bullet1_position        byte $00, #69
 bullet1_direction       byte $00
 bullet1_state           byte $00
+bullet1_max_state       byte $01
 bullet1_on              byte $00, $00
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -264,5 +269,6 @@ notei_offset        byte note_index - music_template
 length_offset       byte song_length - song_template
 track_offset        byte song_notes - song_template
 state_offset        byte state - template
+max_state_offset    byte max_state - template
 level_size          byte level_end - level_start
 graphics_size       byte end_graphics - graphics
