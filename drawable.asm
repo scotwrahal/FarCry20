@@ -11,7 +11,7 @@ loadDrawable
     iny
     lda drawables,y
     sta $ff
-    pla 
+    pla
     tya
     lda holder
     pla
@@ -70,7 +70,7 @@ drawDrawable
     pla
     sta $ff
     rts
-    
+
 ; draw
 ;   A: top/bottom location 0 ; = top
 ;   X: location
@@ -102,8 +102,8 @@ EndDraw
     tay
     pla
     rts
-    
-    
+
+
 ; getFromPosition returns the color and the character at a locaiton on the screen
 ;   A: top/bottom location 0 ; = top
 ;   X: location

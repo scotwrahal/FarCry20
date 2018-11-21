@@ -26,7 +26,7 @@ UpdateBullets
     inx
     jmp UpdateBullets
 BulletEntitiesUpdated
-    
+
         ldx #0
 UpdateAI
     txa
@@ -61,18 +61,18 @@ NoTimeBasedUpdates
     tay
     pla
     rts
-    
+
 setClockEntity
     lda clock
     ldy clock_offset
-    sta ($fe),y    
+    sta ($fe),y
     rts
-   
+
 loadEntity
-    clc 
+    clc
     adc entity_offset
     jmp loadDrawable
-    
+
 loadEntity2
     tay
     lda entities,y
@@ -81,10 +81,10 @@ loadEntity2
     lda entities,y
     sta $fd
     rts
-    
+
 drawEntity
     pha
-    txa                  
+    txa
     pha
     tya
     pha
@@ -107,9 +107,9 @@ drawEntity
     sta ($fe),y
     ldy position_offset
     iny
-    lda ($fe),y 
+    lda ($fe),y
     tax
-    dey 
+    dey
     lda ($fe),y
     jsr draw
     pla
@@ -154,7 +154,7 @@ move
     sta ($fe),y
     plp
     bcc noMove
-    
+
     ldy state_offset
     lda ($fe),y
     clc
@@ -171,7 +171,7 @@ skip
 restore
     ldy state_offset
     sta ($fe),y
-    
+
     ldy direction_offset
     lda ($fe),y
     ldy #1                  ; load 1 for the low position, 0 is the high used in the move
@@ -261,19 +261,19 @@ FinishMove
     dey
     lda ($fe),y
     jsr drawOn              ; draw the thing you were on in the old position
-        
+
     ldy #1                  ; move the new position to the entity position
     lda new_position,y
     tax
     lda new_position
-    
+
     jsr getFromPosition
     ldy on_char_offset
     sta ($fe),y
     txa
     ldy on_color_offset
-    sta ($fe),y   
-    
+    sta ($fe),y
+
     ldy #1
     lda new_position,y
     ldy position_offset
@@ -290,21 +290,21 @@ EndMove
     tax
     pla
     rts
-    
+
 drawOn
     pha
     tya
     pha
     txa
     pha
-    
+
     ldy on_char_offset
     lda ($fe),y
     sta on_char
     ldy on_color_offset
     lda ($fe),y
     sta on_color
-    
+
     ldy position_offset
     iny
     lda ($fe),y
@@ -318,5 +318,5 @@ drawOn
     tax
     pla
     tay
-    pla    
+    pla
     rts

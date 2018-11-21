@@ -7,7 +7,7 @@ moveBullet
     clc
     adc bullet_offset
     jsr checkClock
-    cmp #0 
+    cmp #0
     bne NoTime
     jsr move
     ldy direction_offset
@@ -16,9 +16,9 @@ moveBullet
     sta ($fe),y
 NoTime
     rts
-    
+
 drawBullet
     jmp drawEntity
-    
+
 updateBulletEntity
     rts

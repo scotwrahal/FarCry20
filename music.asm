@@ -30,15 +30,15 @@ ChannelUpdate
     beq NoChannelUpdate
 
     jsr loadSong
-    jsr loadNote   
+    jsr loadNote
     sta holder
     sta $900a,x             ; store the note in the register
     jsr updateNote          ; advances the music system to the next note
-    
+
 NoChannelUpdate
     inx
-    jmp ChannelUpdate 
-    
+    jmp ChannelUpdate
+
 NoMoreChannels
     pla
     sta $fc
@@ -54,18 +54,18 @@ NoMoreChannels
     tay
     pla
     rts
-    
+
 setClockMusic
     jmp setClockEntity
 
 loadMusicEntity
-    clc 
+    clc
     adc music_offset
     jmp loadEntity
-    
+
 loadTrack
     sta holder
-    tya 
+    tya
     pha
     lda holder
     ldy tracki_offset
@@ -103,11 +103,11 @@ loadSong
     lda song_memory,y
     sta $fd
     rts
-    
+
 loadNote
-    ldy notei_offset                    
+    ldy notei_offset
     lda ($fe),y                         ; load the note index
     tay
-    iny                                 ; the key is stored in the 1st location of a note 
+    iny                                 ; the key is stored in the 1st location of a note
     lda ($fc),y                         ; get the key to be played
     rts

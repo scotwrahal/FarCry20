@@ -55,12 +55,12 @@ play_loop
     INCLUDE "data.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-setTimers   
+setTimers
     jsr updateClock
-        
+
     ldx #0              ; index
 SetEntityClocks
-    txa                 
+    txa
     asl                 ; multiply by 2 because they are addresses
     jsr loadEntity
     lda $ff             ; load the page number of the entity

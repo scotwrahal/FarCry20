@@ -5,9 +5,9 @@ holder          byte $00
 last_input      byte $00
 
 new_position    byte $00, $00
-	
+
 return_add_hi   byte $00
-	
+
 return_add_low  byte $00
 
 graphic_offset  byte $00
@@ -30,7 +30,7 @@ AIs:
 AI1      word AI1_char
 AI2      word AI2_char
             word 0
-    
+
 bullets:
 bullet1     word bullet1_char
             word 0              ; terminator for list
@@ -43,7 +43,7 @@ music_player_2  ;word track_index_2
 music_player_3  ;word track_index_3
 music_player_4  ;word track_index_4
                 word #0
-                
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terrain_char    byte #14
 terrain_color   byte $00
@@ -87,7 +87,7 @@ AI1_direction           byte $00
 AI1_state               byte $00
 AI1_max_state           byte $01
 AI1_on                  byte $00, $00
-    
+
 AI2_char                byte #2
 AI2_color               byte $07
 AI2_clock               byte $00
@@ -116,7 +116,7 @@ note_index
 note_index_1            byte $02        ; starts at 2 for all music players
 music_clock_1           byte $00
 music_clock_updates_1   byte $01
-    
+
 track_index_2           byte $00
 note_index_2            byte $02
 music_clock_2           byte $00
@@ -131,7 +131,7 @@ track_index_4           byte $00
 note_index_4            byte $02
 music_clock_4           byte $00
 music_clock_updates_4   byte $01
-    
+
 graphics:
 jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
 jason_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
@@ -150,7 +150,7 @@ palm_tree0:     byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
 end_graphics
-	
+
 jason_animation_state:
 	byte $00
 
@@ -215,7 +215,7 @@ song0_notes
     byte    #15, #218
     byte    #15, #206
 song0_end
-    
+
 song1_length
     byte  song1_end - song1_notes, $00    ; number of notes plus one
 song1_notes
@@ -242,7 +242,7 @@ song1_notes
     byte #8, #241
 song1_end
 
-    
+
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
 terrain_offset      byte terrain - drawables

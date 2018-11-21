@@ -25,7 +25,7 @@ UpdateClock                 ; if the gameclock is larger than the entity clock m
     lda #1
     rts                     ; restore values and return the result of the check
 
-    
+
     ; update clock updates the clock and stores it where we can check it
 updateClock
     pha

@@ -32,7 +32,7 @@ loadByte
     tay
     pla
     rts
-; helper function for load level   
+; helper function for load level
 readByte
     asl $ff                 ; get the value for the next bit
     bcs ReadGround          ; branch for terrain and ground
@@ -50,7 +50,7 @@ BoundarySkip
     dey
     bne readByte            ; repeat till the byte is done
     rts
-    
+
 load_level
     sta holder
     pha
@@ -70,7 +70,7 @@ load_level
     iny
     lda level_mem,y
     sta $fe
-    
+
 ; start at 0 0
     lda #0
     sta $fc             	; store the byte number
@@ -82,7 +82,7 @@ load_row
     beq LevelLoadDone       ; BREAK out of load
     pla                     ; restore the location
 
-    jsr loadByte    		
+    jsr loadByte
     ldy #8          		; the number of bits in the first byte
     jsr readByte
     jsr loadByte

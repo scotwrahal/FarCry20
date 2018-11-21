@@ -8,7 +8,7 @@ handleCollision
     beq TerrainCollide
 CollidedWithNothing
     rts
-    
+
 TerrainCollide
     jsr terrainCollisionHandler
     rts
@@ -22,8 +22,8 @@ terrainCollisionHandler
     jsr move
     jsr invertDirection
     rts
-    
-    
+
+
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 checkCollision
@@ -73,7 +73,7 @@ CollideEntityDone
     tay
     lda #0
     rts
-    
+
 checkEntity
     ldy position_offset
     lda ($fe),y
@@ -112,35 +112,35 @@ getChar
     lda ($fe),y
     clc
     adc holder
-    rts    
-    
+    rts
+
 getDirection
     ldy direction_offset
     lda ($fe),y
-_Up 
+_Up
     asl
     bcc _Down
     lda #0
-    rts 
+    rts
 _Down
     asl
     bcc _Left
     lda #1
-    rts 
+    rts
 _Left
     asl
     bcc _Right
     lda #2
-    rts 
+    rts
 _Right
     asl
     bcc _None
     lda #3
-    rts 
+    rts
 _None
     lda #$ff
     rts
-    
+
 ; inverts the direction of the entity
 invertDirection
     pha
