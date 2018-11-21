@@ -1,9 +1,24 @@
-loadAIEntity
+setAIClocks    
+    ldx #0
+SetAIClocks
+    txa
+    asl
+    jsr loadAI
+    lda $ff
+    cmp #0
+    beq AIClocksSet
+    jsr setClock
+    inx
+    jmp SetAIClocks
+AIClocksSet
+    rts
+
+loadAI
         clc
     adc AI_offset
     jmp loadEntity
 
-updateAIEntity
+updateAI
     jsr setDirection
     jsr updateEntity
     rts

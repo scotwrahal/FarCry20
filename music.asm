@@ -1,5 +1,20 @@
 ; TODO make a list of functions
 
+setMusicClocks
+    ldx #0
+SetMusicClocks
+    txa
+    asl
+    jsr loadMusic
+    lda $ff
+    cmp #0
+    beq MusicClocksSet
+    jsr setClock
+    inx
+    jmp SetMusicClocks
+MusicClocksSet
+    rts
+
 
 ; update music will update the current track playing
 updateMusic
@@ -21,7 +36,7 @@ updateMusic
 ChannelUpdate
     txa
     asl
-    jsr loadMusicEntity
+    jsr loadMusic
     lda $ff                 ; only need to check the page
     cmp #0                  ; null terminated list
     beq NoMoreChannels
@@ -56,9 +71,9 @@ NoMoreChannels
     rts
 
 setClockMusic
-    jmp setClockEntity
+    jmp setClock
 
-loadMusicEntity
+loadMusic
     clc
     adc music_offset
     jmp loadEntity

@@ -1,4 +1,19 @@
-loadBulletEntity
+setBulletClocks
+    ldx #0
+SetBulletClocks
+    txa
+    asl
+    jsr loadBullet
+    lda $ff
+    cmp #0
+    beq BulletClocksSet
+    jsr setClock
+    inx
+    jmp SetBulletClocks
+BulletClocksSet
+    rts
+
+loadBullet
     clc
     adc bullet_offset
     jmp loadEntity
@@ -20,5 +35,5 @@ NoTime
 drawBullet
     jmp drawEntity
 
-updateBulletEntity
+updateBullet
     rts

@@ -58,55 +58,8 @@ play_loop
 setTimers
     jsr updateClock
 
-    ldx #0              ; index
-SetEntityClocks
-    txa
-    asl                 ; multiply by 2 because they are addresses
-    jsr loadEntity
-    lda $ff             ; load the page number of the entity
-    cmp #0              ; no entitys are on pg 0
-    beq EntityClocksSet ; so break out of the loop
-    jsr setClockEntity  ; sets the entity clock to the current clock
-    inx                 ; increase the index
-    jmp SetEntityClocks
-EntityClocksSet
-
-    ldx #0
-SetAIClocks
-    txa
-    asl
-    jsr loadAIEntity
-    lda $ff
-    cmp #0
-    beq AIClocksSet
-    jsr setClockEntity
-    inx
-    jmp SetAIClocks
-AIClocksSet
-
-    ldx #0
-SetBulletClocks
-    txa
-    asl
-    jsr loadBulletEntity
-    lda $ff
-    cmp #0
-    beq BulletClocksSet
-    jsr setClockEntity
-    inx
-    jmp SetBulletClocks
-BulletClocksSet
-
-    ldx #0
-SetMusicClocks
-    txa
-    asl
-    jsr loadMusicEntity
-    lda $ff
-    cmp #0
-    beq MusicClocksSet
-    jsr setClockEntity
-    inx
-    jmp SetMusicClocks
-MusicClocksSet
+    jsr setEntityClocks
+    jsr setAIClocks
+    jsr setBulletClocks
+    jsr setMusicClocks
     rts

@@ -1,5 +1,21 @@
 ; TODO make a list of functions
 
+setEntityClocks
+    ldx #0              ; index
+SetEntityClocks
+    txa
+    asl                 ; multiply by 2 because they are addresses
+    jsr loadEntity
+    lda $ff             ; load the page number of the entity
+    cmp #0              ; no entitys are on pg 0
+    beq EntityClocksSet ; so break out of the loop
+    jsr setClock  ; sets the entity clock to the current clock
+    inx                 ; increase the index
+    jmp SetEntityClocks
+EntityClocksSet
+    rts
+
+    
 updateEntities
     ldx #0
 UpdateEntity
@@ -18,11 +34,11 @@ EntitiesUpdated
 UpdateBullets
     txa
     asl
-    jsr loadBulletEntity
+    jsr loadBullet
     lda $ff
     cmp #0
     beq BulletEntitiesUpdated
-    jsr updateBulletEntity
+    jsr updateBullet
     inx
     jmp UpdateBullets
 BulletEntitiesUpdated
@@ -31,11 +47,11 @@ BulletEntitiesUpdated
 UpdateAI
     txa
     asl
-    jsr loadAIEntity
+    jsr loadAI
     lda $ff
     cmp #0
     beq AIEntitiesUpdated
-    jsr updateAIEntity
+    jsr updateAI
     inx
     jmp UpdateAI
 AIEntitiesUpdated
@@ -62,7 +78,7 @@ NoTimeBasedUpdates
     pla
     rts
 
-setClockEntity
+setClock
     lda clock
     ldy clock_offset
     sta ($fe),y
