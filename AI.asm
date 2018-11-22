@@ -12,9 +12,26 @@ SetAIClocks
     jmp SetAIClocks
 AIClocksSet
     rts
-
+    
+updateAIs
+    ldx #0
+    lda $11
+    sta AI1_direction
+UpdateAI
+    txa
+    asl
+    jsr loadAI
+    lda $ff
+    cmp #0
+    beq AIsUpdated
+    jsr updateAI
+    inx
+    jmp UpdateAI
+AIsUpdated
+    rts
+    
 loadAI
-        clc
+    clc
     adc AI_offset
     jmp loadEntity
 
@@ -24,5 +41,9 @@ updateAI
     rts
 
 setDirection
+    pha
+    lda #$11
+    sta AI1_direction
+    pla
     ; find your position relative to the player set your direction towards the player
     rts

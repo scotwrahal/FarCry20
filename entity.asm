@@ -9,13 +9,12 @@ SetEntityClocks
     lda $ff             ; load the page number of the entity
     cmp #0              ; no entitys are on pg 0
     beq EntityClocksSet ; so break out of the loop
-    jsr setClock  ; sets the entity clock to the current clock
+    jsr setClock        ; sets the entity clock to the current clock
     inx                 ; increase the index
     jmp SetEntityClocks
 EntityClocksSet
     rts
 
-    
 updateEntities
     ldx #0
 UpdateEntity
@@ -29,32 +28,6 @@ UpdateEntity
     inx
     jmp UpdateEntity
 EntitiesUpdated
-
-    ldx #0
-UpdateBullets
-    txa
-    asl
-    jsr loadBullet
-    lda $ff
-    cmp #0
-    beq BulletEntitiesUpdated
-    jsr updateBullet
-    inx
-    jmp UpdateBullets
-BulletEntitiesUpdated
-
-        ldx #0
-UpdateAI
-    txa
-    asl
-    jsr loadAI
-    lda $ff
-    cmp #0
-    beq AIEntitiesUpdated
-    jsr updateAI
-    inx
-    jmp UpdateAI
-AIEntitiesUpdated
     rts
 
 updateEntity
@@ -80,6 +53,8 @@ NoTimeBasedUpdates
 
 setClock
     lda clock
+    clc
+    adc #1
     ldy clock_offset
     sta ($fe),y
     rts
@@ -153,15 +128,6 @@ move
     pha
     lda holder
 
-    ldy position_offset
-    ; transfer the old position to the new position variable
-    lda ($fe),y             ; load the location
-    sta new_position
-    iny
-    ldx #1
-    lda ($fe),y
-    sta new_position,x
-
     ldy direction_offset
     lda ($fe),y             ; load the direction into A
     lsr
@@ -170,6 +136,15 @@ move
     sta ($fe),y
     plp
     bcc noMove
+    
+    ldy position_offset
+    ; transfer the old position to the new position variable
+    lda ($fe),y             ; load the location
+    sta new_position
+    iny
+    ldx #1
+    lda ($fe),y
+    sta new_position,x
 
     ldy state_offset
     lda ($fe),y
@@ -200,6 +175,9 @@ restore
     asl
     bcs MoveRight
 noMove
+    lda #0
+    ldy state_offset
+    sta ($fe),y
     jmp EndMove             ; if there is no direction then it doesn't move
 ; MoveUp is commented the others moves follow similar logic
 MoveUp
@@ -278,7 +256,7 @@ FinishMove
     lda ($fe),y
     jsr drawOn              ; draw the thing you were on in the old position
 
-    ldy #1                  ; move the new position to the entity position
+    ldy #1                  ; store the thing you are now standing on
     lda new_position,y
     tax
     lda new_position
@@ -290,7 +268,7 @@ FinishMove
     ldy on_color_offset
     sta ($fe),y
 
-    ldy #1
+    ldy #1                  ; move the new position to the entity position
     lda new_position,y
     ldy position_offset
     iny

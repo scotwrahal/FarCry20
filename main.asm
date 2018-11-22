@@ -40,6 +40,8 @@ play_loop
     jsr updateMusic
     jsr input
     jsr updateEntities
+    jsr updateAIs
+    ;jsr updateBullets   
     jmp play_loop
 
     INCDIR  "farcry20"
@@ -54,6 +56,10 @@ play_loop
     INCLUDE "input.asm"
     INCLUDE "data.asm"
 
+; things that could be done to pontenally compress the code
+; make the loops all use the same loop and pass in the loading function and what to do
+    
+    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 setTimers
     jsr updateClock

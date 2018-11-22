@@ -13,6 +13,21 @@ SetBulletClocks
 BulletClocksSet
     rts
 
+updateBullets
+    ldx #0
+UpdateBullets
+    txa
+    asl
+    jsr loadBullet
+    lda $ff
+    cmp #0
+    beq BulletEntitiesUpdated
+    jsr updateBullet
+    inx
+    jmp UpdateBullets
+BulletEntitiesUpdated
+    rts
+
 loadBullet
     clc
     adc bullet_offset
