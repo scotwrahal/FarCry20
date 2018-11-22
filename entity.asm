@@ -137,6 +137,14 @@ move
     plp
     bcc noMove
     
+    ldy position_offset     ; load in the old position
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+    jsr drawOn              ; draw the thing you were on in the old position
+    
     ldy position_offset
     ; transfer the old position to the new position variable
     lda ($fe),y             ; load the location
@@ -248,14 +256,6 @@ MoveRightBorder
     sta new_position,y
 NoMoveRight
 FinishMove
-    ldy position_offset     ; load in the old position
-    iny
-    lda ($fe),y
-    tax
-    dey
-    lda ($fe),y
-    jsr drawOn              ; draw the thing you were on in the old position
-
     ldy #1                  ; store the thing you are now standing on
     lda new_position,y
     tax
