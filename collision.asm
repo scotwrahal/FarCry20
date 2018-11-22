@@ -25,7 +25,6 @@ terrainCollisionHandler
     pha
     ldy direction_offset
     lda ($fe),y
-    
     asl                     ; shift through the bits to get the direction
     bcs CollideMoveDown
     asl
@@ -63,7 +62,20 @@ checkCollision
     ldy on_char_offset
     lda ($fe),y
     cmp terrain_char
-    bne Collide
+    beq CollideTerrain
+    cmp terrain1_char
+    beq CollideTerrain
+    jmp Collide
+CollideTerrain
+    ldy on_color_offset
+    lda ($fe),y
+    and #$0f
+    cmp terrain_color
+    beq CollideTerrain2
+    cmp terrain1_color
+    beq CollideTerrain2
+    jmp Collide
+CollideTerrain2
     pla
     tay
     lda #1              ; terrain collision

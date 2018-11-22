@@ -24,6 +24,12 @@ drawTerrain
     tya
     pha
     ldy terrain_offset
+    jsr rnd
+    and #$01
+    beq DrawT
+    iny
+    iny
+DrawT
     lda holder
     jsr drawDrawable
     pla

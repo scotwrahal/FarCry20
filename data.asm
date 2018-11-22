@@ -14,9 +14,9 @@ human_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
 human_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
 human_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
 
-palm_tree0:     byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
-shrub0:         byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
-shrub1:         byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
+palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
+shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
+shrub1:         byte $0, $2a, $ac, $a9, $99, $5a, $3c, $1c
 end_graphics
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -28,6 +28,7 @@ random2         byte $cc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 drawables:
 terrain     word terrain_char
+terrain1    word terrain1_char
 ground      word ground_char
 ground1     word ground1_char
 on_holder   word on_char
@@ -58,6 +59,9 @@ music_player_4  ;word track_index_4
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terrain_char    byte [palm_tree0 - graphics]/8+2
 terrain_color   byte $00 ; black 
+
+terrain1_char    byte [shrub0 - graphics]/8+2
+terrain1_color   byte $00 ; black 
 
 
 ground_char     byte [shrub1 - graphics]/8+2
