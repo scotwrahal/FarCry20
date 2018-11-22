@@ -51,4 +51,13 @@ drawBullet
     jmp drawEntity
 
 updateBullet
+    jsr setBullet
+    jsr updateEntity
+    rts
+    
+setBullet
+    lda #1
+    ldy direction_offset
+    ora ($fe),y
+    sta ($fe),y
     rts

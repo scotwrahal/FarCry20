@@ -6,6 +6,10 @@ handleCollision
     beq TerrainCollide
     cmp #2
     beq TerrainCollide
+    cmp #3
+    beq TerrainCollide
+    cmp #4
+    beq TerrainCollide
 CollidedWithNothing
     rts
 
@@ -40,6 +44,8 @@ checkCollision
 Collide
     ;loop entitys
     ldx #0
+    lda #0 
+    pha
 CollideEntity
     txa
     asl
@@ -65,10 +71,23 @@ NextEntity
     jmp CollideEntity
 CollidedWithEntity
     pla
+    clc
+    adc #1
+    sta holder
+    pla
     tay
-    lda #2
+    lda holder
     rts
 CollideEntityDone
+    pla
+    clc
+    adc #1
+    cmp #3
+    beq CollideDone
+    pha
+    inx
+    jmp CollideEntity
+CollideDone
     pla
     tay
     lda #0

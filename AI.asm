@@ -41,9 +41,8 @@ updateAI
     rts
 
 setDirection
-    pha
+    ldy direction_offset
     lda #$11
-    sta AI1_direction
-    pla
+    sta ($fe),y
     ; find your position relative to the player set your direction towards the player
     rts

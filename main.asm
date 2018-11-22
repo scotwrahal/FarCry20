@@ -41,7 +41,7 @@ play_loop
     jsr input
     jsr updateEntities
     jsr updateAIs
-    ;jsr updateBullets   
+    jsr updateBullets   
     jmp play_loop
 
     INCDIR  "farcry20"

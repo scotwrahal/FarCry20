@@ -70,7 +70,7 @@ player_on_color         byte $05
 AI1_char                byte $02
 AI1_color               byte $02
 AI1_clock               byte $00
-AI1_clock_updates       byte $06
+AI1_clock_updates       byte $02
 AI1_position            byte $00, #46
 AI1_direction           byte $00
 AI1_state               byte $00
@@ -84,18 +84,18 @@ AI2_clock_updates       byte $05
 AI2_position            byte $00, #68
 AI2_direction           byte $00
 AI2_state               byte $00
-AI2_max_state           byte $01
-AI2_on                  byte $00, $00
+AI2_max_state           byte $03
+AI2_on                  byte [shrub1 - graphics]/8+1, $05
 
-bullet1_char            byte $04
-bullet1_color           byte $07
+bullet1_char            byte $06
+bullet1_color           byte $00
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
-bullet1_position        byte $00, #69
-bullet1_direction       byte $00
+bullet1_position        byte $00, #75
+bullet1_direction       byte $40
 bullet1_state           byte $00
 bullet1_max_state       byte $01
-bullet1_on              byte $00, $00
+bullet1_on              byte [shrub1 - graphics]/8+1, $05
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
