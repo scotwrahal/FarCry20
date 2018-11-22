@@ -1,7 +1,6 @@
 ; TODO make a list of functions
 loadDrawable
     sta holder
-    pha
     tya
     pha
     lda holder
@@ -12,9 +11,8 @@ loadDrawable
     lda drawables,y
     sta $ff
     pla
-    tya
+    tay
     lda holder
-    pla
     rts
 
 ; drawTerrain
