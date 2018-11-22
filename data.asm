@@ -1,3 +1,21 @@
+graphics:
+jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
+jason_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
+jason_down0:    byte $18, $18, $18, $3c, $5a, $58, $58, $08
+jason_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
+jason_right0:   byte $18, $18, $13, $3e, $58, $18, $34, $46
+jason_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
+jason_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
+jason_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
+jason_right1:	byte $18, $18, $13, $3e, $38, $18, $28, $2c
+jason_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
+jason_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
+jason_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
+jason_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
+palm_tree0:     byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
+shrub0:         byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
+shrub1:         byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
+end_graphics
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 holder          byte $00
@@ -34,11 +52,11 @@ music_player_4  ;word track_index_4
                 word #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-terrain_char    byte [palm_tree0 - graphics]/8+1
+terrain_char    byte [palm_tree0 - graphics]/8+2
 terrain_color   byte $00 ; black 
 
 
-ground_char     byte [shrub1 - graphics]/8+1
+ground_char     byte [shrub1 - graphics]/8+2
 ground_color    byte $05 ; green
 
 on_char         byte $00
@@ -47,7 +65,7 @@ on_color        byte $00
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 template                                ; this is used for calculating offsets
 char
-player_char             byte [jason_up0 - graphics]/8+1
+player_char             byte [jason_up0 - graphics]/8+2
 color
 player_color            byte $06
 t_clock
@@ -63,11 +81,11 @@ player_state            byte $00
 max_state
 player_max_state        byte $03
 on_char_template
-player_on_char          byte [shrub1 - graphics]/8+1
+player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template
 player_on_color         byte $05
 
-AI1_char                byte $02
+AI1_char                byte [jason_up0 - graphics]/8+2
 AI1_color               byte $02
 AI1_clock               byte $00
 AI1_clock_updates       byte $02
@@ -75,9 +93,9 @@ AI1_position            byte $00, #46
 AI1_direction           byte $00
 AI1_state               byte $00
 AI1_max_state           byte $03
-AI1_on                  byte [shrub1 - graphics]/8+1, $05
+AI1_on                  byte [shrub1 - graphics]/8+2, $05
 
-AI2_char                byte $02
+AI2_char                byte [jason_up0 - graphics]/8+2
 AI2_color               byte $02
 AI2_clock               byte $00
 AI2_clock_updates       byte $05
@@ -85,9 +103,9 @@ AI2_position            byte $00, #68
 AI2_direction           byte $00
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_on                  byte [shrub1 - graphics]/8+1, $05
+AI2_on                  byte [shrub1 - graphics]/8+2, $05
 
-bullet1_char            byte $06
+bullet1_char            byte [jason_up0 - graphics]/8+2
 bullet1_color           byte $00
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
@@ -95,7 +113,7 @@ bullet1_position        byte $00, #75
 bullet1_direction       byte $40
 bullet1_state           byte $00
 bullet1_max_state       byte $01
-bullet1_on              byte [shrub1 - graphics]/8+1, $05
+bullet1_on              byte [shrub1 - graphics]/8+2, $05
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -120,25 +138,6 @@ track_index_4           byte $00
 note_index_4            byte $02
 music_clock_4           byte $00
 music_clock_updates_4   byte $01
-
-graphics:
-jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
-jason_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
-jason_down0:    byte $18, $18, $18, $3c, $5a, $58, $58, $08
-jason_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
-jason_right0:   byte $18, $18, $13, $3e, $58, $18, $34, $46
-jason_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
-jason_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
-jason_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
-jason_right1:	byte $18, $18, $13, $3e, $38, $18, $28, $2c
-jason_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
-jason_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
-jason_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
-jason_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
-palm_tree0:     byte $1a, $7c, $b2, $28, $48, $08, $0c, $1f
-shrub0:         byte $0a, $4c, $28, $1d, $2a, $1c, $08, $1c
-shrub1:         byte $28, $2a, $ac, $a9, $99, $5a, $3c, $1c
-end_graphics
 
 jason_animation_state:
 	byte $00

@@ -1,4 +1,5 @@
 ;farcry3
+
     processor   6502                ;assembling for 6502
     org         $1001               ;standard organization
     word     end_basic           ;pointer to end of BASIC stub
@@ -8,18 +9,23 @@
     byte     0                   ;null terminator for SYS statement
 end_basic
     word     0                   ;indicating end of BASIC stub
+    jmp start
+    
+    INCDIR  "farcry20"
+    INCLUDE "data.asm"
+    INCLUDE "levels.asm"
+    INCLUDE "entity.asm"
+    INCLUDE "collision.asm"
+    INCLUDE "music.asm"
+    INCLUDE "AI.asm"
+    INCLUDE "bullet.asm"
+    INCLUDE "clock.asm"
+    INCLUDE "drawable.asm"
+    INCLUDE "input.asm"
+    
 start:
-    lda #255                ; point to custom character set
+    lda #252                ; point to custom character set
     sta $9005
-load_8x8:
-    ldx #0                  ; index of bitmap line
-write_byte_line:
-    lda graphics,x          ; load line from offset of bitmap
-    sta $1c08,x
-    inx
-    txa
-    sbc graphics_size                ; (8*(number of bitmaps) - 1)
-    bne write_byte_line     ; loop until all bitmaps loaded into custom char memory
 
 load_screen_colour
     lda #$dd                ; $dd yields light green playfield, dark green border
@@ -43,18 +49,6 @@ play_loop
     jsr updateAIs
     jsr updateBullets   
     jmp play_loop
-
-    INCDIR  "farcry20"
-    INCLUDE "levels.asm"
-    INCLUDE "entity.asm"
-    INCLUDE "collision.asm"
-    INCLUDE "music.asm"
-    INCLUDE "AI.asm"
-    INCLUDE "bullet.asm"
-    INCLUDE "clock.asm"
-    INCLUDE "drawable.asm"
-    INCLUDE "input.asm"
-    INCLUDE "data.asm"
 
 ; things that could be done to pontenally compress the code
 ; make the loops all use the same loop and pass in the loading function and what to do
