@@ -144,16 +144,8 @@ move
     dey
     lda ($fe),y
     jsr drawOn              ; draw the thing you were on in the old position
-    
-    ldy position_offset
-    ; transfer the old position to the new position variable
-    lda ($fe),y             ; load the location
-    sta new_position
-    iny
-    ldx #1
-    lda ($fe),y
-    sta new_position,x
 
+;update the state
     ldy state_offset
     lda ($fe),y
     clc
@@ -173,7 +165,6 @@ restore
 
     ldy direction_offset
     lda ($fe),y
-    ldy #1                  ; load 1 for the low position, 0 is the high used in the move
     asl                     ; shift through the bits to get the direction
     bcs MoveUp
     asl
@@ -183,83 +174,103 @@ restore
     asl
     bcs MoveRight
 noMove
+; set to the idle state 
     lda #0
     ldy state_offset
     sta ($fe),y
     jmp EndMove             ; if there is no direction then it doesn't move
+    
 ; MoveUp is commented the others moves follow similar logic
 MoveUp
-    lda new_position,y
+    ldy position_offset
+    iny
+    lda ($fe),y
     sec
     sbc #22                 ; move by one row
     bcc MoveUpBorder        ; check the upper lower border
-    sta new_position,y      ; if  didn't, store the new locaiton
+    sta ($fe),y      ; if  didn't, store the new locaiton
     jmp FinishMove
 MoveUpBorder
-    lda new_position
+    ldy position_offset
+    lda ($fe),y
     beq NoMoveUp            ; in the top cant move up
     lda #0                  ; now in the top
-    sta new_position        ; save in new positon
-    lda new_position,y
+    sta ($fe),y        ; save in new positon
+    iny
+    lda ($fe),y
     sec
     sbc #22                 ; move up one row
-    sta new_position,y      ; save new position
+    sta ($fe),y      ; save new position
 NoMoveUp
     jmp FinishMove
 MoveDown
-    lda new_position,y
+    ldy position_offset
+    iny
+    lda ($fe),y
     clc
     adc #22
     bcs MoveDownBorder
-    sta new_position,y
+    sta ($fe),y
     jmp FinishMove
 MoveDownBorder
-    lda new_position
+    ldy position_offset
+    lda ($fe),y
     bne NoMoveDown
     lda #1
-    sta new_position
-    lda new_position,y
+    sta ($fe),y
+    iny
+    lda ($fe),y
     clc
     adc #22
-    sta new_position,y
+    sta ($fe),y
 NoMoveDown
     jmp FinishMove
 MoveLeft
-    lda new_position,y
+    ldy position_offset
+    iny
+    lda ($fe),y
     sec
     sbc #1
     bcc MoveLeftBorder
-    sta new_position,y
+    sta ($fe),y
     jmp FinishMove
 MoveLeftBorder
-    lda new_position
+    ldy position_offset
+    lda ($fe),y
     beq NoMoveLeft
     lda #0
-    sta new_position
+    sta ($fe),y
+    iny
     lda #$ff
-    sta new_position,y
+    sta ($fe),y
 NoMoveLeft
     jmp FinishMove
 MoveRight
-    lda new_position,y
+    ldy position_offset
+    iny
+    lda ($fe),y
     clc
     adc #1
     bcs MoveRightBorder
-    sta new_position,y
+    sta ($fe),y
     jmp FinishMove
 MoveRightBorder
-    lda new_position
+    ldy position_offset
+    lda ($fe),y
     bne NoMoveRight
     lda #1
-    sta new_position
+    sta ($fe),y
+    iny
     lda #0
-    sta new_position,y
+    sta ($fe),y
 NoMoveRight
 FinishMove
-    ldy #1                  ; store the thing you are now standing on
-    lda new_position,y
+    ldy position_offset
+    iny                         ; store the thing you are now standing on
+    lda ($fe),y
+    dey
     tax
-    lda new_position
+    lda ($fe),y
 
     jsr getFromPosition
     ldy on_char_offset
@@ -267,16 +278,7 @@ FinishMove
     txa
     ldy on_color_offset
     sta ($fe),y
-
-    ldy #1                  ; move the new position to the entity position
-    lda new_position,y
-    ldy position_offset
-    iny
-    sta ($fe),y
-    tax
-    dey
-    lda new_position
-    sta ($fe),y
+    
 EndMove
     pla
     tay

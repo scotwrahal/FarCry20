@@ -18,14 +18,41 @@ TerrainCollide
     rts
 
 terrainCollisionHandler
-    jsr invertDirection
+    pha
+    txa
+    pha
+    tya
+    pha
     ldy direction_offset
     lda ($fe),y
-    ora #$01
-    sta ($fe),y
-    jsr move
-    jsr invertDirection
+    
+    asl                     ; shift through the bits to get the direction
+    bcs CollideMoveDown
+    asl
+    bcs CollideMoveUp
+    asl
+    bcs CollideMoveRight
+    asl
+    bcs CollideMoveLeft
+    
+    pla
+    tay
+    pla
+    tax
+    pla
     rts
+    
+CollideMoveUp
+    jmp MoveUp
+    
+CollideMoveDown
+    jmp MoveDown
+    
+CollideMoveLeft
+    jmp MoveLeft
+    
+CollideMoveRight
+    jmp MoveRight
 
 
 ; Check for what is in the new location and determines if it has collided
