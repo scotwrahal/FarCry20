@@ -1,19 +1,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 holder          byte $00
-
-last_input      byte $00
-
 new_position    byte $00, $00
-
-return_add_hi   byte $00
-
-return_add_low  byte $00
-
-graphic_offset  byte $00
-
-num_frames      byte $00
-
 clock           byte $00
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,9 +14,10 @@ on_holder   word on_char
 ; THESE EXTEND DRAWABLE
 entities:
 player      word player_char
+            word 0
 AIs:
-AI1      word AI1_char
-AI2      word AI2_char
+AI1         word AI1_char
+AI2         word AI2_char
             word 0
 
 bullets:
@@ -45,12 +34,12 @@ music_player_4  ;word track_index_4
                 word #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-terrain_char    byte #14
-terrain_color   byte $00
+terrain_char    byte [palm_tree0 - graphics]/8+1
+terrain_color   byte $00 ; black 
 
 
-ground_char     byte #16
-ground_color    byte $05
+ground_char     byte [shrub1 - graphics]/8+1
+ground_color    byte $05 ; green
 
 on_char         byte $00
 on_color        byte $00
@@ -58,7 +47,7 @@ on_color        byte $00
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 template                                ; this is used for calculating offsets
 char
-player_char             byte $02
+player_char             byte [jason_up0 - graphics]/8+1
 color
 player_color            byte $06
 t_clock
@@ -66,7 +55,7 @@ player_clock            byte $00
 clock_updates
 player_clock_updates    byte $08
 position
-player_position         byte $00, #25
+player_position         byte $00, #50
 direction
 player_direction        byte $80
 state
@@ -74,22 +63,22 @@ player_state            byte $00
 max_state
 player_max_state        byte $03
 on_char_template
-player_on_char          byte $16
+player_on_char          byte [shrub1 - graphics]/8+1
 on_color_template
 player_on_color         byte $05
 
-AI1_char                byte #2
-AI1_color               byte $08
+AI1_char                byte $02
+AI1_color               byte $02
 AI1_clock               byte $00
-AI1_clock_updates       byte $03
+AI1_clock_updates       byte $06
 AI1_position            byte $00, #46
 AI1_direction           byte $00
 AI1_state               byte $00
-AI1_max_state           byte $01
-AI1_on                  byte $00, $00
+AI1_max_state           byte $03
+AI1_on                  byte [shrub1 - graphics]/8+1, $05
 
-AI2_char                byte #2
-AI2_color               byte $07
+AI2_char                byte $02
+AI2_color               byte $02
 AI2_clock               byte $00
 AI2_clock_updates       byte $05
 AI2_position            byte $00, #68
@@ -98,7 +87,7 @@ AI2_state               byte $00
 AI2_max_state           byte $01
 AI2_on                  byte $00, $00
 
-bullet1_char            byte #4
+bullet1_char            byte $04
 bullet1_color           byte $07
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
@@ -198,22 +187,22 @@ song0_length
 song_notes
 song0_notes
     ;     duration note
-    byte    #15, #231
-    byte    #15, #222
-    byte    #15, #231
-    byte    #15, #206
-    byte    #15, #231
-    byte    #15, #206
-    byte    #15, #218
-    byte    #15, #206
-    byte    #15, #229
-    byte    #15, #231
-    byte    #15, #220
-    byte    #15, #206
-    byte    #15, #181
-    byte    #15, #206
-    byte    #15, #218
-    byte    #15, #206
+    byte    #12, #231
+    byte    #12, #222
+    byte    #12, #231
+    byte    #12, #206
+    byte    #12, #231
+    byte    #12, #206
+    byte    #12, #218
+    byte    #12, #206
+    byte    #12, #229
+    byte    #12, #231
+    byte    #12, #220
+    byte    #12, #206
+    byte    #12, #181
+    byte    #12, #206
+    byte    #12, #218
+    byte    #12, #206
 song0_end
 
 song1_length
