@@ -40,6 +40,12 @@ drawGround
     tya
     pha
     ldy ground_offset
+    jsr rnd
+    and #$01
+    beq Draw
+    iny
+    iny
+Draw
     lda holder
     jsr drawDrawable
     pla

@@ -42,3 +42,14 @@ updateClock
     tay
     pla
     rts
+    
+    
+    
+rnd
+    lda random1
+    asl
+    eor random1
+    asl
+    rol random1
+    lda random1
+    rts
