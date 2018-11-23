@@ -91,7 +91,7 @@ draw
     tya
     pha
     lda holder
-    cmp #0
+    and #$80
     bne DrawBottom
     ldy char_offset
     lda ($fe),y
@@ -121,7 +121,7 @@ EndDraw
 ;   A: character
 ;   X: color
 getFromPosition
-    cmp #0
+    and #$80
     bne readBottom
     lda $1e00,x
     pha

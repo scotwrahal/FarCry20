@@ -116,6 +116,7 @@ drawEntity
     tax
     pla
     rts
+    
 
 ; moves an updatable entity based on the direction they are moving and if the low bit is set
 ;   A index of the updatable entity to be moved
@@ -166,19 +167,34 @@ restore
     ldy direction_offset
     lda ($fe),y
     asl                     ; shift through the bits to get the direction
-    bcs MoveUp
+    bcs EntityMoveUp
     asl
-    bcs MoveDown
+    bcs EntityMoveDown
     asl
-    bcs MoveLeft
+    bcs EntityMoveLeft
     asl
-    bcs MoveRight
+    bcs EntityMoveRight
 noMove
 ; set to the idle state 
     lda #0
     ldy state_offset
     sta ($fe),y
     jmp EndMove             ; if there is no direction then it doesn't move
+    
+    
+    
+EntityMoveUp
+    jmp MoveUp
+    
+EntityMoveDown
+    jmp MoveDown
+    
+EntityMoveLeft
+    jmp MoveLeft
+    
+EntityMoveRight
+    jmp MoveRight
+
     
 ; MoveUp is commented the others moves follow similar logic
 MoveUp
@@ -188,21 +204,30 @@ MoveUp
     sec
     sbc #22                 ; move by one row
     bcc MoveUpBorder        ; check the upper lower border
-    sta ($fe),y      ; if  didn't, store the new locaiton
+    sta ($fe),y             ; if  didn't, store the new locaiton
+    dey 
+    lda ($fe),y
+    sbc #1                  ; decrement the row
+    sta ($fe),y
     jmp FinishMove
 MoveUpBorder
     ldy position_offset
     lda ($fe),y
+    and #$80                ; only use the top bit
     beq NoMoveUp            ; in the top cant move up
-    lda #0                  ; now in the top
-    sta ($fe),y        ; save in new positon
+    lda ($fe),y
+    and #$7f                ; clear top bit
+    sbc #1                  ; decrement the row
+    sta ($fe),y             ; save in new positon
     iny
     lda ($fe),y
     sec
     sbc #22                 ; move up one row
-    sta ($fe),y      ; save new position
+    sta ($fe),y             ; save new position
 NoMoveUp
     jmp FinishMove
+    
+    
 MoveDown
     ldy position_offset
     iny
@@ -211,12 +236,21 @@ MoveDown
     adc #22
     bcs MoveDownBorder
     sta ($fe),y
+    dey 
+    lda ($fe),y
+    clc
+    adc #1                  ; increment the row
+    sta ($fe),y
     jmp FinishMove
 MoveDownBorder
     ldy position_offset
     lda ($fe),y
+    and #$80
     bne NoMoveDown
-    lda #1
+    lda ($fe),y
+    ora #$80                ; set the position
+    clc
+    adc #1                  ; increment the row
     sta ($fe),y
     iny
     lda ($fe),y
@@ -237,6 +271,7 @@ MoveLeft
 MoveLeftBorder
     ldy position_offset
     lda ($fe),y
+    and #$80
     beq NoMoveLeft
     lda #0
     sta ($fe),y
@@ -257,6 +292,7 @@ MoveRight
 MoveRightBorder
     ldy position_offset
     lda ($fe),y
+    and #$80
     bne NoMoveRight
     lda #1
     sta ($fe),y

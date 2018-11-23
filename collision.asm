@@ -1,15 +1,15 @@
 handleCollision
     ;collide with terrain
-    cmp #0
+    cmp #0              ; nothing
     beq CollidedWithNothing
-    cmp #1
+    cmp #1              ; terrain
     beq TerrainCollide
-    cmp #2
+    cmp #2              ; player
     beq TerrainCollide
-    cmp #3
+    cmp #3              ; AI
     beq TerrainCollide
-    cmp #4
-    beq TerrainCollide
+    cmp #4              ; bullet
+    beq CollidedWithNothing
 CollidedWithNothing
     rts
 
@@ -33,7 +33,6 @@ terrainCollisionHandler
     bcs CollideMoveRight
     asl
     bcs CollideMoveLeft
-    
     pla
     tay
     pla
@@ -80,17 +79,18 @@ CollideTerrain2
     tay
     lda #1              ; terrain collision
     rts
+    
 Collide
     ;loop entitys
-    ldx #0
-    lda #0 
+    ldx #0              ; index for the list of entitys
+    lda #0              ; entity type
     pha
 CollideEntity
     txa
-    asl
+    asl                 ; multiply by 2 for address
     jsr loadEntity2
     lda $fd
-    cmp #0
+    cmp #0              ; check for end of entity type
     beq CollideEntityDone
     sta holder
     lda $ff
@@ -111,7 +111,7 @@ NextEntity
 CollidedWithEntity
     pla
     clc
-    adc #1
+    adc #2
     sta holder
     pla
     tay
@@ -120,8 +120,8 @@ CollidedWithEntity
 CollideEntityDone
     pla
     clc
-    adc #1
-    cmp #3
+    adc #1              ; advance entity type
+    cmp #3              ; 3 entities 
     beq CollideDone
     pha
     inx
@@ -135,8 +135,10 @@ CollideDone
 checkEntity
     ldy position_offset
     lda ($fe),y
+    and #$80
     sta holder
     lda ($fc),y
+    and #$80
     cmp holder
     bne NotInTheSameSpot
     iny

@@ -84,13 +84,13 @@ player_clock            byte $00
 clock_updates
 player_clock_updates    byte $08
 position
-player_position         byte $00, #50
+player_position         byte #2, #50
 direction
-player_direction        byte $80
+player_direction        byte $80            ; bits 1111 direction 11 shooing 0 nothing 1 movement
 state
 player_state            byte $00
 max_state
-player_max_state        byte $03
+player_max_state        byte $02
 on_char_template
 player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template

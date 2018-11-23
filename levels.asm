@@ -45,7 +45,7 @@ NextBit
     clc
     inx             		; increment the position
     bne BoundarySkip        ; boundery check
-    lda #1
+    lda #$80
 BoundarySkip
     dey
     bne readByte            ; repeat till the byte is done
