@@ -167,13 +167,13 @@ restore
     ldy direction_offset
     lda ($fe),y
     asl                     ; shift through the bits to get the direction
-    bcs EntityMoveUp
+    bcs EntitymoveUp
     asl
-    bcs EntityMoveDown
+    bcs EntitymoveDown
     asl
-    bcs EntityMoveLeft
+    bcs EntitymoveLeft
     asl
-    bcs EntityMoveRight
+    bcs EntitymoveRight
 noMove
 ; set to the idle state 
     lda #0
@@ -182,22 +182,25 @@ noMove
     jmp EndMove             ; if there is no direction then it doesn't move
     
     
+EntitymoveUp
+    jsr moveUp
+    jmp FinishMove
     
-EntityMoveUp
-    jmp MoveUp
+EntitymoveDown
+    jsr moveDown
+    jmp FinishMove
     
-EntityMoveDown
-    jmp MoveDown
+EntitymoveLeft
+    jsr moveLeft
+    jmp FinishMove
     
-EntityMoveLeft
-    jmp MoveLeft
-    
-EntityMoveRight
-    jmp MoveRight
+EntitymoveRight
+    jsr moveRight
+    jmp FinishMove
 
     
-; MoveUp is commented the others moves follow similar logic
-MoveUp
+; moveUp is commented the others moves follow similar logic
+moveUp
     ldy position_offset
     iny
     lda ($fe),y
@@ -207,9 +210,10 @@ MoveUp
     sta ($fe),y             ; if  didn't, store the new locaiton
     dey 
     lda ($fe),y
+    sec
     sbc #1                  ; decrement the row
     sta ($fe),y
-    jmp FinishMove
+    rts
 MoveUpBorder
     ldy position_offset
     lda ($fe),y
@@ -217,18 +221,18 @@ MoveUpBorder
     beq NoMoveUp            ; in the top cant move up
     lda ($fe),y
     and #$7f                ; clear top bit
+    sec
     sbc #1                  ; decrement the row
-    sta ($fe),y             ; save in new positon
+    sta ($fe),y             ; save the new position
     iny
     lda ($fe),y
     sec
     sbc #22                 ; move up one row
     sta ($fe),y             ; save new position
 NoMoveUp
-    jmp FinishMove
+    rts
     
-    
-MoveDown
+moveDown
     ldy position_offset
     iny
     lda ($fe),y
@@ -241,7 +245,7 @@ MoveDown
     clc
     adc #1                  ; increment the row
     sta ($fe),y
-    jmp FinishMove
+    rts
 MoveDownBorder
     ldy position_offset
     lda ($fe),y
@@ -258,8 +262,9 @@ MoveDownBorder
     adc #22
     sta ($fe),y
 NoMoveDown
-    jmp FinishMove
-MoveLeft
+    rts
+    
+moveLeft
     ldy position_offset
     iny
     lda ($fe),y
@@ -267,7 +272,8 @@ MoveLeft
     sbc #1
     bcc MoveLeftBorder
     sta ($fe),y
-    jmp FinishMove
+    rts
+
 MoveLeftBorder
     ldy position_offset
     lda ($fe),y
@@ -279,8 +285,9 @@ MoveLeftBorder
     lda #$ff
     sta ($fe),y
 NoMoveLeft
-    jmp FinishMove
-MoveRight
+    rts
+    
+moveRight
     ldy position_offset
     iny
     lda ($fe),y
@@ -288,7 +295,7 @@ MoveRight
     adc #1
     bcs MoveRightBorder
     sta ($fe),y
-    jmp FinishMove
+    rts
 MoveRightBorder
     ldy position_offset
     lda ($fe),y
@@ -300,6 +307,8 @@ MoveRightBorder
     lda #0
     sta ($fe),y
 NoMoveRight
+    rts
+
 FinishMove
     ldy position_offset
     iny                         ; store the thing you are now standing on
@@ -307,14 +316,12 @@ FinishMove
     dey
     tax
     lda ($fe),y
-
     jsr getFromPosition
     ldy on_char_offset
     sta ($fe),y
     txa
     ldy on_color_offset
     sta ($fe),y
-    
 EndMove
     pla
     tay

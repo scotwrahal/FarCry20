@@ -33,24 +33,27 @@ terrainCollisionHandler
     bcs CollideMoveRight
     asl
     bcs CollideMoveLeft
-    pla
-    tay
-    pla
-    tax
-    pla
     rts
     
 CollideMoveUp
-    jmp MoveUp
+    jsr moveUp
+    jmp FinishMove
+    rts
     
 CollideMoveDown
-    jmp MoveDown
+    jsr moveDown
+    jmp FinishMove
+    rts
     
 CollideMoveLeft
-    jmp MoveLeft
+    jsr moveLeft
+    jmp FinishMove
+    rts
     
 CollideMoveRight
-    jmp MoveRight
+    jsr moveRight
+    jmp FinishMove
+    rts
 
 
 ; Check for what is in the new location and determines if it has collided
