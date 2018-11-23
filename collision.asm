@@ -105,8 +105,8 @@ CollideEntity
     cmp holder
     beq NextEntity
 NotSelf
-    jsr checkEntity
-    cmp #1
+    jsr checkPositions
+    cmp #0
     beq CollidedWithEntity
 NextEntity
     inx
@@ -132,27 +132,6 @@ CollideEntityDone
 CollideDone
     pla
     tay
-    lda #0
-    rts
-
-checkEntity
-    ldy position_offset
-    lda ($fe),y
-    and #$80
-    sta holder
-    lda ($fc),y
-    and #$80
-    cmp holder
-    bne NotInTheSameSpot
-    iny
-    lda ($fe),y
-    sta holder
-    lda ($fc),y
-    cmp holder
-    bne NotInTheSameSpot
-    lda #1
-    rts
-NotInTheSameSpot
     lda #0
     rts
 
@@ -228,4 +207,32 @@ EndFlip
     pla
     tay
     pla
+    rts
+    
+checkPositions 
+    ldy position_offset
+    lda ($fe),y
+    and #$80
+    sta holder
+    lda ($fc),y 
+    and #$80
+    cmp holder
+    bmi Return1
+    bne Return2                     ; is positive
+    
+    iny
+    lda ($fe),y
+    sta holder
+    lda ($fc),y
+    cmp holder
+    bmi Return1
+    bne Return2
+Return0
+    lda #0
+    rts
+Return1
+    lda #1
+    rts
+Return2
+    lda #2
     rts
