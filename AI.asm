@@ -41,9 +41,16 @@ updateAI
     rts
 
 setDirection
+    pha 
+    tya 
+    pha
+    txa
+    pha
+    
     ; find your position relative to the player set your direction towards the player
     lda #0
     jsr loadEntity2         ; load the player into fc
+    ldx #0                  ; set the move counter to 0
     jsr checkPositions
     cmp #0
     beq On
@@ -51,95 +58,97 @@ setDirection
     beq Below
     cmp #2
     beq Above
-    rts
+    jmp ReturnSetDirection
 
 Above
-    ; jmp SetUp
-    ; lda #0      ; keep track of how many times
-    ; pha
-AboveLoop
-    ; pla
-    ; clc
-    ; adc #1      ; increment the count
-    ; pha
-    jmp SetDown
+    inx
+    jsr moveDown
     jsr checkPositions
     cmp #2
-    bne CheckRowsUp
-    jmp AboveLoop
-CheckRowsUp
-    ; cmp #0 
-    ; beq SetUp
-    ; jsr checkRows
-    ; cmp #0
-    ; beq SetRight
-    ; jmp SetLeftFromUp
-    rts
-
+    bne CheckRowsAbove
+    jmp Above
+CheckRowsAbove
+    cmp #0
+    beq SetDown   
+    jsr checkRows
+    cmp #0
+    beq SetLeftFromAbove
+    jmp SetRightFromAbove
+    
 Below
-    ; jmp SetDown
-    ; lda #0      ; keep track of how many times
-    ; pha
-BelowLoop
-    ; pla
-    ; clc
-    ; adc #1      ; increment the count
-    ; pha
-    jmp SetUp
+    inx
+    jsr moveUp
     jsr checkPositions
     cmp #1
-    bne CheckRowsDown
-    jmp AboveLoop
-CheckRowsDown
-    ; cmp #0 
-    ; beq SetDown
-    ; jsr checkRows
-    ; cmp #0
-    ; beq SetRight
-    ; jmp SetLeftFromUp
-    rts 
-
+    bne CheckRowsBelow
+    jmp Below
+CheckRowsBelow
+    cmp #0
+    beq SetUp
+    jsr checkRows
+    cmp #0
+    beq SetRightFromBelow
+    jmp SetLeftFromBelow
+    
 On    
-    rts
+    jmp ReturnSetDirection
     
 SetUp
-    jsr restoreUp
+    jsr restoreFromBelow
     lda #$81
     ldy direction_offset
     sta ($fe),y
-    rts
+    jmp ReturnSetDirection
+    
 SetDown
-    jsr restoreDown
+    jsr restoreFromAbove
     lda #$41
     ldy direction_offset
     sta ($fe),y
-    rts
+    jmp ReturnSetDirection
     
-SetLeftFromUp
-    jsr restoreUp
+SetLeftFromAbove
+    jsr restoreFromAbove
     jmp SetLeft
-SetLeftFromDown
-    jsr restoreDown
+SetLeftFromBelow
+    jsr restoreFromBelow
 SetLeft
     lda #$21
     ldy direction_offset
     sta ($fe),y
-    rts
+    jmp ReturnSetDirection
 
-SetRightFromUp
-    jsr restoreUp
-    jmp SetLeft
-SetRightDown
-    jsr restoreDown
+SetRightFromAbove
+    jsr restoreFromAbove
+    jmp SetRight
+SetRightFromBelow
+    jsr restoreFromBelow
 SetRight
     lda #$11
     ldy direction_offset
     sta ($fe),y
+    jmp ReturnSetDirection
+    
+
+restoreFromBelow
+    jsr moveDown
+    dex
+    bne restoreFromBelow
     rts
     
-restoreDown
-restoreUp
+restoreFromAbove
+    jsr moveUp
+    dex
+    bne restoreFromAbove
+    rts
 
+ReturnSetDirection
+    pla
+    tax
+    pla
+    tay
+    pla
+    rts
 
 
 ; return 0 if they are the same

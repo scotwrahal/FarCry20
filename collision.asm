@@ -226,11 +226,9 @@ checkPositions
     
     iny
     lda ($fe),y
-    lsr                             ; do a left shift to prevent negatives among large differences
-    lsr
+    lsr                             ; do a right shift to prevent negatives among large differences
     sta holder
     lda ($fc),y
-    lsr
     lsr
     cmp holder
     bmi Return1

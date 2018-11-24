@@ -84,7 +84,7 @@ player_clock            byte $00
 clock_updates
 player_clock_updates    byte $08
 position
-player_position         byte #2, #50
+player_position         byte #2, #50        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
 direction
 player_direction        byte $80            ; bits 1111 direction 11 shooing 0 nothing 1 movement
 state
@@ -99,8 +99,8 @@ player_on_color         byte $05
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
 AI1_clock               byte $00
-AI1_clock_updates       byte $02
-AI1_position            byte $00, #46
+AI1_clock_updates       byte #30
+AI1_position            byte $02, #47
 AI1_direction           byte $00
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -109,8 +109,8 @@ AI1_on                  byte [shrub1 - graphics]/8+2, $05
 AI2_char                byte [human - graphics]/8+2
 AI2_color               byte $02
 AI2_clock               byte $00
-AI2_clock_updates       byte $05
-AI2_position            byte $02, #68
+AI2_clock_updates       byte #30
+AI2_position            byte $03, #68
 AI2_direction           byte $00
 AI2_state               byte $00
 AI2_max_state           byte $03
