@@ -42,57 +42,119 @@ updateAI
 
 setDirection
     ; find your position relative to the player set your direction towards the player
-    ; jsr loadEntity2 ; load the player into fc
-    ; jsr checkPositions
+    lda #0
+    jsr loadEntity2         ; load the player into fc
+    jsr checkPositions
+    cmp #0
+    beq On
+    cmp #1
+    beq Below
+    cmp #2
+    beq Above
+    rts
+
+Above
+    ; jmp SetUp
+    ; lda #0      ; keep track of how many times
+    ; pha
+AboveLoop
+    ; pla
+    ; clc
+    ; adc #1      ; increment the count
+    ; pha
+    jmp SetDown
+    jsr checkPositions
+    cmp #2
+    bne CheckRowsUp
+    jmp AboveLoop
+CheckRowsUp
+    ; cmp #0 
+    ; beq SetUp
+    ; jsr checkRows
     ; cmp #0
-    ; beq On
-    ; cmp #1
-    ; beq Above
-    ; cmp #2
-    ; beq Below
-    ; rts
+    ; beq SetRight
+    ; jmp SetLeftFromUp
+    rts
 
-; Above
-    ; lda #0
-; AboveLoop
-    ; jsr moveUp
-    ; jsr checkPositions
+Below
+    ; jmp SetDown
+    ; lda #0      ; keep track of how many times
+    ; pha
+BelowLoop
+    ; pla
+    ; clc
+    ; adc #1      ; increment the count
+    ; pha
+    jmp SetUp
+    jsr checkPositions
+    cmp #1
+    bne CheckRowsDown
+    jmp AboveLoop
+CheckRowsDown
+    ; cmp #0 
+    ; beq SetDown
+    ; jsr checkRows
+    ; cmp #0
+    ; beq SetRight
+    ; jmp SetLeftFromUp
+    rts 
 
-; Below
-    ; lda #0
-; BelowLoop
-; On    
+On    
     rts
     
+SetUp
+    jsr restoreUp
+    lda #$81
+    ldy direction_offset
+    sta ($fe),y
+    rts
+SetDown
+    jsr restoreDown
+    lda #$41
+    ldy direction_offset
+    sta ($fe),y
+    rts
     
+SetLeftFromUp
+    jsr restoreUp
+    jmp SetLeft
+SetLeftFromDown
+    jsr restoreDown
+SetLeft
+    lda #$21
+    ldy direction_offset
+    sta ($fe),y
+    rts
+
+SetRightFromUp
+    jsr restoreUp
+    jmp SetLeft
+SetRightDown
+    jsr restoreDown
+SetRight
+    lda #$11
+    ldy direction_offset
+    sta ($fe),y
+    rts
     
-    
-; return 0 if entity in fc is in the same spot as the entity in fe
-; return 1 if the entity in fc less than fe
-; return 2 if the entity in fc greater than fe
-; checkPositions 
-    ; lda ($fe),y
-    ; and #$80
-    ; sta holder
-    ; lda ($fc),y 
-    ; and #$80
-    ; cmp holder
-    ; bmi Return1
-    ; bne Return2
-    
-    ; iny
-    ; lda ($fe),y
-    ; sta holder
-    ; lda ($fc),y
-    ; cmp holder
-    ; bmi Return1
-    ; bne Return2
-; Return0
-    ; lda #0
-    ; rts
-; Return1
-    ; lda #1
-    ; rts
-; Return2
-    ; lda #2
-    ; rts
+restoreDown
+restoreUp
+
+
+
+; return 0 if they are the same
+; return 1 otherwise
+checkRows
+    ldy position_offset
+    lda ($fe),y
+    and #$7f
+    sta holder
+    lda ($fc),y
+    and #$7f
+    cmp holder
+    beq SameRow
+    lda #1
+    rts
+SameRow
+    lda #0
+    rts
