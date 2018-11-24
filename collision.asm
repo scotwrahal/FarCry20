@@ -213,14 +213,29 @@ checkPositions
     ldy position_offset
     lda ($fe),y
     and #$80
+    lsr
+    lsr
     sta holder
     lda ($fc),y 
     and #$80
+    lsr
+    lsr
     cmp holder
     bmi Return1
     bne Return2                     ; is positive
     
     iny
+    lda ($fe),y
+    lsr                             ; do a left shift to prevent negatives among large differences
+    lsr
+    sta holder
+    lda ($fc),y
+    lsr
+    lsr
+    cmp holder
+    bmi Return1
+    bne Return2
+    
     lda ($fe),y
     sta holder
     lda ($fc),y
