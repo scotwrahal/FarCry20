@@ -279,7 +279,8 @@ MoveLeftBorder
     lda ($fe),y
     and #$80
     beq NoMoveLeft
-    lda #0
+    lda ($fe),y
+    and #$7f
     sta ($fe),y
     iny
     lda #$ff
@@ -301,7 +302,8 @@ MoveRightBorder
     lda ($fe),y
     and #$80
     bne NoMoveRight
-    lda #1
+    lda ($fe),y
+    ora #$80
     sta ($fe),y
     iny
     lda #0
