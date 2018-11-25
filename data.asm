@@ -87,14 +87,18 @@ position
 player_position         byte #2, #50        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
 direction
 player_direction        byte $80            ; bits 1111 direction 11 shooing 0 nothing 1 movement
-state
-player_state            byte $00
-max_state
-player_max_state        byte $02
 on_char_template
 player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template
 player_on_color         byte $05
+damage
+player_damage           byte $01
+health
+player_health           byte $ff
+state
+player_state            byte $00
+max_state
+player_max_state        byte $02
 
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
@@ -102,9 +106,11 @@ AI1_clock               byte $00
 AI1_clock_updates       byte #14
 AI1_position            byte $02, #47
 AI1_direction           byte $00
+AI1_on                  byte [shrub1 - graphics]/8+2, $05
+AI1_health              byte $ff
+AI1_damage              byte $01
 AI1_state               byte $00
 AI1_max_state           byte $03
-AI1_on                  byte [shrub1 - graphics]/8+2, $05
 
 AI2_char                byte [human - graphics]/8+2
 AI2_color               byte $02
@@ -112,9 +118,11 @@ AI2_clock               byte $00
 AI2_clock_updates       byte #14
 AI2_position            byte $03, #68
 AI2_direction           byte $00
+AI2_on                  byte [shrub1 - graphics]/8+2, $05
+AI2_health              byte $ff
+AI2_damage              byte $01
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_on                  byte [shrub1 - graphics]/8+2, $05
 
 bullet1_char            byte [human - graphics]/8+2
 bullet1_color           byte $00
@@ -122,9 +130,11 @@ bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
 bullet1_position        byte $04, #75
 bullet1_direction       byte $40
+bullet1_on              byte [shrub1 - graphics]/8+2, $05
+bullet1_health          byte $ff
+bullet1_damage          byte $01
 bullet1_state           byte $00
 bullet1_max_state       byte $03
-bullet1_on              byte [shrub1 - graphics]/8+2, $05
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -255,6 +265,8 @@ on_char_offset      byte on_char_template - template
 on_color_offset     byte on_color_template - template
 clock_offset        byte t_clock - template
 clock_update_offset byte clock_updates - template
+health_offset       byte health - template
+damage_offset       byte damage - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
 music_offset        byte music - entities
