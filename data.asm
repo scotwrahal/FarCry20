@@ -99,7 +99,7 @@ player_on_color         byte $05
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
 AI1_clock               byte $00
-AI1_clock_updates       byte #30
+AI1_clock_updates       byte #14
 AI1_position            byte $02, #47
 AI1_direction           byte $00
 AI1_state               byte $00
@@ -109,7 +109,7 @@ AI1_on                  byte [shrub1 - graphics]/8+2, $05
 AI2_char                byte [human - graphics]/8+2
 AI2_color               byte $02
 AI2_clock               byte $00
-AI2_clock_updates       byte #30
+AI2_clock_updates       byte #14
 AI2_position            byte $03, #68
 AI2_direction           byte $00
 AI2_state               byte $00
@@ -120,7 +120,7 @@ bullet1_char            byte [human - graphics]/8+2
 bullet1_color           byte $00
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
-bullet1_position        byte $03, #75
+bullet1_position        byte $04, #75
 bullet1_direction       byte $40
 bullet1_state           byte $00
 bullet1_max_state       byte $03

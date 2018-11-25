@@ -15,8 +15,6 @@ AIClocksSet
     
 updateAIs
     ldx #0
-    lda $11
-    sta AI1_direction
 UpdateAI
     txa
     asl
@@ -46,14 +44,19 @@ setDirection
     pha
     txa
     pha
+    ldy direction_offset
+    lda ($fe),y
+    and #$01                ; only update direction if you need to move
+    beq SetDirection
+    jmp ReturnSetDirection
     
+    
+SetDirection  
     ; find your position relative to the player set your direction towards the player
     lda #0
     jsr loadEntity2         ; load the player into fc
     ldx #0                  ; set the move counter to 0
     jsr checkPositions
-    cmp #0
-    beq On
     cmp #1
     beq Below
     cmp #2
@@ -69,7 +72,10 @@ Above
     jmp Above
 CheckRowsAbove
     cmp #0
-    beq SetDown   
+    beq SetDownWithRestore  
+    dex
+    php
+    inx
     jsr checkRows
     cmp #0
     beq SetLeftFromAbove
@@ -84,24 +90,28 @@ Below
     jmp Below
 CheckRowsBelow
     cmp #0
-    beq SetUp
+    beq SetUpWithRestore
+    dex
+    php
+    inx
     jsr checkRows
     cmp #0
     beq SetRightFromBelow
     jmp SetLeftFromBelow
     
-On    
-    jmp ReturnSetDirection
-    
-SetUp
+SetUpWithRestore
     jsr restoreFromBelow
+    ; shoot here
+SetUp
     lda #$81
     ldy direction_offset
     sta ($fe),y
     jmp ReturnSetDirection
     
-SetDown
+SetDownWithRestore
     jsr restoreFromAbove
+    ; shoot here
+SetDown
     lda #$41
     ldy direction_offset
     sta ($fe),y
@@ -109,9 +119,21 @@ SetDown
     
 SetLeftFromAbove
     jsr restoreFromAbove
+    plp                     ; check if you moved down only one time
+    beq SetLeft
+    ldy direction_offset
+    lda ($fe),y
+    and #$40                ; if it was not down go down
+    beq SetDown
     jmp SetLeft
 SetLeftFromBelow
     jsr restoreFromBelow
+    plp
+    beq SetLeft
+    ldy direction_offset
+    lda ($fe),y
+    and #$80                ; if it was not up go up
+    beq SetUp
 SetLeft
     lda #$21
     ldy direction_offset
@@ -120,15 +142,26 @@ SetLeft
 
 SetRightFromAbove
     jsr restoreFromAbove
+    plp
+    beq SetRight
+    ldy direction_offset
+    lda ($fe),y
+    and #$40                ; if it was not down go down
+    beq SetDown
     jmp SetRight
 SetRightFromBelow
     jsr restoreFromBelow
+    plp
+    beq SetRight
+    ldy direction_offset
+    lda ($fe),y
+    and #$80                ; if it was not up go up
+    beq SetUp
 SetRight
     lda #$11
     ldy direction_offset
     sta ($fe),y
     jmp ReturnSetDirection
-    
 
 restoreFromBelow
     jsr moveDown
