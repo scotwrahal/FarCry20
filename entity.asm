@@ -24,12 +24,7 @@ UpdateEntity
     lda $ff
     cmp #0
     beq EntitiesUpdated
-    ldy position_offset
-    ;lda ($fe),y
-    ;and #$40                ; check if active
-    ;beq NoUpdate
     jsr updateEntity
-NoUpdate
     inx
     jmp UpdateEntity
 EntitiesUpdated
@@ -44,9 +39,14 @@ updateEntity
     jsr checkClock
     cmp #0
     beq NoTimeBasedUpdates
+    ldy active_offset
+    lda ($fe),y
+    beq NotActive
     jsr move
     jsr checkCollision
     jsr handleCollision
+    jsr shoot
+NotActive
 NoTimeBasedUpdates
     pla
     tax
@@ -54,7 +54,26 @@ NoTimeBasedUpdates
     tay
     pla
     rts
-
+    
+shoot   
+    ldy direction_offset
+    lda ($fe),y
+    and #$08
+    beq NoShoot
+    lda ($fe),y
+    and #$04
+    bne NoShoot
+    lda ($fe),y         ; make it so that you are not shooting
+    and #$f7            ; 111110111
+    sta ($fe),y
+    ldy bullet_index_offset
+    lda ($fe),y
+    asl 
+    jsr loadBullet2
+    jsr spawnEntity
+NoShoot
+    rts
+    
 setClock
     lda clock
     clc
@@ -367,43 +386,49 @@ drawOn
     rts
     
 
-; fe is the entity to spawn
-; fc is the spawning entity
+; fc is the entity to spawn
+; fe is the spawning entity
 spawnEntity
+    ldy active_offset
+    lda ($fc),y
+    beq Spawn
+    rts
+Spawn    
+    lda #1
+    sta ($fc),y
+
     ldy position_offset
-    lda ($fc),y
-    ora #$40        ; make it active
-    sta ($fe),y
+    lda ($fe),y
+    sta ($fc),y
     iny 
-    lda ($fc),y
-    sta ($fe),y
+    lda ($fe),y
+    sta ($fc),y
     
     ldy direction_offset
-    lda ($fc),y
-    sta ($fe),y
+    lda ($fe),y
+    sta ($fc),y
     
     ldy on_char_offset
-    lda ($fc),y
-    sta ($fe),y
+    lda ($fe),y
+    sta ($fc),y
     
     ldy on_color_offset
-    lda ($fc),y
-    sta ($fe),y
+    lda ($fe),y
+    sta ($fc),y
     
     ldy clock_offset
     lda clock
-    sta ($fe),y
+    sta ($fc),y
     
     ldy state_offset
     lda #0
-    sta ($fe),y
+    sta ($fc),y
     
-    ldy char_offset
-    lda ($fe),y
-    ldy health_offset
-    cmp human_offset
-    bne NotHuman
-    lda human_health
-    sta ($fe),y
-    rts
-NotHuman    
+    ; ldy char_offset
+    ; lda ($fc),y
+    ; ldy health_offset
+    ; cmp human_offset
+    ; bne NotHuman
+    ; lda human_health
+    ; sta ($fc),y
+    rts    
