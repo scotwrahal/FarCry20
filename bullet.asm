@@ -32,19 +32,14 @@ loadBullet
     clc
     adc bullet_offset
     jmp loadEntity
-
-moveBullet
-    clc
-    adc bullet_offset
-    jsr checkClock
-    cmp #0
-    bne NoTime
-    jsr move
-    ldy direction_offset
-    lda #1
-    ora ($fe),y
-    sta ($fe),y
-NoTime
+    
+loadBullet2
+    tay
+    lda bullets,y
+    sta $fc
+    iny
+    lda bullets,y
+    sta $fd
     rts
 
 drawBullet
