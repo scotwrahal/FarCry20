@@ -86,7 +86,7 @@ player_clock_updates    byte $08
 position
 player_position         byte #2, #50        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
 direction
-player_direction        byte $80            ; bits 1111 direction 11 shooing 0 nothing 1 movement
+player_direction        byte $82            ; bits 1111 direction 11 shooing 1 Active 1 movement
 on_char_template
 player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template

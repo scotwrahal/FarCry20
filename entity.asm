@@ -24,7 +24,12 @@ UpdateEntity
     lda $ff
     cmp #0
     beq EntitiesUpdated
+    ldy position_offset
+    ;lda ($fe),y
+    ;and #$40                ; check if active
+    ;beq NoUpdate
     jsr updateEntity
+NoUpdate
     inx
     jmp UpdateEntity
 EntitiesUpdated
@@ -43,7 +48,6 @@ updateEntity
     jsr checkCollision
     jsr handleCollision
 NoTimeBasedUpdates
-    jsr drawEntity
     pla
     tax
     pla
@@ -361,3 +365,45 @@ drawOn
     tay
     pla
     rts
+    
+
+; fe is the entity to spawn
+; fc is the spawning entity
+spawnEntity
+    ldy position_offset
+    lda ($fc),y
+    ora #$40        ; make it active
+    sta ($fe),y
+    iny 
+    lda ($fc),y
+    sta ($fe),y
+    
+    ldy direction_offset
+    lda ($fc),y
+    sta ($fe),y
+    
+    ldy on_char_offset
+    lda ($fc),y
+    sta ($fe),y
+    
+    ldy on_color_offset
+    lda ($fc),y
+    sta ($fe),y
+    
+    ldy clock_offset
+    lda clock
+    sta ($fe),y
+    
+    ldy state_offset
+    lda #0
+    sta ($fe),y
+    
+    ldy char_offset
+    lda ($fe),y
+    ldy health_offset
+    cmp human_offset
+    bne NotHuman
+    lda human_health
+    sta ($fe),y
+    rts
+NotHuman    
