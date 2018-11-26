@@ -5,6 +5,11 @@
 input
     pha
     lda $c5                 ; read scancode
+    
+Shoot
+    cmp #32
+    bne Up
+    jmp SetShoot
 Up
     cmp #9                  ;'W' Scancode
     bne Down
@@ -25,11 +30,24 @@ Right
     bne nothin
     lda #$11
     jmp InputRetrun
-    ; expand here for more input upto 3 with the same byte
     
+; expand here for more input upto 3 with the same byte  
 nothin
-    lda player_direction
+    pla
+    rts
 InputRetrun
+    sta holder
+    and #$f0
+    beq SetShoot
+    lda player_direction
+    and #$0f
+    ora holder
     sta player_direction
     pla
+    rts
+SetShoot
+    lda player_direction
+    ora #$08
+    sta player_direction
+    pla 
     rts
