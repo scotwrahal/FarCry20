@@ -12,18 +12,23 @@ SpawnAIs
     lda $fd
     cmp #0
     beq AIsSpawned
+    ldy type_offset
+    lda ($fc),y
+    cmp #3
+    bne NoAIForSpawn
     ldy active_offset
     lda ($fc),y
     bne AIActive
     jsr spawnEntity
     jmp AIsSpawned
 AIActive
+NoAIForSpawn
     inx
     jmp SpawnAIs
 AIsSpawned
 NoSpawn
     pla
-    tax 
+    tax
     rts
     
 loadSpawner
@@ -52,6 +57,7 @@ Spawn
     
     ldy direction_offset
     lda ($fe),y
+    ora #1
     sta ($fc),y
     
     ldy on_char_offset
