@@ -127,7 +127,7 @@ AI1_active              byte $00
 AI1_position            byte $80, $ff
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte $10
+AI1_damage              byte 0
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -142,7 +142,7 @@ AI2_active              byte $00
 AI2_position            byte $80, $ff
 AI2_direction           byte $00
 AI2_on                  byte 0, 0
-AI2_damage              byte $10
+AI2_damage              byte 0
 AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03
@@ -157,7 +157,7 @@ AI3_active              byte $00
 AI3_position            byte $80, $ff
 AI3_direction           byte $00
 AI3_on                  byte 0, 0
-AI3_damage              byte $10
+AI3_damage              byte 0
 AI3_health              byte $7f
 AI3_state               byte $00
 AI3_max_state           byte $03
@@ -172,7 +172,7 @@ AI4_active              byte $00
 AI4_position            byte $80, $ff
 AI4_direction           byte $00
 AI4_on                  byte 0, 0
-AI4_damage              byte $10
+AI4_damage              byte 0
 AI4_health              byte $7f
 AI4_state               byte $00
 AI4_max_state           byte $03
@@ -187,7 +187,7 @@ bullet1_active          byte $00
 bullet1_position        byte $80, $ff
 bullet1_direction       byte $40
 bullet1_on              byte 0, 0
-bullet1_damage          byte $10
+bullet1_damage          byte 0
 bullet1_health          byte $7f
 bullet1_state           byte $00
 bullet1_max_state       byte $01
@@ -201,7 +201,7 @@ spawner1_active          byte $01
 spawner1_position        byte $01, #23
 spawner1_direction       byte $40
 spawner1_on              byte [shrub1 - graphics]/8+2, $05
-spawner1_damage          byte $10
+spawner1_damage          byte 0
 spawner1_health          byte $7f
 spawner1_state           byte $00
 spawner1_max_state       byte $01
@@ -211,16 +211,16 @@ music_template
 track_index
 music1_track           byte $00
 note_index
-music1_index           byte $02        ; starts at 2 for all music players
+music1_index           byte $00
 music1_clock           byte $00
 music1_clock_updates   byte $01
 music1_type            byte #6
-music1_active          byte #1
+music1_active          byte #0
 channel
 music1_channel         byte #0
 
 music2_track           byte $00
-music2_index           byte $02        ; starts at 2 for all music players
+music2_index           byte $00
 music2_clock           byte $00
 music2_clock_updates   byte $01
 music2_type            byte #6
@@ -228,15 +228,15 @@ music2_active          byte #0
 music2_channel         byte #0
 
 music3_track           byte $00
-music3_index           byte $02        ; starts at 2 for all music players
+music3_index           byte $00
 music3_clock           byte $00
-music3_clock_updates   byte  $01
+music3_clock_updates   byte $01
 music3_type            byte #6
 music3_active          byte #0
 music3_channel         byte #0
 
 music4_track           byte $00
-music4_index           byte $02        ; starts at 2 for all music players
+music4_index           byte $00
 music4_clock           byte $00
 music4_clock_updates   byte $01
 music4_type            byte #6
@@ -283,7 +283,7 @@ song1    word song1_length
 song_template
 song_length
 song0_length
-    byte song0_end - song0_notes, $00    ; number of notes plus one
+    byte [song0_end - song0_notes]/2, $00
 song_notes
 song0_notes
     ;     duration note
@@ -306,7 +306,7 @@ song0_notes
 song0_end
 
 song1_length
-    byte  song1_end - song1_notes, $00    ; number of notes plus one
+    byte  [song1_end - song1_notes]/2 , $00
 song1_notes
     ;     duration note
     byte #8, #135

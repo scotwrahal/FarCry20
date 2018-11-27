@@ -8,16 +8,22 @@ checkClock
     lda ($fe),y             ; get the clock time
     sec
     cmp clock               ; compare it with the current clock
-    beq UpdateClock         ; if the times are equal then you update
+    beq CheckForLoop         ; if the times are equal then you update
+    bcc CheckForLoop
 NoClock
     pla
     tay
     lda #0
     rts                     ; restore values and return the result of the check
-UpdateClock                 ; if the gameclock is larger than the entity clock may need to update
+CheckForLoop                 ; if the gameclock is larger than the entity clock may need to update
     iny                     ; move to the entity clock update
     clc
     adc ($fe),y             ; update the clock based on the entity clock update
+    bcs UpdateClock
+    sec
+    cmp clock
+    bcc NoClock
+UpdateClock
     dey                     ; return to the clock so you can store the new time
     sta ($fe),y
     pla
@@ -25,13 +31,6 @@ UpdateClock                 ; if the gameclock is larger than the entity clock m
     lda #1
     rts                     ; restore values and return the result of the check
 
-setClock
-    lda clock
-    clc
-    adc #1
-    ldy clock_offset
-    sta ($fe),y
-    rts
 
     ; update clock updates the clock and stores it where we can check it
 updateClock
@@ -65,6 +64,14 @@ SetClock
     jmp SetClock
 SetClockDone
     rts
+
+setClock
+    lda clock
+    clc
+    adc #1
+    ldy clock_offset
+    sta ($fe),y
+    rts     
     
 rnd
     lda random1
