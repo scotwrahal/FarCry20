@@ -14,6 +14,13 @@ human_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
 human_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
 human_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
 
+bullet
+bullet_up       byte $00, $00 ,$08, $18, $18, $00, $00, $00
+bullet_down     byte $00, $00 ,$00, $18, $18, $10, $00, $00
+bullet_left     byte $00, $00 ,$00, $38, $18, $00, $00, $00
+bullet_right    byte $00, $00 ,$00, $1c, $18, $00, $00, $00
+
+
 palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $0, $2a, $ac, $a9, $99, $5a, $3c, $1c
@@ -93,10 +100,10 @@ on_char_template
 player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template
 player_on_color         byte $05
-damage
+damage_
 player_damage           byte $01
 health
-player_health           byte $ff
+player_health           byte $7f
 state
 player_state            byte $00
 max_state
@@ -109,46 +116,46 @@ player_bullet_index     byte #0
 
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
-AI1_type                byte #1
+AI1_type                byte #3
 AI1_clock               byte $00
 AI1_clock_updates       byte #14
 AI1_position            byte $02, #47
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_health              byte $ff
 AI1_damage              byte $01
+AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
-AI1_active              byte $00
+AI1_active              byte $01
 AI1_bullet_index        byte #1
 
 AI2_char                byte [human - graphics]/8+2
 AI2_color               byte $02
-AI2_type                byte #1
+AI2_type                byte #3
 AI2_clock               byte $00
 AI2_clock_updates       byte #14
 AI2_position            byte $03, #68
 AI2_direction           byte $00
 AI2_on                  byte [shrub1 - graphics]/8+2, $05
-AI2_health              byte $ff
 AI2_damage              byte $01
+AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_active              byte $00
+AI2_active              byte $01
 AI2_bullet_index        byte #2
 
-bullet1_char            byte [human - graphics]/8+2
+bullet1_char            byte [bullet - graphics]/8+2
 bullet1_color           byte $00
-bullet1_type            byte #2
+bullet1_type            byte #4
 bullet1_clock           byte $00
-bullet1_clock_updates   byte $05
-bullet1_position        byte $04, #75
+bullet1_clock_updates   byte $03
+bullet1_position        byte $80    , $ff
 bullet1_direction       byte $40
 bullet1_on              byte [shrub1 - graphics]/8+2, $05
-bullet1_health          byte $ff
-bullet1_damage          byte $01
+bullet1_damage          byte $10
+bullet1_health          byte $7f
 bullet1_state           byte $00
-bullet1_max_state       byte $03
+bullet1_max_state       byte $01
 bullet1_active          byte $00
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -281,7 +288,7 @@ on_color_offset     byte on_color_template - template
 clock_offset        byte t_clock - template
 clock_update_offset byte clock_updates - template
 health_offset       byte health - template
-damage_offset       byte damage - template
+damage_offset       byte damage_ - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
 music_offset        byte music - entities
