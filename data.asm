@@ -55,6 +55,11 @@ AI1         word AI1_char
 AI2         word AI2_char
 AI3         word AI3_char
 AI4         word AI4_char
+AI5         word AI5_char
+AI6         word AI6_char
+AI7         word AI7_char
+AI8         word AI8_char
+AI9         word AI9_char
 
 bullets:
 bullet1     word bullet1_char
@@ -107,7 +112,7 @@ player_on_char          byte [shrub1 - graphics]/8+2
 on_color_template
 player_on_color         byte $05
 damage_
-player_damage           byte $01
+player_damage           byte $7f
 health
 player_health           byte $7f
 state
@@ -178,16 +183,91 @@ AI4_state               byte $00
 AI4_max_state           byte $03
 AI4_bullet_index        byte #2
 
+AI5_char                byte [human - graphics]/8+2
+AI5_color               byte $02
+AI5_clock               byte $00
+AI5_clock_updates       byte #7
+AI5_type                byte #3
+AI5_active              byte $00
+AI5_position            byte $80, $ff
+AI5_direction           byte $00
+AI5_on                  byte 0, 0
+AI5_damage              byte 0
+AI5_health              byte $7f
+AI5_state               byte $00
+AI5_max_state           byte $03
+AI5_bullet_index        byte #2
+
+AI6_char                byte [human - graphics]/8+2
+AI6_color               byte $02
+AI6_clock               byte $00
+AI6_clock_updates       byte #7
+AI6_type                byte #3
+AI6_active              byte $00
+AI6_position            byte $80, $ff
+AI6_direction           byte $00
+AI6_on                  byte 0, 0
+AI6_damage              byte 0
+AI6_health              byte $7f
+AI6_state               byte $00
+AI6_max_state           byte $03
+AI6_bullet_index        byte #2
+
+AI7_char                byte [human - graphics]/8+2
+AI7_color               byte $02
+AI7_clock               byte $00
+AI7_clock_updates       byte #7
+AI7_type                byte #3
+AI7_active              byte $00
+AI7_position            byte $80, $ff
+AI7_direction           byte $00
+AI7_on                  byte 0, 0
+AI7_damage              byte 0
+AI7_health              byte $7f
+AI7_state               byte $00
+AI7_max_state           byte $03
+AI7_bullet_index        byte #2
+
+AI8_char                byte [human - graphics]/8+2
+AI8_color               byte $02
+AI8_clock               byte $00
+AI8_clock_updates       byte #7
+AI8_type                byte #3
+AI8_active              byte $00
+AI8_position            byte $80, $ff
+AI8_direction           byte $00
+AI8_on                  byte 0, 0
+AI8_damage              byte 0
+AI8_health              byte $7f
+AI8_state               byte $00
+AI8_max_state           byte $03
+AI8_bullet_index        byte #2
+
+AI9_char                byte [human - graphics]/8+2
+AI9_color               byte $02
+AI9_clock               byte $00
+AI9_clock_updates       byte #7
+AI9_type                byte #3
+AI9_active              byte $00
+AI9_position            byte $80, $ff
+AI9_direction           byte $00
+AI9_on                  byte 0, 0
+AI9_damage              byte 0
+AI9_health              byte $7f
+AI9_state               byte $00
+AI9_max_state           byte $03
+AI9_bullet_index        byte #2
+
 bullet1_char            byte [bullet - graphics]/8+2
 bullet1_color           byte $00
 bullet1_clock           byte $00
-bullet1_clock_updates   byte $03
+bullet1_clock_updates   byte $05
 bullet1_type            byte #4
 bullet1_active          byte $00
 bullet1_position        byte $80, $ff
 bullet1_direction       byte $40
 bullet1_on              byte 0, 0
-bullet1_damage          byte 0
+bullet1_damage          byte $7f
 bullet1_health          byte $7f
 bullet1_state           byte $00
 bullet1_max_state       byte $01
@@ -240,8 +320,8 @@ music4_index           byte $00
 music4_clock           byte $00
 music4_clock_updates   byte $01
 music4_type            byte #6
-music4_active          byte #0
-music4_channel         byte #0
+music4_active          byte #1
+music4_channel         byte #1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; LEVEL MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; ideally to be stored on a disk and loaded in later
