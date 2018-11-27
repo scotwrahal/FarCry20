@@ -1,6 +1,9 @@
 ; TODO make a list of functions
 ; update music will update the current track playing
 updateMusic
+    ldy active_offset
+    lda ($fe),y
+    beq NoChannelUpdate
     jsr checkClock
     cmp #0
     beq NoChannelUpdate
