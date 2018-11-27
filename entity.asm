@@ -14,6 +14,117 @@ SetEntityClocks
     jmp SetEntityClocks
 EntityClocksSet
     rts
+    
+drawAllEntitys
+    ;loop entitys
+    ldx #0              ; index for the list of entitys
+    lda #0              ; entity type
+    pha
+DrawEntity
+    txa
+    asl                 ; multiply by 2 for address
+    jsr loadEntity
+    lda $ff
+    cmp #0              ; check for end of entity type
+    beq DrawEntityDone
+    jsr drawEntity
+    inx
+    jmp DrawEntity
+DrawEntityDone
+    pla
+    clc
+    adc #1              ; advance entity type
+    cmp #3              ; 3 entities 
+    beq DrawingDone
+    pha
+    inx
+    jmp DrawEntity
+DrawingDone
+    rts
+    
+handleEntityCollision
+    pla
+    cmp #1
+    beq EntityTerrain
+    cmp #2
+    beq EntityPlayer
+    cmp #3
+    beq EntityAI
+    cmp #4
+    beq EntityBullet
+    rts
+    
+EntityBullet
+    jsr flipEntitys
+    jsr damage
+    jsr despawn
+    jsr flipEntitys
+    jsr copyOn
+    rts
+EntityAI
+EntityPlayer
+    ;jsr damage
+EntityTerrain
+    jsr terrainCollide
+    rts
+    
+copyOn
+    ldy on_char_offset
+    lda ($fc),y
+    sta ($fe),y
+    ldy on_color_offset
+    lda ($fc),y
+    sta ($fe),y
+    rts
+    
+flipEntitys
+    lda $fe
+    sta holder
+    lda $fc
+    sta $fe
+    lda holder
+    sta $fc
+    lda $ff
+    sta holder
+    lda $fd
+    sta $ff
+    lda holder
+    sta $fd
+    rts
+
+terrainCollide    
+    pha
+    txa
+    pha
+    tya
+    pha
+    ldy direction_offset
+    lda ($fe),y
+    asl                     ; shift through the bits to get the direction
+    bcs CollideMoveDown
+    asl
+    bcs CollideMoveUp
+    asl
+    bcs CollideMoveRight
+    asl
+    bcs CollideMoveLeft
+    
+CollideMoveUp
+    jsr moveUp
+    jmp FinishMove
+    
+CollideMoveDown
+    jsr moveDown
+    jmp FinishMove
+    
+CollideMoveLeft
+    jsr moveLeft
+    jmp FinishMove
+    
+CollideMoveRight
+    jsr moveRight
+    jmp FinishMove
+
 
 updateEntities
     ldx #0
@@ -36,6 +147,12 @@ updateEntity
     pha
     txa
     pha
+    ldy health_offset
+    lda ($fe),y
+    bpl Update
+    jsr despawn
+    jmp NoUpdate
+Update
     jsr checkClock
     cmp #0
     beq NoTimeBasedUpdates
@@ -48,6 +165,7 @@ updateEntity
     jsr shoot
 NotActive
 NoTimeBasedUpdates
+NoUpdate
     pla
     tax
     pla
@@ -220,6 +338,28 @@ EntitymoveLeft
 EntitymoveRight
     jsr moveRight
     jmp FinishMove
+    
+FinishMove
+    ldy position_offset
+    iny                         ; store the thing you are now standing on
+    lda ($fe),y
+    dey
+    tax
+    lda ($fe),y
+    jsr getFromPosition
+    ldy on_char_offset
+    sta ($fe),y
+    txa
+    ldy on_color_offset
+    sta ($fe),y
+EndMove
+    pla
+    tay
+    pla
+    tax
+    pla
+    rts
+
 
     
 ; moveUp is commented the others moves follow similar logic
@@ -334,27 +474,6 @@ MoveRightBorder
 NoMoveRight
     rts
 
-FinishMove
-    ldy position_offset
-    iny                         ; store the thing you are now standing on
-    lda ($fe),y
-    dey
-    tax
-    lda ($fe),y
-    jsr getFromPosition
-    ldy on_char_offset
-    sta ($fe),y
-    txa
-    ldy on_color_offset
-    sta ($fe),y
-EndMove
-    pla
-    tay
-    pla
-    tax
-    pla
-    rts
-
 drawOn
     pha
     tya
@@ -389,11 +508,11 @@ drawOn
 ; fc is the entity to spawn
 ; fe is the spawning entity
 spawnEntity
-    ldy active_offset
+    ldy active_offset       ; check to see if the thing you are tyring to spawn is active
     lda ($fc),y
     beq Spawn
     rts
-Spawn    
+Spawn
     lda #1
     sta ($fc),y
 
@@ -423,12 +542,29 @@ Spawn
     ldy state_offset
     lda #0
     sta ($fc),y
-    
-    ; ldy char_offset
-    ; lda ($fc),y
-    ; ldy health_offset
-    ; cmp human_offset
-    ; bne NotHuman
-    ; lda human_health
-    ; sta ($fc),y
     rts    
+    
+despawn
+    ldy active_offset       ; set it to not active
+    lda ($fe),y
+    bne Despawn
+    rts
+    
+Despawn
+    lda #0
+    sta ($fe),y
+    jsr drawOn              ; draw what it is standing on
+    
+    ldy active_offset       ; set it to not active
+    lda #0
+    sta ($fe),y
+
+    ldy position_offset     ; move it off the screen
+    lda #$80
+    sta ($fe),y
+    iny 
+    lda #$ff
+    sta ($fe),y
+    rts
+    
+    

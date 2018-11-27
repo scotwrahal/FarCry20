@@ -47,10 +47,20 @@ play_loop
     jsr input
     jsr updateEntities
     jsr updateAIs
-    jsr updateBullets 
+    jsr updateBullets
     jsr drawAllEntitys
     jmp play_loop
 
+    
+damage
+    ldy health_offset
+    lda ($fc),y
+    ldy damage_offset
+    sec
+    sbc ($fe),y
+    ldy health_offset
+    sta ($fc),y
+    rts
 ; things that could be done to pontenally compress the code
 ; make the loops all use the same loop and pass in the loading function and what to do
     
@@ -63,31 +73,4 @@ setTimers
     jsr setAIClocks
     jsr setBulletClocks
     jsr setMusicClocks
-    rts
-    
-drawAllEntitys
-    ;loop entitys
-    ldx #0              ; index for the list of entitys
-    lda #0              ; entity type
-    pha
-DrawEntity
-    txa
-    asl                 ; multiply by 2 for address
-    jsr loadEntity
-    lda $ff
-    cmp #0              ; check for end of entity type
-    beq DrawEntityDone
-    jsr drawEntity
-    inx
-    jmp DrawEntity
-DrawEntityDone
-    pla
-    clc
-    adc #1              ; advance entity type
-    cmp #3              ; 3 entities 
-    beq DrawingDone
-    pha
-    inx
-    jmp DrawEntity
-DrawingDone
     rts

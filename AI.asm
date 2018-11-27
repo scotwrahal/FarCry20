@@ -13,6 +13,9 @@ SetAIClocks
 AIClocksSet
     rts
     
+handleAICollision
+    jmp handleEntityCollision
+    
 updateAIs
     ldx #0
 UpdateAI

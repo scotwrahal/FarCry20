@@ -12,6 +12,28 @@ SetBulletClocks
     jmp SetBulletClocks
 BulletClocksSet
     rts
+    
+handleBulletCollion
+    pla
+    cmp #1
+    beq BulletTerrain
+    cmp #2
+    beq BulletPlayer
+    cmp #3
+    beq BulletAI
+    cmp #4
+    beq BulletBullet
+    rts
+    
+
+BulletTerrain
+    jmp despawn
+BulletBullet
+    rts
+BulletAI
+BulletPlayer
+    jsr damage
+    jmp despawn
 
 updateBullets
     ldx #0
