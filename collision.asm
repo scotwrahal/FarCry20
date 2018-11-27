@@ -2,59 +2,23 @@ handleCollision
     ;collide with terrain
     cmp #0              ; nothing
     beq CollidedWithNothing
-    cmp #1              ; terrain
-    beq TerrainCollide
-    cmp #2              ; player
-    beq TerrainCollide
-    cmp #3              ; AI
-    beq TerrainCollide
-    cmp #4              ; bullet
-    beq CollidedWithNothing
+    pha
+    ldy type_offset
+    lda ($fe),y
+    cmp #2              ; player collisions
+    bne Handle1
+    jmp handleEntityCollision
+Handle1
+    cmp #3              ; enemy collisions
+    bne Handle2
+    jmp handleAICollision
+Handle2
+    cmp #4              ; bullet collisions
+    bne Handle3
+    jmp handleBulletCollion
+Handle3
 CollidedWithNothing
     rts
-
-TerrainCollide
-    jsr terrainCollisionHandler
-    rts
-
-terrainCollisionHandler
-    pha
-    txa
-    pha
-    tya
-    pha
-    ldy direction_offset
-    lda ($fe),y
-    asl                     ; shift through the bits to get the direction
-    bcs CollideMoveDown
-    asl
-    bcs CollideMoveUp
-    asl
-    bcs CollideMoveRight
-    asl
-    bcs CollideMoveLeft
-    rts
-    
-CollideMoveUp
-    jsr moveUp
-    jmp FinishMove
-    rts
-    
-CollideMoveDown
-    jsr moveDown
-    jmp FinishMove
-    rts
-    
-CollideMoveLeft
-    jsr moveLeft
-    jmp FinishMove
-    rts
-    
-CollideMoveRight
-    jsr moveRight
-    jmp FinishMove
-    rts
-
 
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
