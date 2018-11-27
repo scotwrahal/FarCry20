@@ -44,7 +44,6 @@ set_up_music
 
 play_loop
     jsr updateClock
-    jsr updateMusic 
     jsr input
     jsr updateEntities
     jsr drawAllEntities

@@ -9,7 +9,12 @@ DrawEntity
     lda $ff
     cmp #0              ; check for end of entity type
     beq DrawEntityDone
+    ldy type_offset
+    lda ($fe),y
+    cmp #6
+    beq NextEntityDraw
     jsr drawEntity
+NextEntityDraw
     inx
     jmp DrawEntity
 DrawEntityDone
