@@ -14,20 +14,6 @@ human_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
 human_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
 human_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
 
-
-human2_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
-human2_down0:   byte $18, $18, $18, $3c, $5a, $58, $58, $08
-human2_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
-human2_right0:  byte $18, $18, $13, $3e, $58, $18, $34, $46
-human2_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
-human2_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
-human2_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
-human2_right1:	byte $18, $18, $13, $3e, $38, $18, $28, $2c
-human2_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
-human2_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
-human2_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
-human2_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
-
 bullet
 bullet_up       byte $00, $00 ,$08, $18, $18, $00, $00, $00
 bullet_down     byte $00, $00 ,$00, $18, $18, $10, $00, $00
@@ -57,8 +43,12 @@ on_holder   word on_char
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE EXTEND DRAWABLE
+; this list also controls the order for updates
 entities:
 player      word player_char
+
+spawners:
+spawner1    word spawner1_char
 
 AIs:
 AI1         word AI1_char
@@ -68,18 +58,13 @@ AI4         word AI4_char
 
 bullets:
 bullet1     word bullet1_char
-            
-spawners:
-spawner1    word spawner1_char
-            word 0
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYER LIST;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
-music_player_1  word track_index_1
-music_player_2  ;word track_index_2
-music_player_3  ;word track_index_3
-music_player_4  ;word track_index_4
+music_player_1  word music1_track
+music_player_2  word music2_track
+music_player_3  word music3_track
+music_player_4  word music4_track
                 word #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -210,7 +195,7 @@ bullet1_max_state       byte $01
 spawner1_char            byte [bullet - graphics]/8+2
 spawner1_color           byte $00
 spawner1_clock           byte $00
-spawner1_clock_updates   byte $f0
+spawner1_clock_updates   byte $0f
 spawner1_type            byte #5
 spawner1_active          byte $01
 spawner1_position        byte $01, #23
@@ -224,33 +209,39 @@ spawner1_max_state       byte $01
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
 track_index
-track_index_1           byte $00
+music1_track           byte $00
 note_index
-note_index_1            byte $02        ; starts at 2 for all music players
-music_clock_1           byte $00
-music_clock_updates_1   byte $01
-music_type_1            byte #6
+music1_index           byte $02        ; starts at 2 for all music players
+music1_clock           byte $00
+music1_clock_updates   byte $01
+music1_type            byte #6
+music1_active          byte #1
+channel
+music1_channel         byte #0
 
-track_index_2           byte $00
-note_index_2            byte $02
-music_clock_2           byte $00
-music_clock_updates_2   byte $01
-music_type_2            byte #0
+music2_track           byte $00
+music2_index           byte $02        ; starts at 2 for all music players
+music2_clock           byte $00
+music2_clock_updates   byte $01
+music2_type            byte #6
+music2_active          byte #0
+music2_channel         byte #0
 
-track_index_3           byte $00
-note_index_3            byte $02
-music_clock_3           byte $00
-music_clock_updates_3   byte $01
-music_type_3            byte #0
+music3_track           byte $00
+music3_index           byte $02        ; starts at 2 for all music players
+music3_clock           byte $00
+music3_clock_updates   byte  $01
+music3_type            byte #6
+music3_active          byte #0
+music3_channel         byte #0
 
-track_index_4           byte $00
-note_index_4            byte $02
-music_clock_4           byte $00
-music_clock_updates_4   byte $01
-music_type_4            byte #0
-
-human_animation_state:
-	byte $00
+music4_track           byte $00
+music4_index           byte $02        ; starts at 2 for all music players
+music4_clock           byte $00
+music4_clock_updates   byte $01
+music4_type            byte #6
+music4_active          byte #0
+music4_channel         byte #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; LEVEL MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; ideally to be stored on a disk and loaded in later
@@ -361,8 +352,6 @@ bullet_offset       byte bullets - entities
 music_offset        byte music - entities
 AI_offset           byte AIs - entities
 spawner_offset      byte spawners - entities
-tracki_offset       byte track_index - music_template
-notei_offset        byte note_index - music_template
 length_offset       byte song_length - song_template
 track_offset        byte song_notes - song_template
 state_offset        byte state - template
@@ -372,5 +361,8 @@ graphics_size       byte end_graphics - graphics
 active_offset       byte active - template
 bullet_index_offset byte bullet_index - template
 type_offset         byte type - template
+tracki_offset       byte track_index - music_template
+notei_offset        byte note_index - music_template
+channel_offset      byte channel - music_template
 entity_count        byte #4
 AI_health           byte #60
