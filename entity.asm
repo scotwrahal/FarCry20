@@ -13,6 +13,8 @@ updateEntity
     beq UpdateSpawner
     cmp #6 
     beq UpdateMusic
+    cmp #7
+    beq UpdateHealthbar
     rts 
     
 UpdatePlayer
@@ -29,6 +31,9 @@ UpdateSpawner
     rts
 UpdateMusic
     jsr updateMusic
+    rts
+UpdateHealthbar
+    jsr updateHealthbar
     rts
 
 updatePlayer
@@ -100,50 +105,6 @@ loadEntity2
     iny
     lda entities,y
     sta $fd
-    rts
-
-drawEntity
-    pha
-    txa
-    pha
-    tya
-    pha
-    ldy state_offset
-    lda ($fe),y
-    asl
-    asl
-    pha
-    jsr getDirection
-    sta holder
-    pla
-    clc
-    adc holder
-    sta holder
-    pha
-    ldy char_offset
-    lda ($fe),y
-    clc
-    adc holder
-    sta ($fe),y
-    ldy position_offset
-    iny
-    lda ($fe),y
-    tax
-    dey
-    lda ($fe),y
-    jsr draw
-    pla
-    sta holder
-    ldy char_offset
-    lda ($fe),y
-    sec
-    sbc holder
-    sta ($fe),y
-    pla
-    tay
-    pla
-    tax
-    pla
     rts
     
 

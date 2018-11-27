@@ -20,7 +20,6 @@ bullet_down     byte $00, $00 ,$00, $18, $18, $10, $00, $00
 bullet_left     byte $00, $00 ,$00, $38, $18, $00, $00, $00
 bullet_right    byte $00, $00 ,$00, $1c, $18, $00, $00, $00
 
-
 palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $0, $2a, $ac, $a9, $99, $5a, $3c, $1c
@@ -47,19 +46,21 @@ on_holder   word on_char
 entities:
 player      word player_char
 
+healbar     word healthbar_char
+
 spawners:
 spawner1    word spawner1_char
 
 AIs:
 AI1         word AI1_char
-AI2         word AI2_char
-AI3         word AI3_char
-AI4         word AI4_char
-AI5         word AI5_char
-AI6         word AI6_char
-AI7         word AI7_char
-AI8         word AI8_char
-AI9         word AI9_char
+;AI2         word AI2_char
+;AI3         word AI3_char
+;AI4         word AI4_char
+;AI5         word AI5_char
+;AI6         word AI6_char
+;AI7         word AI7_char
+;AI8         word AI8_char
+;AI9         word AI9_char
 
 bullets:
 bullet1     word bullet1_char
@@ -122,6 +123,19 @@ player_max_state        byte $02
 bullet_index
 player_bullet_index     byte #0
 
+healthbar_char                byte [human - graphics]/8+2
+healthbar_color               byte $02
+healthbar_clock               byte $00
+healthbar_clock_updates       byte #14
+healthbar_type                byte #7
+healthbar_active              byte $01
+healthbar_position            byte $80, $e4
+healthbar_direction           byte $00
+healthbar_on                  byte [shrub1 - graphics]/8+2, $05
+healthbar_damage              byte 5
+healthbar_health              byte $7f
+healthbar_state               byte $00
+healthbar_max_state           byte $01
 
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
@@ -132,7 +146,7 @@ AI1_active              byte $00
 AI1_position            byte $80, $ff
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte 0
+AI1_damage              byte 5
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -307,13 +321,13 @@ music2_type            byte #6
 music2_active          byte #0
 music2_channel         byte #0
 
-music3_track           byte $00
+music3_track           byte $01
 music3_index           byte $00
 music3_clock           byte $00
 music3_clock_updates   byte $01
 music3_type            byte #6
-music3_active          byte #0
-music3_channel         byte #0
+music3_active          byte #1
+music3_channel         byte #3
 
 music4_track           byte $00
 music4_index           byte $00

@@ -11,7 +11,9 @@ DrawEntity
     beq DrawEntityDone
     ldy type_offset
     lda ($fe),y
-    cmp #6
+    cmp #6              ; dont draw music players
+    beq NextEntityDraw
+    cmp #7              ; don't draw health bar
     beq NextEntityDraw
     jsr drawEntity
 NextEntityDraw
@@ -100,6 +102,51 @@ drawDrawable
     sta $fe
     pla
     sta $ff
+    rts
+
+    
+drawEntity
+    pha
+    txa
+    pha
+    tya
+    pha
+    ldy state_offset
+    lda ($fe),y
+    asl
+    asl
+    pha
+    jsr getDirection
+    sta holder
+    pla
+    clc
+    adc holder
+    sta holder
+    pha
+    ldy char_offset
+    lda ($fe),y
+    clc
+    adc holder
+    sta ($fe),y
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+    jsr draw
+    pla
+    sta holder
+    ldy char_offset
+    lda ($fe),y
+    sec
+    sbc holder
+    sta ($fe),y
+    pla
+    tay
+    pla
+    tax
+    pla
     rts
 
 ; draw

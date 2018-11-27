@@ -23,6 +23,7 @@ end_basic
     INCLUDE "clock.asm"
     INCLUDE "drawable.asm"
     INCLUDE "input.asm"
+    INCLUDE "healthbar.asm"
     
 start:
     lda #252                ; point to custom character set
