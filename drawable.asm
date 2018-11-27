@@ -1,4 +1,20 @@
 ; TODO make a list of functions
+drawAllEntities
+    ;loop entitys
+    ldx #0              ; index for the list of entitys
+DrawEntity
+    txa
+    asl                 ; multiply by 2 for address
+    jsr loadEntity
+    lda $ff
+    cmp #0              ; check for end of entity type
+    beq DrawEntityDone
+    jsr drawEntity
+    inx
+    jmp DrawEntity
+DrawEntityDone
+    rts
+
 loadDrawable
     sta holder
     tya

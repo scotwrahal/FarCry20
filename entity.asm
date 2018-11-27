@@ -1,129 +1,57 @@
-; TODO make a list of functions
-
-setEntityClocks
-    ldx #0              ; index
-SetEntityClocks
-    txa
-    asl                 ; multiply by 2 because they are addresses
-    jsr loadEntity
-    lda $ff             ; load the page number of the entity
-    cmp #0              ; no entitys are on pg 0
-    beq EntityClocksSet ; so break out of the loop
-    jsr setClock        ; sets the entity clock to the current clock
-    inx                 ; increase the index
-    jmp SetEntityClocks
-EntityClocksSet
-    rts
-    
-drawAllEntitys
-    ;loop entitys
-    ldx #0              ; index for the list of entitys
-    lda #0              ; entity type
-    pha
-DrawEntity
-    txa
-    asl                 ; multiply by 2 for address
-    jsr loadEntity
-    lda $ff
-    cmp #0              ; check for end of entity type
-    beq DrawEntityDone
-    jsr drawEntity
-    inx
-    jmp DrawEntity
-DrawEntityDone
-    pla
-    clc
-    adc #1              ; advance entity type
-    cmp #3              ; 3 entities 
-    beq DrawingDone
-    pha
-    inx
-    jmp DrawEntity
-DrawingDone
-    rts
-    
-handleEntityCollision
-    pla
-    cmp #1
-    beq EntityTerrain
-    cmp #2
-    beq EntityPlayer
-    cmp #3
-    beq EntityAI
-    cmp #4
-    beq EntityBullet
-    rts
-    
-EntityBullet
-    jsr flipEntitys
-    jsr damage
-    jsr despawn
-    jsr flipEntitys
-    jsr copyOn
-    rts
-EntityAI
-EntityPlayer
-    jsr damage
-EntityTerrain
-    jsr terrainCollide
-    rts
-    
-copyOn
-    ldy on_char_offset
-    lda ($fc),y
-    sta ($fe),y
-    ldy on_color_offset
-    lda ($fc),y
-    sta ($fe),y
-    rts
-    
-flipEntitys
-    lda $fe
-    sta holder
-    lda $fc
-    sta $fe
-    lda holder
-    sta $fc
-    lda $ff
-    sta holder
-    lda $fd
-    sta $ff
-    lda holder
-    sta $fd
-    rts
-
-terrainCollide    
-    pha
-    txa
-    pha
-    tya
-    pha
-    ldy direction_offset
+; TODO make a list of functions    
+   
+updateEntity
+    ldy type_offset
     lda ($fe),y
-    asl                     ; shift through the bits to get the direction
-    bcs CollideMoveDown
-    asl
-    bcs CollideMoveUp
-    asl
-    bcs CollideMoveRight
-    asl
-    bcs CollideMoveLeft
+    cmp #2 
+    beq UpdatePlayer
+    cmp #3 
+    beq UpdateAI
+    cmp #4 
+    beq UpdateBullet
+    cmp #5 
+    beq UpdateSpawner
+    cmp #6 
+    beq UpdateMusic
+    rts 
     
-CollideMoveUp
-    jsr moveUp
-    jmp FinishMove
-    
-CollideMoveDown
-    jsr moveDown
-    jmp FinishMove
-    
-CollideMoveLeft
-    jsr moveLeft
-    jmp FinishMove
-    
-CollideMoveRight
-    jsr moveRight
-    jmp FinishMove
+UpdatePlayer
+    jsr updatePlayer
+    rts
+UpdateAI
+    jsr updateAI
+    rts 
+UpdateBullet
+    jsr updateBullet
+    rts
+UpdateSpawner
+    jsr updateSpawner
+    rts
+UpdateMusic
+    jsr updateMusic
+    rts
+
+updatePlayer
+    ldy health_offset
+    lda ($fe),y
+    bpl Update
+    jsr despawn
+    jmp NoUpdate
+Update
+    ldy active_offset
+    lda ($fe),y
+    beq NotActive
+    jsr checkClock
+    cmp #0
+    beq NoTimeBasedUpdates
+    jsr move
+    jsr checkCollision
+    jsr handleCollision
+    jsr shoot
+NotActive
+NoTimeBasedUpdates
+NoUpdate
+    rts
 
 
 updateEntities
@@ -139,38 +67,6 @@ UpdateEntity
     inx
     jmp UpdateEntity
 EntitiesUpdated
-    rts
-
-updateEntity
-    pha
-    tya
-    pha
-    txa
-    pha
-    ldy health_offset
-    lda ($fe),y
-    bpl Update
-    jsr despawn
-    jmp NoUpdate
-Update
-    jsr checkClock
-    cmp #0
-    beq NoTimeBasedUpdates
-    ldy active_offset
-    lda ($fe),y
-    beq NotActive
-    jsr move
-    jsr checkCollision
-    jsr handleCollision
-    jsr shoot
-NotActive
-NoTimeBasedUpdates
-NoUpdate
-    pla
-    tax
-    pla
-    tay
-    pla
     rts
     
 shoot   
@@ -190,14 +86,6 @@ shoot
     jsr loadBullet2
     jsr spawnEntity
 NoShoot
-    rts
-    
-setClock
-    lda clock
-    clc
-    adc #1
-    ldy clock_offset
-    sta ($fe),y
     rts
 
 loadEntity
@@ -502,54 +390,13 @@ drawOn
     pla
     tay
     pla
-    rts
-    
-
-; fc is the entity to spawn
-; fe is the spawning entity
-spawnEntity
-    ldy active_offset       ; check to see if the thing you are tyring to spawn is active
-    lda ($fc),y
-    beq Spawn
-    rts
-Spawn
-    lda #1
-    sta ($fc),y
-
-    ldy position_offset
-    lda ($fe),y
-    sta ($fc),y
-    iny 
-    lda ($fe),y
-    sta ($fc),y
-    
-    ldy direction_offset
-    lda ($fe),y
-    sta ($fc),y
-    
-    ldy on_char_offset
-    lda ($fe),y
-    sta ($fc),y
-    
-    ldy on_color_offset
-    lda ($fe),y
-    sta ($fc),y
-    
-    ldy clock_offset
-    lda clock
-    sta ($fc),y
-    
-    ldy state_offset
-    lda #0
-    sta ($fc),y
-    rts    
+    rts   
     
 despawn
     ldy active_offset       ; set it to not active
     lda ($fe),y
-    bne Despawn
+    bne Despawn             ; only despawn if they are not despawned
     rts
-    
 Despawn
     lda #0
     sta ($fe),y
@@ -566,5 +413,4 @@ Despawn
     lda #$ff
     sta ($fe),y
     rts
-    
     

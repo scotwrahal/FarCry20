@@ -1,44 +1,20 @@
-setAIClocks    
-    ldx #0
-SetAIClocks
-    txa
-    asl
-    jsr loadAI
-    lda $ff
-    cmp #0
-    beq AIClocksSet
-    jsr setClock
-    inx
-    jmp SetAIClocks
-AIClocksSet
-    rts
-    
-handleAICollision
-    jmp handleEntityCollision
-    
-updateAIs
-    ldx #0
-UpdateAI
-    txa
-    asl
-    jsr loadAI
-    lda $ff
-    cmp #0
-    beq AIsUpdated
-    jsr updateAI
-    inx
-    jmp UpdateAI
-AIsUpdated
-    rts
-    
 loadAI
     clc
     adc AI_offset
     jmp loadEntity
+    
+loadAI2
+    tay
+    lda AIs,y
+    sta $fc
+    iny
+    lda AIs,y
+    sta $fd
+    rts
 
 updateAI
     jsr setDirection
-    jsr updateEntity
+    jsr updatePlayer
     rts
 
 setDirection
@@ -189,7 +165,6 @@ ReturnSetDirection
     tay
     pla
     rts
-
 
 ; return 0 if they are the same
 ; return 1 otherwise

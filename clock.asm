@@ -25,6 +25,13 @@ UpdateClock                 ; if the gameclock is larger than the entity clock m
     lda #1
     rts                     ; restore values and return the result of the check
 
+setClock
+    lda clock
+    clc
+    adc #1
+    ldy clock_offset
+    sta ($fe),y
+    rts
 
     ; update clock updates the clock and stores it where we can check it
 updateClock
@@ -43,7 +50,21 @@ updateClock
     pla
     rts
     
-    
+setClocksAllEntities
+    ;loop entitys
+    ldx #0              ; index for the list of entitys
+SetClock
+    txa
+    asl                 ; multiply by 2 for address
+    jsr loadEntity
+    lda $ff 
+    cmp #0              ; check for end of entity type
+    beq SetClockDone
+    jsr setClock
+    inx
+    jmp SetClock
+SetClockDone
+    rts
     
 rnd
     lda random1

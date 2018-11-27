@@ -7,7 +7,7 @@ handleCollision
     lda ($fe),y
     cmp #2              ; player collisions
     bne Handle1
-    jmp handleEntityCollision
+    jmp handlePlayerCollision
 Handle1
     cmp #3              ; enemy collisions
     bne Handle2
@@ -15,7 +15,7 @@ Handle1
 Handle2
     cmp #4              ; bullet collisions
     bne Handle3
-    jmp handleBulletCollion
+    jmp handleBulletCollision
 Handle3
 CollidedWithNothing
     rts
@@ -50,8 +50,6 @@ CollideTerrain2
 Collide
     ;loop entitys
     ldx #0              ; index for the list of entitys
-    lda #0              ; entity type
-    pha
 CollideEntity
     txa
     asl                 ; multiply by 2 for address
@@ -76,24 +74,13 @@ NextEntity
     inx
     jmp CollideEntity
 CollidedWithEntity
-    pla
-    clc
-    adc #2
+    lda #2
     sta holder
     pla
     tay
     lda holder
     rts
 CollideEntityDone
-    pla
-    clc
-    adc #1              ; advance entity type
-    cmp #3              ; 3 entities 
-    beq CollideDone
-    pha
-    inx
-    jmp CollideEntity
-CollideDone
     pla
     tay
     lda #0
@@ -212,4 +199,110 @@ Return1
     rts
 Return2
     lda #2
+    rts
+    
+handleBulletCollision
+    pla 
+    cmp #1
+    beq BulletTerrain
+    
+    lda ($fc),y
+    cmp #2
+    beq BulletPlayer
+    cmp #3
+    beq BulletAI
+    cmp #4
+    beq BulletBullet
+    rts
+
+BulletTerrain
+    jmp despawn
+BulletBullet
+    jsr copyOn
+    rts
+BulletAI
+BulletPlayer
+    jsr damage
+    jmp despawn
+    
+handleAICollision
+handlePlayerCollision
+    pla 
+    cmp #1
+    beq EntityTerrain
+    
+    lda ($fc),y
+    cmp #2
+    beq EntityPlayer
+    cmp #3
+    beq EntityAI
+    cmp #4
+    beq EntityBullet
+    cmp #5
+    beq EntitySpawner
+    rts
+
+EntitySpawner
+    rts
+EntityBullet
+    jsr flipEntitys
+    jsr damage
+    jsr despawn
+    jsr flipEntitys
+    jsr copyOn
+    rts
+EntityAI
+EntityPlayer
+    jsr damage
+EntityTerrain
+    jsr terrainCollide
+    rts
+    
+terrainCollide    
+    pha
+    txa
+    pha
+    tya
+    pha
+    ldy direction_offset
+    lda ($fe),y
+    asl                     ; shift through the bits to get the direction
+    bcs CollideMoveDown
+    asl
+    bcs CollideMoveUp
+    asl
+    bcs CollideMoveRight
+    asl
+    bcs CollideMoveLeft
+    
+CollideMoveUp
+    jsr moveUp
+    jmp FinishMove
+    
+CollideMoveDown
+    jsr moveDown
+    jmp FinishMove
+    
+CollideMoveLeft
+    jsr moveLeft
+    jmp FinishMove
+    
+CollideMoveRight
+    jsr moveRight
+    jmp FinishMove
+    
+    
+flipEntitys
+    lda $fe
+    sta holder
+    lda $fc
+    sta $fe
+    lda holder
+    sta $fc
+    lda $ff
+    sta holder
+    lda $fd
+    sta $ff
+    lda holder
+    sta $fd
     rts

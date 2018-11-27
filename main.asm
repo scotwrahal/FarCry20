@@ -19,6 +19,7 @@ end_basic
     INCLUDE "music.asm"
     INCLUDE "AI.asm"
     INCLUDE "bullet.asm"
+    INCLUDE "spawner.asm"
     INCLUDE "clock.asm"
     INCLUDE "drawable.asm"
     INCLUDE "input.asm"
@@ -43,12 +44,10 @@ set_up_music
 
 play_loop
     jsr updateClock
-    jsr updateMusic
+    jsr updateMusic 
     jsr input
     jsr updateEntities
-    jsr updateAIs
-    jsr updateBullets
-    jsr drawAllEntitys
+    jsr drawAllEntities
     jmp play_loop
 
     
@@ -68,9 +67,6 @@ damage
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 setTimers
     jsr updateClock
-
-    jsr setEntityClocks
-    jsr setAIClocks
-    jsr setBulletClocks
-    jsr setMusicClocks
+    jsr setClocksAllEntities
+    
     rts

@@ -14,6 +14,20 @@ human_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
 human_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
 human_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
 
+
+human2_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
+human2_down0:   byte $18, $18, $18, $3c, $5a, $58, $58, $08
+human2_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
+human2_right0:  byte $18, $18, $13, $3e, $58, $18, $34, $46
+human2_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
+human2_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
+human2_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
+human2_right1:	byte $18, $18, $13, $3e, $38, $18, $28, $2c
+human2_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
+human2_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
+human2_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
+human2_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
+
 bullet
 bullet_up       byte $00, $00 ,$08, $18, $18, $00, $00, $00
 bullet_down     byte $00, $00 ,$00, $18, $18, $10, $00, $00
@@ -32,29 +46,34 @@ clock           byte $00
 random1         byte $55         
 random2         byte $cc
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 drawables:
 terrain     word terrain_char
 terrain1    word terrain1_char
 ground      word ground_char
 ground1     word ground1_char
 on_holder   word on_char
+            word 0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE EXTEND DRAWABLE
 entities:
 player      word player_char
-            word 0
+
 AIs:
 AI1         word AI1_char
 AI2         word AI2_char
-            word 0
+AI3         word AI3_char
+AI4         word AI4_char
 
 bullets:
 bullet1     word bullet1_char
-            word 0              ; terminator for list
+            
+spawners:
+spawner1    word spawner1_char
+            word 0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYER LIST;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
 music_player_1  word track_index_1
@@ -63,12 +82,12 @@ music_player_3  ;word track_index_3
 music_player_4  ;word track_index_4
                 word #0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terrain_char    byte [palm_tree0 - graphics]/8+2
 terrain_color   byte $00 ; black 
 
-terrain1_char    byte [shrub0 - graphics]/8+2
-terrain1_color   byte $00 ; black 
+terrain1_char   byte [shrub0 - graphics]/8+2
+terrain1_color  byte $00 ; black 
 
 
 ground_char     byte [shrub1 - graphics]/8+2
@@ -86,12 +105,14 @@ char
 player_char             byte [human - graphics]/8+2
 color
 player_color            byte $06
-type 
-player_type             byte #2
 t_clock
 player_clock            byte $00
 clock_updates
 player_clock_updates    byte $08
+type 
+player_type             byte #2
+active
+player_active           byte $01
 position
 player_position         byte #2, #50        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
 direction
@@ -108,55 +129,97 @@ state
 player_state            byte $00
 max_state
 player_max_state        byte $02
-active
-player_active           byte $01
 bullet_index
 player_bullet_index     byte #0
 
 
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
-AI1_type                byte #3
 AI1_clock               byte $00
 AI1_clock_updates       byte #14
-AI1_position            byte $02, #47
+AI1_type                byte #3
+AI1_active              byte $00
+AI1_position            byte $80, $ff
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
 AI1_damage              byte $10
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
-AI1_active              byte $01
 AI1_bullet_index        byte #1
 
 AI2_char                byte [human - graphics]/8+2
 AI2_color               byte $02
-AI2_type                byte #3
 AI2_clock               byte $00
 AI2_clock_updates       byte #14
-AI2_position            byte $03, #68
+AI2_type                byte #3
+AI2_active              byte $00
+AI2_position            byte $80, $ff
 AI2_direction           byte $00
-AI2_on                  byte [shrub1 - graphics]/8+2, $05
+AI2_on                  byte 0, 0
 AI2_damage              byte $10
 AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_active              byte $01
 AI2_bullet_index        byte #2
+
+AI3_char                byte [human - graphics]/8+2
+AI3_color               byte $02
+AI3_clock               byte $00
+AI3_clock_updates       byte #14
+AI3_type                byte #3
+AI3_active              byte $00
+AI3_position            byte $80, $ff
+AI3_direction           byte $00
+AI3_on                  byte 0, 0
+AI3_damage              byte $10
+AI3_health              byte $7f
+AI3_state               byte $00
+AI3_max_state           byte $03
+AI3_bullet_index        byte #1
+
+AI4_char                byte [human - graphics]/8+2
+AI4_color               byte $02
+AI4_clock               byte $00
+AI4_clock_updates       byte #7
+AI4_type                byte #3
+AI4_active              byte $00
+AI4_position            byte $80, $ff
+AI4_direction           byte $00
+AI4_on                  byte 0, 0
+AI4_damage              byte $10
+AI4_health              byte $7f
+AI4_state               byte $00
+AI4_max_state           byte $03
+AI4_bullet_index        byte #2
 
 bullet1_char            byte [bullet - graphics]/8+2
 bullet1_color           byte $00
-bullet1_type            byte #4
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $03
-bullet1_position        byte $80    , $ff
+bullet1_type            byte #4
+bullet1_active          byte $00
+bullet1_position        byte $80, $ff
 bullet1_direction       byte $40
-bullet1_on              byte [shrub1 - graphics]/8+2, $05
+bullet1_on              byte 0, 0
 bullet1_damage          byte $10
 bullet1_health          byte $7f
 bullet1_state           byte $00
 bullet1_max_state       byte $01
-bullet1_active          byte $00
+
+spawner1_char            byte [bullet - graphics]/8+2
+spawner1_color           byte $00
+spawner1_clock           byte $00
+spawner1_clock_updates   byte $f0
+spawner1_type            byte #5
+spawner1_active          byte $01
+spawner1_position        byte $01, #23
+spawner1_direction       byte $40
+spawner1_on              byte [shrub1 - graphics]/8+2, $05
+spawner1_damage          byte $10
+spawner1_health          byte $7f
+spawner1_state           byte $00
+spawner1_max_state       byte $01
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -166,21 +229,25 @@ note_index
 note_index_1            byte $02        ; starts at 2 for all music players
 music_clock_1           byte $00
 music_clock_updates_1   byte $01
+music_type_1            byte #6
 
 track_index_2           byte $00
 note_index_2            byte $02
 music_clock_2           byte $00
 music_clock_updates_2   byte $01
+music_type_2            byte #0
 
 track_index_3           byte $00
 note_index_3            byte $02
 music_clock_3           byte $00
 music_clock_updates_3   byte $01
+music_type_3            byte #0
 
 track_index_4           byte $00
 note_index_4            byte $02
 music_clock_4           byte $00
 music_clock_updates_4   byte $01
+music_type_4            byte #0
 
 human_animation_state:
 	byte $00
@@ -229,22 +296,22 @@ song0_length
 song_notes
 song0_notes
     ;     duration note
-    byte    #12, #231
-    byte    #12, #222
-    byte    #12, #231
-    byte    #12, #206
-    byte    #12, #231
-    byte    #12, #206
-    byte    #12, #218
-    byte    #12, #206
-    byte    #12, #229
-    byte    #12, #231
-    byte    #12, #220
-    byte    #12, #206
-    byte    #12, #181
-    byte    #12, #206
-    byte    #12, #218
-    byte    #12, #206
+    byte #12, #231
+    byte #12, #222
+    byte #12, #231
+    byte #12, #206
+    byte #12, #231
+    byte #12, #206
+    byte #12, #218
+    byte #12, #206
+    byte #12, #229
+    byte #12, #231
+    byte #12, #220
+    byte #12, #206
+    byte #12, #181
+    byte #12, #206
+    byte #12, #218
+    byte #12, #206
 song0_end
 
 song1_length
@@ -293,9 +360,7 @@ entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
 music_offset        byte music - entities
 AI_offset           byte AIs - entities
-mp1offset           byte music_player_3 - entities
-mp2offset           byte music_player_2 - entities
-mp3offset           byte music_player_1 - entities
+spawner_offset      byte spawners - entities
 tracki_offset       byte track_index - music_template
 notei_offset        byte note_index - music_template
 length_offset       byte song_length - song_template
@@ -307,3 +372,5 @@ graphics_size       byte end_graphics - graphics
 active_offset       byte active - template
 bullet_index_offset byte bullet_index - template
 type_offset         byte type - template
+entity_count        byte #4
+AI_health           byte #60
