@@ -63,7 +63,7 @@ EntityBullet
     rts
 EntityAI
 EntityPlayer
-    ;jsr damage
+    jsr damage
 EntityTerrain
     jsr terrainCollide
     rts

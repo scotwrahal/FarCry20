@@ -122,7 +122,7 @@ AI1_clock_updates       byte #14
 AI1_position            byte $02, #47
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte $01
+AI1_damage              byte $10
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -137,7 +137,7 @@ AI2_clock_updates       byte #14
 AI2_position            byte $03, #68
 AI2_direction           byte $00
 AI2_on                  byte [shrub1 - graphics]/8+2, $05
-AI2_damage              byte $01
+AI2_damage              byte $10
 AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03

@@ -58,12 +58,16 @@ SetDirection
     ; find your position relative to the player set your direction towards the player
     lda #0
     jsr loadEntity2         ; load the player into fc
+    ldy active_offset
+    lda ($fc),y
+    beq PlayerDead
     ldx #0                  ; set the move counter to 0
     jsr checkPositions
     cmp #1
     beq Below
     cmp #2
     beq Above
+PlayerDead
     jmp ReturnSetDirection
 
 Above
