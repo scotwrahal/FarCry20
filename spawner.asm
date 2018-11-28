@@ -1,3 +1,4 @@
+; may want to make the spawners more random than a queue
 updateSpawner
     txa 
     pha
@@ -15,7 +16,7 @@ SpawnAIs
     ldy type_offset
     lda ($fc),y
     cmp #3
-    bne NoAIForSpawn
+    bne AIsSpawned
     ldy active_offset
     lda ($fc),y
     bne AIActive
@@ -35,7 +36,6 @@ loadSpawner
     clc
     adc spawner_offset
     jmp loadEntity
-    
     
 ; fc is the entity to spawn
 ; fe is the spawning entity
@@ -86,11 +86,24 @@ Spawn
 NotAI
     rts 
     
-copyOn
-    ldy on_char_offset
-    lda ($fc),y
+despawn
+    ldy active_offset       ; set it to not active
+    lda ($fe),y
+    bne Despawn             ; only despawn if they are not despawned
+    rts
+Despawn
+    lda #0
     sta ($fe),y
-    ldy on_color_offset
-    lda ($fc),y
+    jsr drawOn              ; draw what it is standing on
+    
+    ldy active_offset       ; set it to not active
+    lda #0
+    sta ($fe),y
+
+    ldy position_offset     ; move it off the screen
+    lda #$80
+    sta ($fe),y
+    iny 
+    lda #$ff
     sta ($fe),y
     rts

@@ -15,26 +15,24 @@ updateEntity
     beq UpdateMusic
     cmp #7
     beq UpdateHealthbar
-    rts 
+    cmp #8
+    beq UpdateCapturePoint
+    rts
     
 UpdatePlayer
-    jsr updatePlayer
-    rts
+    jmp updatePlayer
 UpdateAI
-    jsr updateAI
-    rts 
+    jmp updateAI
 UpdateBullet
-    jsr updateBullet
-    rts
+    jmp updateBullet
 UpdateSpawner
-    jsr updateSpawner
-    rts
+    jmp updateSpawner
 UpdateMusic
-    jsr updateMusic
-    rts
+    jmp updateMusic
 UpdateHealthbar
-    jsr updateHealthbar
-    rts
+    jmp updateHealthbar
+UpdateCapturePoint
+    jmp updateCapturePoint
 
 updatePlayer
     ldy health_offset
@@ -321,57 +319,4 @@ MoveRightBorder
     lda #0
     sta ($fe),y
 NoMoveRight
-    rts
-
-drawOn
-    pha
-    tya
-    pha
-    txa
-    pha
-
-    ldy on_char_offset
-    lda ($fe),y
-    sta on_char
-    ldy on_color_offset
-    lda ($fe),y
-    sta on_color
-
-    ldy position_offset
-    iny
-    lda ($fe),y
-    tax
-    dey
-    lda ($fe),y
-
-    ldy on_holder_offset
-    jsr drawDrawable
-    pla
-    tax
-    pla
-    tay
-    pla
-    rts   
-    
-despawn
-    ldy active_offset       ; set it to not active
-    lda ($fe),y
-    bne Despawn             ; only despawn if they are not despawned
-    rts
-Despawn
-    lda #0
-    sta ($fe),y
-    jsr drawOn              ; draw what it is standing on
-    
-    ldy active_offset       ; set it to not active
-    lda #0
-    sta ($fe),y
-
-    ldy position_offset     ; move it off the screen
-    lda #$80
-    sta ($fe),y
-    iny 
-    lda #$ff
-    sta ($fe),y
-    rts
-    
+    rts    

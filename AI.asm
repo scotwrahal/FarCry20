@@ -16,7 +16,10 @@ updateAI
     jsr setDirection
     jsr updatePlayer
     rts
-
+    
+; this could probably be condensed if we keep track of x and y
+; then you don't have to do a bunch of moves to figure out the direction speeding it up quite significantly
+; if we want to optimize this would be a good place to start
 setDirection
     pha 
     tya 

@@ -4,7 +4,7 @@ updateHealthbar
     jsr checkClock
     cmp #0
     beq NoUpdateHealth
-    lda #0
+    lda player_offset
     jsr loadEntity2         ; load the player
     ldy health_offset
     lda ($fc),y             ; load the health
@@ -12,7 +12,7 @@ updateHealthbar
     lsr                     ; make it 0-7
     lsr
     lsr
-    lsr
+    lsr 
     clc
     adc #1
     tax
@@ -20,7 +20,7 @@ updateHealthbar
     ldy position_offset
     iny
     sta ($fe),y
-    ldy #$09
+    ldy #9
 DrawHealth
     dey 
     dex

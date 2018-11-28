@@ -15,6 +15,8 @@ DrawEntity
     beq NextEntityDraw
     cmp #7              ; don't draw health bar
     beq NextEntityDraw
+    cmp #8              ; don't draw the capture point
+    beq NextEntityDraw
     jsr drawEntity
 NextEntityDraw
     inx
@@ -148,6 +150,33 @@ drawEntity
     tax
     pla
     rts
+    
+getDirection
+    ldy direction_offset
+    lda ($fe),y
+_Up
+    asl
+    bcc _Down
+    lda #0
+    rts
+_Down
+    asl
+    bcc _Left
+    lda #1
+    rts
+_Left
+    asl
+    bcc _Right
+    lda #2
+    rts
+_Right
+    asl
+    bcc _None
+    lda #3
+    rts
+_None
+    lda #$ff
+    rts
 
 ; draw
 ;   A: top/bottom location 0 ; = top
@@ -204,3 +233,34 @@ readBottom
     tax
     pla
     rts
+    
+drawOn
+    pha
+    tya
+    pha
+    txa
+    pha
+
+    ldy on_char_offset
+    lda ($fe),y
+    sta on_char
+    ldy on_color_offset
+    lda ($fe),y
+    sta on_color
+
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+
+    ldy on_holder_offset
+    jsr drawDrawable
+    pla
+    tax
+    pla
+    tay
+    pla
+    rts   
+    

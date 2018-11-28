@@ -24,6 +24,7 @@ end_basic
     INCLUDE "drawable.asm"
     INCLUDE "input.asm"
     INCLUDE "healthbar.asm"
+    INCLUDE "capturePoint.asm"
     
 start:
     lda #252                ; point to custom character set
@@ -31,7 +32,7 @@ start:
 
 load_screen_colour
     lda #$dd                ; $dd yields light green playfield, dark green border
-    sta $900f               ; load value into screen and border colour register (p. 175)
+    sta $900f               ; load value into screen and border color register (p. 175)
 
 level_load
     lda #0                  ; this will select what level you want loaded
@@ -42,6 +43,13 @@ set_up_music
     sta $900e       		; set max volume
 
     jsr setTimers
+    
+    lda capture_point_offset
+    jsr loadEntity   
+    jsr drawCapturePoint
+    ldy color_offset
+    lda #0
+    sta ($fe),y
 
 play_loop
     jsr updateClock
@@ -50,16 +58,6 @@ play_loop
     jsr drawAllEntities
     jmp play_loop
 
-    
-damage
-    ldy health_offset
-    lda ($fc),y
-    ldy damage_offset
-    sec
-    sbc ($fe),y
-    ldy health_offset
-    sta ($fc),y
-    rts
 ; things that could be done to pontenally compress the code
 ; make the loops all use the same loop and pass in the loading function and what to do
     

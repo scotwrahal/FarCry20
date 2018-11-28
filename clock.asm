@@ -8,22 +8,21 @@ checkClock
     lda ($fe),y             ; get the clock time
     sec
     cmp clock               ; compare it with the current clock
-    beq CheckForLoop         ; if the times are equal then you update
-    bcc CheckForLoop
+    bmi CheckForLoop        ; if the time on the clock is greater than the update clock then loop
 NoClock
     pla
     tay
     lda #0
     rts                     ; restore values and return the result of the check
-CheckForLoop                 ; if the gameclock is larger than the entity clock may need to update
-    iny                     ; move to the entity clock update
+CheckForLoop                ; if the gameclock is larger than the entity clock may need to update
+    ldy clock_update_offset ; move to the entity clock update
     clc
     adc ($fe),y             ; update the clock based on the entity clock update
-    bcs UpdateClock
+    bcs UpdatedClock         ; if you wrap then you update
     sec
     cmp clock
-    bcc NoClock
-UpdateClock
+    bmi NoClock
+UpdatedClock
     dey                     ; return to the clock so you can store the new time
     sta ($fe),y
     pla
@@ -32,7 +31,7 @@ UpdateClock
     rts                     ; restore values and return the result of the check
 
 
-    ; update clock updates the clock and stores it where we can check it
+; update clock updates the clock and stores it where we can check it
 updateClock
     pha
     tya
@@ -48,7 +47,7 @@ updateClock
     tay
     pla
     rts
-    
+
 setClocksAllEntities
     ;loop entitys
     ldx #0              ; index for the list of entitys
@@ -66,7 +65,9 @@ SetClockDone
     rts
 
 setClock
-    lda clock
+    txa
+    clc
+    adc clock
     clc
     adc #1
     ldy clock_offset

@@ -23,6 +23,7 @@ bullet_right    byte $00, $00 ,$00, $1c, $18, $00, $00, $00
 palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $0, $2a, $ac, $a9, $99, $5a, $3c, $1c
+shrub2:         byte $0, $2a, $ac, $a9, $99, $5a, $3c, $1c
 end_graphics
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,24 +47,27 @@ on_holder   word on_char
 entities:
 player      word player_char
 
-healbar     word healthbar_char
+special:
+healthbar     word healthbar_char
+capture_point word capture_point_char
 
 spawners:
+spawner0    word spawner0_char
 spawner1    word spawner1_char
+spawner2    word spawner2_char
 
 AIs:
 AI1         word AI1_char
-;AI2         word AI2_char
-;AI3         word AI3_char
-;AI4         word AI4_char
-;AI5         word AI5_char
-;AI6         word AI6_char
-;AI7         word AI7_char
-;AI8         word AI8_char
-;AI9         word AI9_char
+AI2         word AI2_char
+AI3         word AI3_char
+AI4         word AI4_char
 
 bullets:
+bullet0     word bullet0_char
 bullet1     word bullet1_char
+bullet2     word bullet2_char
+bullet3     word bullet3_char
+bullet4     word bullet4_char
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYER LIST;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
@@ -123,20 +127,6 @@ player_max_state        byte $02
 bullet_index
 player_bullet_index     byte #0
 
-healthbar_char                byte [human - graphics]/8+2
-healthbar_color               byte $02
-healthbar_clock               byte $00
-healthbar_clock_updates       byte #14
-healthbar_type                byte #7
-healthbar_active              byte $01
-healthbar_position            byte $80, $e4
-healthbar_direction           byte $00
-healthbar_on                  byte [shrub1 - graphics]/8+2, $05
-healthbar_damage              byte 5
-healthbar_health              byte $7f
-healthbar_state               byte $00
-healthbar_max_state           byte $01
-
 AI1_char                byte [human - graphics]/8+2
 AI1_color               byte $02
 AI1_clock               byte $00
@@ -180,7 +170,7 @@ AI3_damage              byte 0
 AI3_health              byte $7f
 AI3_state               byte $00
 AI3_max_state           byte $03
-AI3_bullet_index        byte #1
+AI3_bullet_index        byte #3
 
 AI4_char                byte [human - graphics]/8+2
 AI4_color               byte $02
@@ -195,82 +185,21 @@ AI4_damage              byte 0
 AI4_health              byte $7f
 AI4_state               byte $00
 AI4_max_state           byte $03
-AI4_bullet_index        byte #2
+AI4_bullet_index        byte #4
 
-AI5_char                byte [human - graphics]/8+2
-AI5_color               byte $02
-AI5_clock               byte $00
-AI5_clock_updates       byte #7
-AI5_type                byte #3
-AI5_active              byte $00
-AI5_position            byte $80, $ff
-AI5_direction           byte $00
-AI5_on                  byte 0, 0
-AI5_damage              byte 0
-AI5_health              byte $7f
-AI5_state               byte $00
-AI5_max_state           byte $03
-AI5_bullet_index        byte #2
-
-AI6_char                byte [human - graphics]/8+2
-AI6_color               byte $02
-AI6_clock               byte $00
-AI6_clock_updates       byte #7
-AI6_type                byte #3
-AI6_active              byte $00
-AI6_position            byte $80, $ff
-AI6_direction           byte $00
-AI6_on                  byte 0, 0
-AI6_damage              byte 0
-AI6_health              byte $7f
-AI6_state               byte $00
-AI6_max_state           byte $03
-AI6_bullet_index        byte #2
-
-AI7_char                byte [human - graphics]/8+2
-AI7_color               byte $02
-AI7_clock               byte $00
-AI7_clock_updates       byte #7
-AI7_type                byte #3
-AI7_active              byte $00
-AI7_position            byte $80, $ff
-AI7_direction           byte $00
-AI7_on                  byte 0, 0
-AI7_damage              byte 0
-AI7_health              byte $7f
-AI7_state               byte $00
-AI7_max_state           byte $03
-AI7_bullet_index        byte #2
-
-AI8_char                byte [human - graphics]/8+2
-AI8_color               byte $02
-AI8_clock               byte $00
-AI8_clock_updates       byte #7
-AI8_type                byte #3
-AI8_active              byte $00
-AI8_position            byte $80, $ff
-AI8_direction           byte $00
-AI8_on                  byte 0, 0
-AI8_damage              byte 0
-AI8_health              byte $7f
-AI8_state               byte $00
-AI8_max_state           byte $03
-AI8_bullet_index        byte #2
-
-AI9_char                byte [human - graphics]/8+2
-AI9_color               byte $02
-AI9_clock               byte $00
-AI9_clock_updates       byte #7
-AI9_type                byte #3
-AI9_active              byte $00
-AI9_position            byte $80, $ff
-AI9_direction           byte $00
-AI9_on                  byte 0, 0
-AI9_damage              byte 0
-AI9_health              byte $7f
-AI9_state               byte $00
-AI9_max_state           byte $03
-AI9_bullet_index        byte #2
+bullet0_char            byte [bullet - graphics]/8+2
+bullet0_color           byte $00
+bullet0_clock           byte $00
+bullet0_clock_updates   byte $05
+bullet0_type            byte #4
+bullet0_active          byte $00
+bullet0_position        byte $80, $ff
+bullet0_direction       byte $40
+bullet0_on              byte 0, 0
+bullet0_damage          byte $7f
+bullet0_health          byte $7f
+bullet0_state           byte $00
+bullet0_max_state       byte $01
 
 bullet1_char            byte [bullet - graphics]/8+2
 bullet1_color           byte $00
@@ -286,6 +215,62 @@ bullet1_health          byte $7f
 bullet1_state           byte $00
 bullet1_max_state       byte $01
 
+bullet2_char            byte [bullet - graphics]/8+2
+bullet2_color           byte $00
+bullet2_clock           byte $00
+bullet2_clock_updates   byte $05
+bullet2_type            byte #4
+bullet2_active          byte $00
+bullet2_position        byte $80, $ff
+bullet2_direction       byte $40
+bullet2_on              byte 0, 0
+bullet2_damage          byte $7f
+bullet2_health          byte $7f
+bullet2_state           byte $00
+bullet2_max_state       byte $01
+
+bullet3_char            byte [bullet - graphics]/8+2
+bullet3_color           byte $00
+bullet3_clock           byte $00
+bullet3_clock_updates   byte $05
+bullet3_type            byte #4
+bullet3_active          byte $00
+bullet3_position        byte $80, $ff
+bullet3_direction       byte $40
+bullet3_on              byte 0, 0
+bullet3_damage          byte $7f
+bullet3_health          byte $7f
+bullet3_state           byte $00
+bullet3_max_state       byte $01
+
+bullet4_char            byte [bullet - graphics]/8+2
+bullet4_color           byte $00
+bullet4_clock           byte $00
+bullet4_clock_updates   byte $05
+bullet4_type            byte #4
+bullet4_active          byte $00
+bullet4_position        byte $80, $ff
+bullet4_direction       byte $40
+bullet4_on              byte 0, 0
+bullet4_damage          byte $7f
+bullet4_health          byte $7f
+bullet4_state           byte $00
+bullet4_max_state       byte $01
+
+spawner0_char            byte [bullet - graphics]/8+2
+spawner0_color           byte $00
+spawner0_clock           byte $00
+spawner0_clock_updates   byte $0f
+spawner0_type            byte #5
+spawner0_active          byte $01
+spawner0_position        byte $01, #23
+spawner0_direction       byte $40
+spawner0_on              byte [shrub1 - graphics]/8+2, $05
+spawner0_damage          byte 0
+spawner0_health          byte $7f
+spawner0_state           byte $00
+spawner0_max_state       byte $01
+
 spawner1_char            byte [bullet - graphics]/8+2
 spawner1_color           byte $00
 spawner1_clock           byte $00
@@ -299,6 +284,48 @@ spawner1_damage          byte 0
 spawner1_health          byte $7f
 spawner1_state           byte $00
 spawner1_max_state       byte $01
+
+spawner2_char            byte [bullet - graphics]/8+2
+spawner2_color           byte $00
+spawner2_clock           byte $00
+spawner2_clock_updates   byte $0f
+spawner2_type            byte #5
+spawner2_active          byte $01
+spawner2_position        byte $01, #23
+spawner2_direction       byte $40
+spawner2_on              byte [shrub1 - graphics]/8+2, $05
+spawner2_damage          byte 0
+spawner2_health          byte $7f
+spawner2_state           byte $00
+spawner2_max_state       byte $01
+
+healthbar_char                byte [human - graphics]/8+2
+healthbar_color               byte $02
+healthbar_clock               byte $00
+healthbar_clock_updates       byte #14
+healthbar_type                byte #7
+healthbar_active              byte $01
+healthbar_position            byte $80, $e4
+healthbar_direction           byte $00
+healthbar_on                  byte [shrub1 - graphics]/8+2, $05
+healthbar_damage              byte 5
+healthbar_health              byte $7f
+healthbar_state               byte $00
+healthbar_max_state           byte $01
+
+capture_point_char                byte [shrub2 - graphics]/8+2
+capture_point_color               byte $00
+capture_point_clock               byte $00
+capture_point_clock_updates       byte #14
+capture_point_type                byte #8
+capture_point_active              byte $01
+capture_point_position            byte #10, #225
+capture_point_direction           byte $00
+capture_point_on                  byte [shrub2 - graphics]/8+2, $01
+capture_percent                   byte 0
+capture_point_health              byte $7f
+capture_point_state               byte $00
+capture_point_max_state           byte $01
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -326,8 +353,8 @@ music3_index           byte $00
 music3_clock           byte $00
 music3_clock_updates   byte $01
 music3_type            byte #6
-music3_active          byte #1
-music3_channel         byte #3
+music3_active          byte #0
+music3_channel         byte #0
 
 music4_track           byte $00
 music4_index           byte $00
@@ -440,6 +467,7 @@ on_color_offset     byte on_color_template - template
 clock_offset        byte t_clock - template
 clock_update_offset byte clock_updates - template
 health_offset       byte health - template
+capture_percent_offset byte damage_ - template
 damage_offset       byte damage_ - template
 entity_offset       byte entities - drawables
 bullet_offset       byte bullets - entities
@@ -460,3 +488,5 @@ notei_offset        byte note_index - music_template
 channel_offset      byte channel - music_template
 entity_count        byte #4
 AI_health           byte #60
+player_offset       byte player - entities
+capture_point_offset byte capture_point  - entities

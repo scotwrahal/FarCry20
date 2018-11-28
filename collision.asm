@@ -86,79 +86,31 @@ CollideEntityDone
     lda #0
     rts
 
-getChar
-    ldy color_offset
-    lda ($fe),y
-    tax
-    ldy state_offset
-    lda ($fe),y
-    asl
-    asl
-    pha
-    jsr getDirection
-    sta holder
-    pla
-    clc
-    adc holder
-    sta holder
-    ldy char_offset
-    lda ($fe),y
-    clc
-    adc holder
-    rts
-
-getDirection
-    ldy direction_offset
-    lda ($fe),y
-_Up
-    asl
-    bcc _Down
-    lda #0
-    rts
-_Down
-    asl
-    bcc _Left
-    lda #1
-    rts
-_Left
-    asl
-    bcc _Right
-    lda #2
-    rts
-_Right
-    asl
-    bcc _None
-    lda #3
-    rts
-_None
-    lda #$ff
-    rts
-
-; inverts the direction of the entity
-invertDirection
-    pha
-    tya
-    pha
-    ldy direction_offset
-    lda ($fe),y
-    sta holder
-    asl
-    bcs FlipUD
-    asl
-    bcs FlipUD
-FlipLR
-    lda ($fe),y
-    eor #$30
-    jmp EndFlip
-FlipUD
-    lda ($fe),y
-    eor #$c0
-EndFlip
-    sta ($fe),y
-    pla
-    tay
-    pla
-    rts
+; ; inverts the direction of the entity
+; invertDirection
+    ; pha
+    ; tya
+    ; pha
+    ; ldy direction_offset
+    ; lda ($fe),y
+    ; sta holder
+    ; asl
+    ; bcs FlipUD
+    ; asl
+    ; bcs FlipUD
+; FlipLR
+    ; lda ($fe),y
+    ; eor #$30
+    ; jmp EndFlip
+; FlipUD
+    ; lda ($fe),y
+    ; eor #$c0
+; EndFlip
+    ; sta ($fe),y
+    ; pla
+    ; tay
+    ; pla
+    ; rts
     
 checkPositions 
     ldy position_offset
@@ -305,4 +257,23 @@ flipEntitys
     sta $ff
     lda holder
     sta $fd
+    rts
+    
+damage
+    ldy health_offset
+    lda ($fc),y
+    ldy damage_offset
+    sec
+    sbc ($fe),y
+    ldy health_offset
+    sta ($fc),y
+    rts
+    
+copyOn
+    ldy on_char_offset
+    lda ($fc),y
+    sta ($fe),y
+    ldy on_color_offset
+    lda ($fc),y
+    sta ($fe),y
     rts

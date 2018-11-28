@@ -59,5 +59,3 @@ NoLoop
     ldy clock_update_offset
     sta ($fe),y
     rts
-    
-    
