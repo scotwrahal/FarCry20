@@ -45,7 +45,6 @@ Update
     lda ($fe),y
     beq NotActive
     jsr checkClock
-    cmp #0
     beq NoTimeBasedUpdates
     jsr move
     jsr checkCollision
@@ -61,10 +60,8 @@ updateEntities
     ldx #0
 UpdateEntity
     txa
-    asl
     jsr loadEntity
     lda $ff
-    cmp #0
     beq EntitiesUpdated
     jsr updateEntity
     inx
@@ -97,6 +94,7 @@ loadEntity
     jmp loadDrawable
 
 loadEntity2
+    asl                   ; multiply by 2 for address
     tay
     lda entities,y
     sta $fc

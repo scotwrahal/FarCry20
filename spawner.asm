@@ -3,7 +3,6 @@ updateSpawner
     txa 
     pha
     jsr checkClock
-    cmp #0
     beq NoSpawn
     ldx #0
 SpawnAIs
@@ -11,7 +10,6 @@ SpawnAIs
     asl
     jsr loadAI2
     lda $fd
-    cmp #0
     beq AIsSpawned
     ldy type_offset
     lda ($fc),y
@@ -32,11 +30,6 @@ NoSpawn
     tax
     rts
     
-loadSpawner
-    clc
-    adc spawner_offset
-    jmp loadEntity
-    
 ; fc is the entity to spawn
 ; fe is the spawning entity
 spawnEntity
@@ -54,6 +47,10 @@ Spawn
     iny 
     lda ($fe),y
     sta ($fc),y
+    iny 
+    lda ($fe),y
+    sta ($fc),y
+    
     
     ldy direction_offset
     lda ($fe),y

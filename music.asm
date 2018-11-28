@@ -5,7 +5,6 @@ updateMusic
     lda ($fe),y
     beq NoChannelUpdate
     jsr checkClock
-    cmp #0
     beq NoChannelUpdate
     jsr loadSong            ; loads the song into fc
     jsr loadNote            ; loads the note to be played into A

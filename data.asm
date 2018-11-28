@@ -109,7 +109,7 @@ player_type             byte #2
 active
 player_active           byte $01
 position
-player_position         byte #2, #50        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
+player_position         byte #2, #50, $00        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
 direction
 player_direction        byte $80            ; bits 1111 direction 11 shooing 1 Active 1 movement
 on_char_template
@@ -133,7 +133,7 @@ AI1_clock               byte $00
 AI1_clock_updates       byte #14
 AI1_type                byte #3
 AI1_active              byte $00
-AI1_position            byte $80, $ff
+AI1_position            byte $80, $ff, $00
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
 AI1_damage              byte 5
@@ -163,7 +163,7 @@ AI3_clock               byte $00
 AI3_clock_updates       byte #14
 AI3_type                byte #3
 AI3_active              byte $00
-AI3_position            byte $80, $ff
+AI3_position            byte $80, $ff, $00
 AI3_direction           byte $00
 AI3_on                  byte 0, 0
 AI3_damage              byte 0
@@ -178,7 +178,7 @@ AI4_clock               byte $00
 AI4_clock_updates       byte #7
 AI4_type                byte #3
 AI4_active              byte $00
-AI4_position            byte $80, $ff
+AI4_position            byte $80, $ff, $00
 AI4_direction           byte $00
 AI4_on                  byte 0, 0
 AI4_damage              byte 0
@@ -193,7 +193,7 @@ bullet0_clock           byte $00
 bullet0_clock_updates   byte $05
 bullet0_type            byte #4
 bullet0_active          byte $00
-bullet0_position        byte $80, $ff
+bullet0_position        byte $80, $ff, $00
 bullet0_direction       byte $40
 bullet0_on              byte 0, 0
 bullet0_damage          byte $7f
@@ -207,7 +207,7 @@ bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
 bullet1_type            byte #4
 bullet1_active          byte $00
-bullet1_position        byte $80, $ff
+bullet1_position        byte $80, $ff, $00
 bullet1_direction       byte $40
 bullet1_on              byte 0, 0
 bullet1_damage          byte $7f
@@ -221,7 +221,7 @@ bullet2_clock           byte $00
 bullet2_clock_updates   byte $05
 bullet2_type            byte #4
 bullet2_active          byte $00
-bullet2_position        byte $80, $ff
+bullet2_position        byte $80, $ff, $00
 bullet2_direction       byte $40
 bullet2_on              byte 0, 0
 bullet2_damage          byte $7f
@@ -235,7 +235,7 @@ bullet3_clock           byte $00
 bullet3_clock_updates   byte $05
 bullet3_type            byte #4
 bullet3_active          byte $00
-bullet3_position        byte $80, $ff
+bullet3_position        byte $80, $ff, $00
 bullet3_direction       byte $40
 bullet3_on              byte 0, 0
 bullet3_damage          byte $7f
@@ -249,7 +249,7 @@ bullet4_clock           byte $00
 bullet4_clock_updates   byte $05
 bullet4_type            byte #4
 bullet4_active          byte $00
-bullet4_position        byte $80, $ff
+bullet4_position        byte $80, $ff, $00
 bullet4_direction       byte $40
 bullet4_on              byte 0, 0
 bullet4_damage          byte $7f
@@ -263,7 +263,7 @@ spawner0_clock           byte $00
 spawner0_clock_updates   byte $0f
 spawner0_type            byte #5
 spawner0_active          byte $01
-spawner0_position        byte $01, #23
+spawner0_position        byte $01, #23, $01
 spawner0_direction       byte $40
 spawner0_on              byte [shrub1 - graphics]/8+2, $05
 spawner0_damage          byte 0
@@ -277,7 +277,7 @@ spawner1_clock           byte $00
 spawner1_clock_updates   byte $0f
 spawner1_type            byte #5
 spawner1_active          byte $01
-spawner1_position        byte $01, #23
+spawner1_position        byte $01, #23, $00
 spawner1_direction       byte $40
 spawner1_on              byte [shrub1 - graphics]/8+2, $05
 spawner1_damage          byte 0
@@ -291,7 +291,7 @@ spawner2_clock           byte $00
 spawner2_clock_updates   byte $0f
 spawner2_type            byte #5
 spawner2_active          byte $01
-spawner2_position        byte $01, #23
+spawner2_position        byte $01, #23, $00
 spawner2_direction       byte $40
 spawner2_on              byte [shrub1 - graphics]/8+2, $05
 spawner2_damage          byte 0
@@ -305,7 +305,7 @@ healthbar_clock               byte $00
 healthbar_clock_updates       byte #14
 healthbar_type                byte #7
 healthbar_active              byte $01
-healthbar_position            byte $80, $e4
+healthbar_position            byte $80, $e4, $00
 healthbar_direction           byte $00
 healthbar_on                  byte [shrub1 - graphics]/8+2, $05
 healthbar_damage              byte 5
@@ -319,7 +319,7 @@ capture_point_clock               byte $00
 capture_point_clock_updates       byte #14
 capture_point_type                byte #8
 capture_point_active              byte $01
-capture_point_position            byte #10, #225
+capture_point_position            byte #10, #225, $00
 capture_point_direction           byte $00
 capture_point_on                  byte [shrub2 - graphics]/8+2, $01
 capture_percent                   byte 0
@@ -455,9 +455,9 @@ song1_end
 
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
-terrain_offset      byte terrain - drawables
-ground_offset       byte ground - drawables
-on_holder_offset    byte on_holder - drawables
+terrain_offset      byte [terrain - drawables]/2
+ground_offset       byte [ground - drawables]/2
+on_holder_offset    byte [on_holder - drawables]/2
 char_offset         byte char - template
 color_offset        byte color - template
 position_offset     byte position - template
@@ -469,11 +469,11 @@ clock_update_offset byte clock_updates - template
 health_offset       byte health - template
 capture_percent_offset byte damage_ - template
 damage_offset       byte damage_ - template
-entity_offset       byte entities - drawables
-bullet_offset       byte bullets - entities
-music_offset        byte music - entities
-AI_offset           byte AIs - entities
-spawner_offset      byte spawners - entities
+entity_offset       byte [entities - drawables]/2
+bullet_offset       byte [bullets - entities]/2
+music_offset        byte [music - entities]/2
+AI_offset           byte [AIs - entities]/2
+spawner_offset      byte [spawners - entities]/2
 length_offset       byte song_length - song_template
 track_offset        byte song_notes - song_template
 state_offset        byte state - template
@@ -488,5 +488,5 @@ notei_offset        byte note_index - music_template
 channel_offset      byte channel - music_template
 entity_count        byte #4
 AI_health           byte #60
-player_offset       byte player - entities
-capture_point_offset byte capture_point  - entities
+player_offset       byte [player - entities]/2
+capture_point_offset byte [capture_point  - entities]/2

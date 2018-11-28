@@ -4,10 +4,8 @@ drawAllEntities
     ldx #0              ; index for the list of entitys
 DrawEntity
     txa
-    asl                 ; multiply by 2 for address
     jsr loadEntity
-    lda $ff
-    cmp #0              ; check for end of entity type
+    lda $ff             ; check for end of entities
     beq DrawEntityDone
     ldy type_offset
     lda ($fe),y
@@ -29,6 +27,7 @@ loadDrawable
     tya
     pha
     lda holder
+    asl
     tay
     lda drawables,y
     sta $fe
@@ -53,7 +52,6 @@ drawTerrain
     and #$01
     beq DrawT
     iny
-    iny
 DrawT
     lda holder
     jsr drawDrawable
@@ -74,7 +72,6 @@ drawGround
     jsr rnd
     and #$01
     beq Draw
-    iny
     iny
 Draw
     lda holder

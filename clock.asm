@@ -53,10 +53,8 @@ setClocksAllEntities
     ldx #0              ; index for the list of entitys
 SetClock
     txa
-    asl                 ; multiply by 2 for address
     jsr loadEntity
-    lda $ff 
-    cmp #0              ; check for end of entity type
+    lda $ff             ; check for end of entity type
     beq SetClockDone
     jsr setClock
     inx

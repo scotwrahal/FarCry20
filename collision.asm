@@ -55,20 +55,14 @@ CollideEntity
     asl                 ; multiply by 2 for address
     jsr loadEntity2
     lda $fd
-    cmp #0              ; check for end of entity type
     beq CollideEntityDone
-    sta holder
-    lda $ff
-    cmp holder
+    cmp $ff
     bne NotSelf
     lda $fc
-    sta holder
-    lda $fe
-    cmp holder
+    cmp $fe
     beq NextEntity
 NotSelf
     jsr checkPositions
-    cmp #0
     beq CollidedWithEntity
 NextEntity
     inx

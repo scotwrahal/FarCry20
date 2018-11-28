@@ -2,7 +2,6 @@ updateHealthbar
     txa
     pha
     jsr checkClock
-    cmp #0
     beq NoUpdateHealth
     lda player_offset
     jsr loadEntity2         ; load the player

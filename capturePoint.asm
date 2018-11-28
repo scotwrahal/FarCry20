@@ -2,7 +2,6 @@ updateCapturePoint
     txa
     pha
     jsr checkClock
-    cmp #0
     beq NotUpdatingCapture
     
     jsr drawCaptureBar
@@ -10,10 +9,8 @@ updateCapturePoint
     lda player_offset                         ; load player
     jsr loadEntity2
     ldy on_char_offset
-    lda ($fc),y 
-    sta holder
     lda ($fe),y
-    cmp holder
+    cmp ($fc),y 
     bne NotCapturing
     ldy on_color_offset
     lda ($fc),y
