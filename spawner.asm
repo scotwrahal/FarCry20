@@ -47,8 +47,10 @@ Spawn
     
     
     ldy direction_offset
-    lda ($fe),y
+    lda ($fc),y
+    and #$04
     ora #1
+    ora ($fe),y
     sta ($fc),y
     
     ldy on_char_offset

@@ -14,6 +14,9 @@ checkShot
     and #$08
     beq NotShooting
     lda ($fe),y
+    and #$04
+    bne NotShooting
+    lda ($fe),y
     and #$fe
     sta ($fe),y
 NotShooting
@@ -28,7 +31,8 @@ setDirection
     and #$c0
     php
 
-    lda #0
+    lda ($fe),y
+    and #$04
     sta ($fe),y
 
     lda player_offset

@@ -126,7 +126,7 @@ AI1_clock_updates       byte #14
 AI1_type                byte #3
 AI1_active              byte $00
 AI1_position            byte $80, $ff, $00
-AI1_direction           byte $00
+AI1_direction           byte $04
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
 AI1_damage              byte 0
 AI1_health              byte $7f
