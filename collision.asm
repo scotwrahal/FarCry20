@@ -23,7 +23,7 @@ CollidedWithNothing
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 checkCollision
-    tya
+    txa
     pha
     ldy on_char_offset
     lda ($fe),y
@@ -43,7 +43,7 @@ CollideTerrain
     jmp Collide
 CollideTerrain2
     pla
-    tay
+    tax
     lda #1              ; terrain collision
     rts
     
@@ -52,7 +52,6 @@ Collide
     ldx #0              ; index for the list of entitys
 CollideEntity
     txa
-    asl                 ; multiply by 2 for address
     jsr loadEntity2
     lda $fd
     beq CollideEntityDone
@@ -71,40 +70,14 @@ CollidedWithEntity
     lda #2
     sta holder
     pla
-    tay
+    tax
     lda holder
     rts
 CollideEntityDone
     pla
-    tay
+    tax
     lda #0
     rts
-
-; ; inverts the direction of the entity
-; invertDirection
-    ; pha
-    ; tya
-    ; pha
-    ; ldy direction_offset
-    ; lda ($fe),y
-    ; sta holder
-    ; asl
-    ; bcs FlipUD
-    ; asl
-    ; bcs FlipUD
-; FlipLR
-    ; lda ($fe),y
-    ; eor #$30
-    ; jmp EndFlip
-; FlipUD
-    ; lda ($fe),y
-    ; eor #$c0
-; EndFlip
-    ; sta ($fe),y
-    ; pla
-    ; tay
-    ; pla
-    ; rts
     
 checkPositions 
     ldy position_offset
@@ -261,7 +234,14 @@ damage
     sbc ($fe),y
     ldy health_offset
     sta ($fc),y
+    cmp #0
+    bmi Kill
     rts
+Kill
+    jsr flipEntitys
+    jsr despawn
+    jsr flipEntitys
+    rts 
     
 copyOn
     ldy on_char_offset
@@ -271,3 +251,30 @@ copyOn
     lda ($fc),y
     sta ($fe),y
     rts
+    
+
+; ; inverts the direction of the entity
+; invertDirection
+    ; pha
+    ; tya
+    ; pha
+    ; ldy direction_offset
+    ; lda ($fe),y
+    ; sta holder
+    ; asl
+    ; bcs FlipUD
+    ; asl
+    ; bcs FlipUD
+; FlipLR
+    ; lda ($fe),y
+    ; eor #$30
+    ; jmp EndFlip
+; FlipUD
+    ; lda ($fe),y
+    ; eor #$c0
+; EndFlip
+    ; sta ($fe),y
+    ; pla
+    ; tay
+    ; pla
+    ; rts

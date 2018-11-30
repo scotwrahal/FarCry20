@@ -25,6 +25,7 @@ end_basic
     INCLUDE "input.asm"
     INCLUDE "healthbar.asm"
     INCLUDE "capturePoint.asm"
+    INCLUDE "updates.asm"
     
 start:
     lda #252                ; point to custom character set
@@ -43,19 +44,11 @@ set_up_music
     sta $900e       		; set max volume
 
     jsr setTimers
-    
-    lda capture_point_offset
-    jsr loadEntity   
-    jsr drawCapturePoint
-    ldy color_offset
-    lda #0
-    sta ($fe),y
 
 play_loop
     jsr updateClock
     jsr input
     jsr updateEntities
-    jsr drawAllEntities
     jmp play_loop
 
 ; things that could be done to pontenally compress the code

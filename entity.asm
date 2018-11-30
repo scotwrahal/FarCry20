@@ -1,74 +1,4 @@
-; TODO make a list of functions    
-   
-updateEntity
-    ldy type_offset
-    lda ($fe),y
-    cmp #2 
-    beq UpdatePlayer
-    cmp #3 
-    beq UpdateAI
-    cmp #4 
-    beq UpdateBullet
-    cmp #5 
-    beq UpdateSpawner
-    cmp #6 
-    beq UpdateMusic
-    cmp #7
-    beq UpdateHealthbar
-    cmp #8
-    beq UpdateCapturePoint
-    rts
-    
-UpdatePlayer
-    jmp updatePlayer
-UpdateAI
-    jmp updateAI
-UpdateBullet
-    jmp updateBullet
-UpdateSpawner
-    jmp updateSpawner
-UpdateMusic
-    jmp updateMusic
-UpdateHealthbar
-    jmp updateHealthbar
-UpdateCapturePoint
-    jmp updateCapturePoint
-
-updatePlayer
-    ldy health_offset
-    lda ($fe),y
-    bpl Update
-    jsr despawn
-    jmp NoUpdate
-Update
-    ldy active_offset
-    lda ($fe),y
-    beq NotActive
-    jsr checkClock
-    beq NoTimeBasedUpdates
-    jsr move
-    jsr checkCollision
-    jsr handleCollision
-    jsr shoot
-NotActive
-NoTimeBasedUpdates
-NoUpdate
-    rts
-
-
-updateEntities
-    ldx #0
-UpdateEntity
-    txa
-    jsr loadEntity
-    lda $ff
-    beq EntitiesUpdated
-    jsr updateEntity
-    inx
-    jmp UpdateEntity
-EntitiesUpdated
-    rts
-    
+; TODO make a list of functions        
 shoot   
     ldy direction_offset
     lda ($fe),y
@@ -82,7 +12,6 @@ shoot
     sta ($fe),y
     ldy bullet_index_offset
     lda ($fe),y
-    asl 
     jsr loadBullet2
     jsr spawnEntity
 NoShoot
@@ -102,7 +31,6 @@ loadEntity2
     lda entities,y
     sta $fd
     rts
-    
 
 ; moves an updatable entity based on the direction they are moving and if the low bit is set
 ;   A index of the updatable entity to be moved
@@ -130,7 +58,7 @@ move
     tax
     dey
     lda ($fe),y
-    jsr drawOn              ; draw the thing you were on in the old position
+    jsr drawEntityOn              ; draw the thing you were on in the old position
 
 ;update the state
     ldy state_offset
@@ -204,8 +132,6 @@ EndMove
     tax
     pla
     rts
-
-
     
 ; moveUp is commented the others moves follow similar logic
 moveUp

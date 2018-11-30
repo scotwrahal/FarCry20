@@ -1,24 +1,5 @@
 ; TODO make a list of functions
 ; update music will update the current track playing
-updateMusic
-    ldy active_offset
-    lda ($fe),y
-    beq NoChannelUpdate
-    jsr checkClock
-    beq NoChannelUpdate
-    jsr loadSong            ; loads the song into fc
-    jsr loadNote            ; loads the note to be played into A
-    sta holder              ; store it for later
-    ldy channel_offset
-    lda ($fe),y
-    tay
-    lda holder              ; get the note
-    sta $900a,y             ; store the note in the correct register
-    jsr updateNote          ; advances the music system to the next note
-NoChannelUpdate
-    rts
-    
-    
 loadSong
     ldy tracki_offset
     lda ($fe),y
@@ -38,6 +19,15 @@ loadNote
     tay 
     iny
     lda ($fc),y
+    rts
+
+storeNote
+    sta holder              ; store it for later
+    ldy channel_offset
+    lda ($fe),y
+    tay
+    lda holder              ; get the note
+    sta $900a,y             ; store the note in the correct register
     rts
 
 updateNote

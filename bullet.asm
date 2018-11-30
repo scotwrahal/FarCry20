@@ -1,14 +1,5 @@
-updateBullet
-    jsr setBullet
-    jsr updatePlayer
-    rts
-
-loadBullet
-    clc
-    adc bullet_offset
-    jmp loadEntity
-    
 loadBullet2
+    asl 
     tay
     lda bullets,y
     sta $fc

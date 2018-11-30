@@ -47,34 +47,26 @@ on_holder   word on_char
 entities:
 player      word player_char
 
+AIs:
+AI1         word AI1_char
+AI2         word AI2_char
+
+bullets:
+bullet0     word bullet0_char
+
+spawners:
+spawner0    word spawner0_char
+
 special:
 healthbar     word healthbar_char
 capture_point word capture_point_char
 
-spawners:
-spawner0    word spawner0_char
-spawner1    word spawner1_char
-spawner2    word spawner2_char
 
-AIs:
-AI1         word AI1_char
-AI2         word AI2_char
-AI3         word AI3_char
-AI4         word AI4_char
 
-bullets:
-bullet0     word bullet0_char
-bullet1     word bullet1_char
-bullet2     word bullet2_char
-bullet3     word bullet3_char
-bullet4     word bullet4_char
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYER LIST;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
 music_player_1  word music1_track
-music_player_2  word music2_track
-music_player_3  word music3_track
-music_player_4  word music4_track
                 word #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -136,7 +128,7 @@ AI1_active              byte $00
 AI1_position            byte $80, $ff, $00
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte 5
+AI1_damage              byte 0
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -150,42 +142,12 @@ AI2_type                byte #3
 AI2_active              byte $00
 AI2_position            byte $80, $ff, $00
 AI2_direction           byte $00
-AI2_on                  byte 0, 0
+AI2_on                  byte [shrub1 - graphics]/8+2, $05
 AI2_damage              byte 0
 AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_bullet_index        byte #2
-
-AI3_char                byte [human - graphics]/8+2
-AI3_color               byte $02
-AI3_clock               byte $00
-AI3_clock_updates       byte #14
-AI3_type                byte #3
-AI3_active              byte $00
-AI3_position            byte $80, $ff, $00
-AI3_direction           byte $00
-AI3_on                  byte 0, 0
-AI3_damage              byte 0
-AI3_health              byte $7f
-AI3_state               byte $00
-AI3_max_state           byte $03
-AI3_bullet_index        byte #3
-
-AI4_char                byte [human - graphics]/8+2
-AI4_color               byte $02
-AI4_clock               byte $00
-AI4_clock_updates       byte #7
-AI4_type                byte #3
-AI4_active              byte $00
-AI4_position            byte $80, $ff, $00
-AI4_direction           byte $00
-AI4_on                  byte 0, 0
-AI4_damage              byte 0
-AI4_health              byte $7f
-AI4_state               byte $00
-AI4_max_state           byte $03
-AI4_bullet_index        byte #4
+AI2_bullet_index        byte #1
 
 bullet0_char            byte [bullet - graphics]/8+2
 bullet0_color           byte $00
@@ -201,66 +163,10 @@ bullet0_health          byte $7f
 bullet0_state           byte $00
 bullet0_max_state       byte $01
 
-bullet1_char            byte [bullet - graphics]/8+2
-bullet1_color           byte $00
-bullet1_clock           byte $00
-bullet1_clock_updates   byte $05
-bullet1_type            byte #4
-bullet1_active          byte $00
-bullet1_position        byte $80, $ff, $00
-bullet1_direction       byte $40
-bullet1_on              byte 0, 0
-bullet1_damage          byte $7f
-bullet1_health          byte $7f
-bullet1_state           byte $00
-bullet1_max_state       byte $01
-
-bullet2_char            byte [bullet - graphics]/8+2
-bullet2_color           byte $00
-bullet2_clock           byte $00
-bullet2_clock_updates   byte $05
-bullet2_type            byte #4
-bullet2_active          byte $00
-bullet2_position        byte $80, $ff, $00
-bullet2_direction       byte $40
-bullet2_on              byte 0, 0
-bullet2_damage          byte $7f
-bullet2_health          byte $7f
-bullet2_state           byte $00
-bullet2_max_state       byte $01
-
-bullet3_char            byte [bullet - graphics]/8+2
-bullet3_color           byte $00
-bullet3_clock           byte $00
-bullet3_clock_updates   byte $05
-bullet3_type            byte #4
-bullet3_active          byte $00
-bullet3_position        byte $80, $ff, $00
-bullet3_direction       byte $40
-bullet3_on              byte 0, 0
-bullet3_damage          byte $7f
-bullet3_health          byte $7f
-bullet3_state           byte $00
-bullet3_max_state       byte $01
-
-bullet4_char            byte [bullet - graphics]/8+2
-bullet4_color           byte $00
-bullet4_clock           byte $00
-bullet4_clock_updates   byte $05
-bullet4_type            byte #4
-bullet4_active          byte $00
-bullet4_position        byte $80, $ff, $00
-bullet4_direction       byte $40
-bullet4_on              byte 0, 0
-bullet4_damage          byte $7f
-bullet4_health          byte $7f
-bullet4_state           byte $00
-bullet4_max_state       byte $01
-
 spawner0_char            byte [bullet - graphics]/8+2
 spawner0_color           byte $00
 spawner0_clock           byte $00
-spawner0_clock_updates   byte $0f
+spawner0_clock_updates   byte $01
 spawner0_type            byte #5
 spawner0_active          byte $01
 spawner0_position        byte $01, #23, $01
@@ -271,44 +177,16 @@ spawner0_health          byte $7f
 spawner0_state           byte $00
 spawner0_max_state       byte $01
 
-spawner1_char            byte [bullet - graphics]/8+2
-spawner1_color           byte $00
-spawner1_clock           byte $00
-spawner1_clock_updates   byte $0f
-spawner1_type            byte #5
-spawner1_active          byte $01
-spawner1_position        byte $01, #23, $00
-spawner1_direction       byte $40
-spawner1_on              byte [shrub1 - graphics]/8+2, $05
-spawner1_damage          byte 0
-spawner1_health          byte $7f
-spawner1_state           byte $00
-spawner1_max_state       byte $01
-
-spawner2_char            byte [bullet - graphics]/8+2
-spawner2_color           byte $00
-spawner2_clock           byte $00
-spawner2_clock_updates   byte $0f
-spawner2_type            byte #5
-spawner2_active          byte $01
-spawner2_position        byte $01, #23, $00
-spawner2_direction       byte $40
-spawner2_on              byte [shrub1 - graphics]/8+2, $05
-spawner2_damage          byte 0
-spawner2_health          byte $7f
-spawner2_state           byte $00
-spawner2_max_state       byte $01
-
 healthbar_char                byte [human - graphics]/8+2
 healthbar_color               byte $02
 healthbar_clock               byte $00
-healthbar_clock_updates       byte #14
-healthbar_type                byte #7
+healthbar_clock_updates       byte #10
+healthbar_type                byte #6
 healthbar_active              byte $01
 healthbar_position            byte $80, $e4, $00
-healthbar_direction           byte $00
+healthbar_direction           byte $00 ; unused
 healthbar_on                  byte [shrub1 - graphics]/8+2, $05
-healthbar_damage              byte 5
+healthbar_damage              byte $00 ; unused
 healthbar_health              byte $7f
 healthbar_state               byte $00
 healthbar_max_state           byte $01
@@ -316,8 +194,8 @@ healthbar_max_state           byte $01
 capture_point_char                byte [shrub2 - graphics]/8+2
 capture_point_color               byte $00
 capture_point_clock               byte $00
-capture_point_clock_updates       byte #14
-capture_point_type                byte #8
+capture_point_clock_updates       byte #10
+capture_point_type                byte #7
 capture_point_active              byte $01
 capture_point_position            byte #10, #225, $00
 capture_point_direction           byte $00
@@ -333,39 +211,16 @@ track_index
 music1_track           byte $00
 note_index
 music1_index           byte $00
+music_clock                         ; this mathces up with other entity clocks
 music1_clock           byte $00
 music1_clock_updates   byte $01
-music1_type            byte #6
-music1_active          byte #0
+music1_type            byte #8
+music1_active          byte #1
 channel
 music1_channel         byte #0
 
-music2_track           byte $00
-music2_index           byte $00
-music2_clock           byte $00
-music2_clock_updates   byte $01
-music2_type            byte #6
-music2_active          byte #0
-music2_channel         byte #0
-
-music3_track           byte $01
-music3_index           byte $00
-music3_clock           byte $00
-music3_clock_updates   byte $01
-music3_type            byte #6
-music3_active          byte #0
-music3_channel         byte #0
-
-music4_track           byte $00
-music4_index           byte $00
-music4_clock           byte $00
-music4_clock_updates   byte $01
-music4_type            byte #6
-music4_active          byte #1
-music4_channel         byte #1
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; LEVEL MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; ideally to be stored on a disk and loaded in later
+
 level_mem
     word level0
 

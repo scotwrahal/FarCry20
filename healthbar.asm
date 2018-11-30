@@ -1,8 +1,6 @@
-updateHealthbar
+drawHealthBar
     txa
     pha
-    jsr checkClock
-    beq NoUpdateHealth
     lda player_offset
     jsr loadEntity2         ; load the player
     ldy health_offset
@@ -34,7 +32,7 @@ DrawHealth
 DrawNotHealth
     dey
     beq BarDone
-    jsr drawOn
+    jsr drawEntityOn
     tya
     pha
     jsr moveRight

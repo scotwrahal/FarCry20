@@ -1,27 +1,3 @@
-; TODO make a list of functions
-drawAllEntities
-    ;loop entitys
-    ldx #0              ; index for the list of entitys
-DrawEntity
-    txa
-    jsr loadEntity
-    lda $ff             ; check for end of entities
-    beq DrawEntityDone
-    ldy type_offset
-    lda ($fe),y
-    cmp #6              ; dont draw music players
-    beq NextEntityDraw
-    cmp #7              ; don't draw health bar
-    beq NextEntityDraw
-    cmp #8              ; don't draw the capture point
-    beq NextEntityDraw
-    jsr drawEntity
-NextEntityDraw
-    inx
-    jmp DrawEntity
-DrawEntityDone
-    rts
-
 loadDrawable
     sta holder
     tya
@@ -104,6 +80,7 @@ drawDrawable
     rts
 
     
+
 drawEntity
     pha
     txa
@@ -231,7 +208,7 @@ readBottom
     pla
     rts
     
-drawOn
+drawEntityOn
     pha
     tya
     pha

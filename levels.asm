@@ -6,6 +6,15 @@
 
 ; helper functions for  load level
 LevelLoadDone
+    
+    lda capture_point_offset
+    jsr loadEntity   
+    jsr drawCapturePoint
+    ldy color_offset
+    lda #0
+    sta ($fe),y
+
+
     pla         			; extra pull for preserving the position
     pla
     sta $ff

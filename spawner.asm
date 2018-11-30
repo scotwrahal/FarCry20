@@ -1,35 +1,32 @@
 ; may want to make the spawners more random than a queue
-updateSpawner
+spawnNextEntity
     txa 
     pha
-    jsr checkClock
-    beq NoSpawn
     ldx #0
 SpawnAIs
     txa
-    asl
     jsr loadAI2
     lda $fd
-    beq AIsSpawned
+    beq AIsSpawned          ; there are no entities to spawn
     ldy type_offset
     lda ($fc),y
     cmp #3
-    bne AIsSpawned
+    bne AIsSpawned          ; all the AIs are together so when you stop reading them you are done
     ldy active_offset
     lda ($fc),y
-    bne AIActive
+    bne AIActive            ; only spawn non active entities
     jsr spawnEntity
     jmp AIsSpawned
 AIActive
-NoAIForSpawn
     inx
     jmp SpawnAIs
 AIsSpawned
-NoSpawn
+    jsr drawEntity
     pla
-    tax
+    tax  
     rts
     
+
 ; fc is the entity to spawn
 ; fe is the spawning entity
 spawnEntity
@@ -85,13 +82,9 @@ NotAI
     
 despawn
     ldy active_offset       ; set it to not active
-    lda ($fe),y
-    bne Despawn             ; only despawn if they are not despawned
-    rts
-Despawn
     lda #0
     sta ($fe),y
-    jsr drawOn              ; draw what it is standing on
+    jsr drawEntityOn              ; draw what it is standing on
     
     ldy active_offset       ; set it to not active
     lda #0

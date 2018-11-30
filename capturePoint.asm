@@ -1,14 +1,23 @@
-updateCapturePoint
-    txa
-    pha
-    jsr checkClock
-    beq NotUpdatingCapture
+Captured
+    brk
+    rts 
+
+drawCapturePoint
+    jsr drawEntityOn
+    jsr moveRight
+    jsr drawEntityOn
+    jsr moveDown
+    jsr drawEntityOn
+    jsr moveLeft
+    jsr drawEntityOn
+    jsr moveUp
+    rts
     
-    jsr drawCaptureBar
-    
-    lda player_offset                         ; load player
+checkIfCapturing
+    lda player_offset           ; load player
     jsr loadEntity2
-    ldy on_char_offset
+    ; compare the character that the player is on to the capture character
+    ldy on_char_offset         
     lda ($fe),y
     cmp ($fc),y 
     bne NotCapturing
@@ -22,32 +31,26 @@ updateCapturePoint
     bne NotCapturing
 Capturing
     ldy capture_percent_offset
-    lda #5
+    lda #5                      ; this is the capture speed
     clc
     adc ($fe),y
     sta ($fe),y 
-NotCapturing    
-NotUpdatingCapture
-    pla 
-    tax
-    rts
-
-Captured
-    brk
-    rts 
-
-drawCapturePoint
-    jsr drawOn
-    jsr moveRight
-    jsr drawOn
-    jsr moveDown
-    jsr drawOn
-    jsr moveLeft
-    jsr drawOn
-    jsr moveUp
+    jmp DoneUpdatingCapture
+NotCapturing   
+    ldy capture_percent_offset
+    lda ($fe),y
+    sec
+    sbc #1
+    bpl Bottomed
+    lda #0
+Bottomed
+    sta ($fe),y
+DoneUpdatingCapture
     rts
     
 drawCaptureBar
+    txa
+    pha
     ldy capture_percent_offset
     lda ($fe),y             ; load the amount captured 
     bmi Captured
@@ -64,7 +67,7 @@ drawCaptureBar
     iny
     lda #$f9
     sta ($fe),y
-    ldy #9
+    ldy #10
 DrawCapture
     dey 
     dex
@@ -79,7 +82,7 @@ DrawCapture
 DrawNotCapture
     dey
     beq CaptureBarDone
-    jsr drawOn
+    jsr drawEntityOn
     tya
     pha
     jsr moveLeft
@@ -87,4 +90,6 @@ DrawNotCapture
     tay
     jmp DrawNotCapture
 CaptureBarDone
+    pla
+    tax
     rts
