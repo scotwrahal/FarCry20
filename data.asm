@@ -128,7 +128,7 @@ AI1_active              byte $00
 AI1_position            byte $80, $ff, $00
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte 0
+AI1_damage              byte 5
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
@@ -143,7 +143,7 @@ AI2_active              byte $00
 AI2_position            byte $80, $ff, $00
 AI2_direction           byte $00
 AI2_on                  byte [shrub1 - graphics]/8+2, $05
-AI2_damage              byte 0
+AI2_damage              byte 5
 AI2_health              byte $7f
 AI2_state               byte $00
 AI2_max_state           byte $03

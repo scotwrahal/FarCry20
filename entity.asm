@@ -33,14 +33,6 @@ move
     sta ($fe),y
     plp
     bcc noMove
-    
-    ldy position_offset     ; load in the old position
-    iny
-    lda ($fe),y
-    tax
-    dey
-    lda ($fe),y
-    jsr drawEntityOn              ; draw the thing u were on in the old position
 
 ;update the state
     ldy state_offset

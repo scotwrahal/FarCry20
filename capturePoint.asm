@@ -67,7 +67,7 @@ drawCaptureBar
     iny
     lda #$f9
     sta ($fe),y
-    ldy #10
+    ldy #9
 DrawCapture
     dey 
     dex

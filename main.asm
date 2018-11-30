@@ -25,7 +25,7 @@ end_basic
     INCLUDE "input.asm"
     INCLUDE "healthbar.asm"
     INCLUDE "capturePoint.asm"
-    INCLUDE "updates.asm"
+    INCLUDE "updates.asm"    
     
 start:
     lda #252                ; point to custom character set
@@ -50,9 +50,6 @@ play_loop
     jsr input
     jsr updateEntities
     jmp play_loop
-
-; things that could be done to pontenally compress the code
-; make the loops all use the same loop and pass in the loading function and what to do
     
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

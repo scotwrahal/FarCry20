@@ -57,6 +57,7 @@ UpdateMusic
     jmp updateMusic
 
 updatePlayer
+    jsr drawEntityOn
     jsr move
     jsr shoot
     jsr checkCollision
@@ -70,8 +71,12 @@ updateAI
     rts
     
 updateBullet
+    jsr drawEntityOn
     jsr setBullet
-    jsr updatePlayer
+    jsr move
+    jsr checkCollision
+    jsr handleCollision
+    jsr drawEntity
     rts
     
 updateSpawner

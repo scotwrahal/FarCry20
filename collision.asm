@@ -23,8 +23,6 @@ CollidedWithNothing
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 checkCollision
-    txa
-    pha
     ldy on_char_offset
     lda ($fe),y
     cmp terrain_char
@@ -42,12 +40,12 @@ CollideTerrain
     beq CollideTerrain2
     jmp Collide
 CollideTerrain2
-    pla
-    tax
     lda #1              ; terrain collision
     rts
     
 Collide
+    txa
+    pha   
     ;loop entitys
     ldx #0              ; index for the list of entitys
 CollideEntity
@@ -69,11 +67,9 @@ NextEntity
     inx
     jmp CollideEntity
 CollidedWithEntity
-    lda #2
-    sta holder
     pla
     tax
-    lda holder
+    lda #2
     rts
 CollideEntityDone
     pla
@@ -102,8 +98,9 @@ BulletBullet
     rts
 BulletAI
 BulletPlayer
+    jsr despawn
     jsr damage
-    jmp despawn
+    rts
     
 handleAICollision
 handlePlayerCollision
@@ -125,10 +122,10 @@ handlePlayerCollision
 EntitySpawner
     rts
 EntityBullet
-    jsr flipEntitys
+    jsr flipEntities
     jsr damage
     jsr despawn
-    jsr flipEntitys
+    jsr flipEntities
     jsr copyOn
     rts
 EntityAI
@@ -172,7 +169,7 @@ CollideMoveRight
     jmp FinishMove
     
     
-flipEntitys
+flipEntities
     lda $fe
     sta holder
     lda $fc
@@ -199,9 +196,9 @@ damage
     bmi Kill
     rts
 Kill
-    jsr flipEntitys
+    jsr flipEntities
     jsr despawn
-    jsr flipEntitys
+    jsr flipEntities
     rts 
     
 copyOn

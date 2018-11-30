@@ -26,9 +26,6 @@ AIsSpawned
     tax  
     rts
     
-
-; fc is the entity to spawn
-; fe is the spawning entity
 spawnEntity
     ldy active_offset       ; check to see if the thing u are tyring to spawn is active
     lda ($fc),y
@@ -64,6 +61,8 @@ Spawn
     
     ldy clock_offset
     lda clock
+    clc
+    adc #1
     sta ($fc),y
     
     ldy state_offset
@@ -78,17 +77,27 @@ Spawn
     lda AI_health
     sta ($fc),y
 NotAI
-    rts 
+
+    jsr flipEntities
+    lda $fc
+    pha
+    lda $fd
+    pha 
+    jsr updateEntity
+    pla
+    sta $fd
+    pla
+    sta $fc
+    jsr flipEntities
+
+NoSpawn
+    rts
     
 despawn
     ldy active_offset       ; set it to not active
     lda #0
     sta ($fe),y
-    jsr drawEntityOn              ; draw what it is standing on
-    
-    ldy active_offset       ; set it to not active
-    lda #0
-    sta ($fe),y
+    jsr drawEntityOn        ; draw what it is standing on
 
     ldy position_offset     ; move it off the screen
     lda #$80
