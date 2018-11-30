@@ -49,10 +49,10 @@ player      word player_char
 
 AIs:
 AI1         word AI1_char
-AI2         word AI2_char
 
 bullets:
 bullet0     word bullet0_char
+bullet1     word bullet1_char
 
 spawners:
 spawner0    word spawner0_char
@@ -128,26 +128,11 @@ AI1_active              byte $00
 AI1_position            byte $80, $ff, $00
 AI1_direction           byte $00
 AI1_on                  byte [shrub1 - graphics]/8+2, $05
-AI1_damage              byte 5
+AI1_damage              byte 0
 AI1_health              byte $7f
 AI1_state               byte $00
 AI1_max_state           byte $03
 AI1_bullet_index        byte #1
-
-AI2_char                byte [human - graphics]/8+2
-AI2_color               byte $02
-AI2_clock               byte $00
-AI2_clock_updates       byte #14
-AI2_type                byte #3
-AI2_active              byte $00
-AI2_position            byte $80, $ff, $00
-AI2_direction           byte $00
-AI2_on                  byte [shrub1 - graphics]/8+2, $05
-AI2_damage              byte 5
-AI2_health              byte $7f
-AI2_state               byte $00
-AI2_max_state           byte $03
-AI2_bullet_index        byte #1
 
 bullet0_char            byte [bullet - graphics]/8+2
 bullet0_color           byte $00
@@ -163,10 +148,24 @@ bullet0_health          byte $7f
 bullet0_state           byte $00
 bullet0_max_state       byte $01
 
+bullet1_char            byte [bullet - graphics]/8+2
+bullet1_color           byte $00
+bullet1_clock           byte $00
+bullet1_clock_updates   byte $05
+bullet1_type            byte #4
+bullet1_active          byte $00
+bullet1_position        byte $80, $ff, $00
+bullet1_direction       byte $40
+bullet1_on              byte 0, 0
+bullet1_damage          byte $0f
+bullet1_health          byte $7f
+bullet1_state           byte $00
+bullet1_max_state       byte $01
+
 spawner0_char            byte [bullet - graphics]/8+2
 spawner0_color           byte $00
 spawner0_clock           byte $00
-spawner0_clock_updates   byte $01
+spawner0_clock_updates   byte $f0
 spawner0_type            byte #5
 spawner0_active          byte $01
 spawner0_position        byte #01, #23, #01
@@ -194,7 +193,7 @@ healthbar_max_state           byte $01
 capture_point_char                byte [shrub2 - graphics]/8+2
 capture_point_color               byte $00
 capture_point_clock               byte $00
-capture_point_clock_updates       byte #10
+capture_point_clock_updates       byte #20
 capture_point_type                byte #7
 capture_point_active              byte $01
 capture_point_position            byte #10, #225, $00

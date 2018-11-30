@@ -67,6 +67,7 @@ updatePlayer
     
 updateAI
     jsr setDirection
+    jsr checkShot
     jsr updatePlayer
     rts
     

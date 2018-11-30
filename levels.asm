@@ -5,7 +5,10 @@
 ; $fd fe will store the level address
 
 ; helper functions for  load level
-LevelLoadDone
+levelLoadDone
+    pla 
+    
+    jsr reset
     
     lda capture_point_offset
     jsr loadEntity   
@@ -13,18 +16,7 @@ LevelLoadDone
     ldy color_offset
     lda #0
     sta ($fe),y
-
-
-    pla         			; extra pull for preserving the position
-    pla
-    sta $ff
-    pla
-    sta $fc
-    pla
-    tay
-    pla
-    tax
-    pla
+    
     rts
 
 ; helper function for load level
@@ -60,18 +52,7 @@ BoundarySkip
     bne readByte            ; repeat till the byte is done
     rts
 
-load_level
-    sta holder
-    pha
-    txa
-    pha
-    tya
-    pha
-    lda $fc
-    pha
-    lda $ff
-    pha
-    lda holder
+loadLevel
     asl                 	; multiply by 2 (level address is 2 bytes)
     tay
     lda level_mem,y
@@ -88,7 +69,7 @@ load_row
     pha                     ; push A to preserve the location
     lda $fc
     cmp level_size          ; check if u have loaded the level
-    beq LevelLoadDone       ; BREAK out of load
+    beq levelLoadDone       ; BREAK out of load
     pla                     ; restore the location
 
     jsr loadByte

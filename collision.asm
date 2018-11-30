@@ -1,25 +1,3 @@
-handleCollision
-    ;collide with terrain
-    cmp #0              ; nothing
-    beq CollidedWithNothing
-    pha
-    ldy type_offset
-    lda ($fe),y
-    cmp #2              ; player collisions
-    bne Handle1
-    jmp handlePlayerCollision
-Handle1
-    cmp #3              ; enemy collisions
-    bne Handle2
-    jmp handleAICollision
-Handle2
-    cmp #4              ; bullet collisions
-    bne Handle3
-    jmp handleBulletCollision
-Handle3
-CollidedWithNothing
-    rts
-
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 checkCollision
@@ -77,29 +55,27 @@ CollideEntityDone
     lda #0
     rts
     
-handleBulletCollision
-    pla 
-    cmp #1
-    beq BulletTerrain
     
-    lda ($fc),y
-    cmp #2
-    beq BulletPlayer
-    cmp #3
-    beq BulletAI
-    cmp #4
-    beq BulletBullet
-    rts
-
-BulletTerrain
-    jmp despawn
-BulletBullet
-    jsr copyOn
-    rts
-BulletAI
-BulletPlayer
-    jsr despawn
-    jsr damage
+handleCollision
+    ;collide with terrain
+    cmp #0              ; nothing
+    beq CollidedWithNothing
+    pha
+    ldy type_offset
+    lda ($fe),y
+    cmp #2              ; player collisions
+    bne Handle1
+    jmp handlePlayerCollision
+Handle1
+    cmp #3              ; enemy collisions
+    bne Handle2
+    jmp handleAICollision
+Handle2
+    cmp #4              ; bullet collisions
+    bne Handle3
+    jmp handleBulletCollision
+Handle3
+CollidedWithNothing
     rts
     
 handleAICollision
@@ -115,8 +91,33 @@ handlePlayerCollision
     beq EntityAI
     cmp #4
     beq EntityBullet
-    cmp #5
-    beq EntitySpawner
+;default
+    jmp EntityTerrain
+    rts
+    
+handleBulletCollision
+    pla 
+    cmp #1
+    beq BulletTerrain
+    lda ($fc),y
+    cmp #2
+    beq BulletPlayer
+    cmp #3
+    beq BulletAI
+    cmp #4
+    beq BulletBullet
+    rts
+
+BulletTerrain
+    jmp despawn
+    
+BulletBullet
+    jsr copyOn
+    rts
+BulletAI
+BulletPlayer
+    jsr despawn
+    jsr damage
     rts
 
 EntitySpawner

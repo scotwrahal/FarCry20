@@ -1,5 +1,8 @@
 Captured
+    pla
     brk
+    lda #0
+    jsr loadLevel
     rts 
 
 drawCapturePoint

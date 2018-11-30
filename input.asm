@@ -40,7 +40,7 @@ InputRetrun
     and #$f0
     beq SetShoot
     lda player_direction
-    and #$0f
+    and #$07            ; don't move and shoot
     ora holder
     sta player_direction
     pla
@@ -48,6 +48,7 @@ InputRetrun
 SetShoot
     lda player_direction
     ora #$08
+    and #$fe            ; don't move and shoot
     sta player_direction
     pla 
     rts

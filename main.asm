@@ -35,15 +35,13 @@ load_screen_colour
     lda #$dd                ; $dd yields light green playfield, dark green border
     sta $900f               ; load value into screen and border color register (p. 175)
 
-level_load
-    lda #0                  ; this will select what level u want loaded
-    jsr load_level
-
 set_up_music
     lda #$0f        		; load 15 (max volume) into Accumulator
     sta $900e       		; set max volume
 
-    jsr setTimers
+level_load
+    lda #0                  ; this will select what level u want loaded
+    jsr loadLevel
 
 play_loop
     jsr updateClock
@@ -56,5 +54,8 @@ play_loop
 setTimers
     jsr updateClock
     jsr setClocksAllEntities
+    rts
     
+reset
+    jsr setTimers
     rts

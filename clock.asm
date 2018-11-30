@@ -18,7 +18,6 @@ Update
     ldy clock_update_offset
     clc
     adc ($fe),y
-    and #$7f
     ldy clock_offset
     sta ($fe),y
     lda #1
@@ -33,7 +32,6 @@ updateClock
     txa
     pha
     jsr $ffde               ; read time from system clock
-    and #$7f
     sta clock               ; store the low byte since we only really need it
     ; may want to store more time info for scoring
     pla
