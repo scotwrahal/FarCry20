@@ -87,7 +87,7 @@ load_level
 load_row
     pha                     ; push A to preserve the location
     lda $fc
-    cmp level_size          ; check if you have loaded the level
+    cmp level_size          ; check if u have loaded the level
     beq LevelLoadDone       ; BREAK out of load
     pla                     ; restore the location
 
@@ -100,6 +100,6 @@ load_row
     jsr loadByte
     ldy #6                  ; the 3rd byte has 6 bits
     jsr readByte
-    ; this may be where you read the last 2 bits of info for the level
+    ; this may be where u read the last 2 bits of info for the level
     jmp load_row
 ; end of loading function

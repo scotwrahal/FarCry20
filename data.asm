@@ -101,7 +101,7 @@ player_type             byte #2
 active
 player_active           byte $01
 position
-player_position         byte #2, #50, $00        ; 1 tells you if you are in the top or bottom 0 nothing 111111 row number, position byte
+player_position         byte #2, #50, #6        ; 1 tells u if u are in the top or bottom 0 nothing 111111 row number, position byte
 direction
 player_direction        byte $80            ; bits 1111 direction 11 shooing 1 Active 1 movement
 on_char_template
@@ -115,7 +115,7 @@ player_health           byte $7f
 state
 player_state            byte $00
 max_state
-player_max_state        byte $02
+player_max_state        byte $03
 bullet_index
 player_bullet_index     byte #0
 
@@ -169,7 +169,7 @@ spawner0_clock           byte $00
 spawner0_clock_updates   byte $01
 spawner0_type            byte #5
 spawner0_active          byte $01
-spawner0_position        byte $01, #23, $01
+spawner0_position        byte #01, #23, #01
 spawner0_direction       byte $40
 spawner0_on              byte [shrub1 - graphics]/8+2, $05
 spawner0_damage          byte 0

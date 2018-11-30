@@ -8,13 +8,13 @@ SpawnAIs
     jsr loadAI2
     lda $fd
     beq AIsSpawned          ; there are no entities to spawn
-    ldy type_offset
-    lda ($fc),y
-    cmp #3
-    bne AIsSpawned          ; all the AIs are together so when you stop reading them you are done
     ldy active_offset
     lda ($fc),y
     bne AIActive            ; only spawn non active entities
+    ldy type_offset
+    lda ($fc),y
+    cmp #3
+    bne AIsSpawned
     jsr spawnEntity
     jmp AIsSpawned
 AIActive
@@ -30,7 +30,7 @@ AIsSpawned
 ; fc is the entity to spawn
 ; fe is the spawning entity
 spawnEntity
-    ldy active_offset       ; check to see if the thing you are tyring to spawn is active
+    ldy active_offset       ; check to see if the thing u are tyring to spawn is active
     lda ($fc),y
     beq Spawn
     rts

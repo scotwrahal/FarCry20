@@ -61,7 +61,9 @@ CollideEntity
     cmp $fe
     beq NextEntity
 NotSelf
-    jsr checkPositions
+    jsr checkRows
+    bne NextEntity
+    jsr checkColumns
     beq CollidedWithEntity
 NextEntity
     inx
@@ -77,47 +79,6 @@ CollideEntityDone
     pla
     tax
     lda #0
-    rts
-    
-checkPositions 
-    ldy position_offset
-    lda ($fe),y
-    and #$80
-    lsr
-    lsr
-    sta holder
-    lda ($fc),y 
-    and #$80
-    lsr
-    lsr
-    cmp holder
-    bmi Return1
-    bne Return2                     ; is positive
-    
-    iny
-    lda ($fe),y
-    lsr                             ; do a right shift to prevent negatives among large differences
-    sta holder
-    lda ($fc),y
-    lsr
-    cmp holder
-    bmi Return1
-    bne Return2
-    
-    lda ($fe),y
-    sta holder
-    lda ($fc),y
-    cmp holder
-    bmi Return1
-    bne Return2
-Return0
-    lda #0
-    rts
-Return1
-    lda #1
-    rts
-Return2
-    lda #2
     rts
     
 handleBulletCollision

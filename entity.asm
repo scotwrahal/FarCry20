@@ -1,22 +1,4 @@
 ; TODO make a list of functions        
-shoot   
-    ldy direction_offset
-    lda ($fe),y
-    and #$08
-    beq NoShoot
-    lda ($fe),y
-    and #$04
-    bne NoShoot
-    lda ($fe),y         ; make it so that you are not shooting
-    and #$f7            ; 111110111
-    sta ($fe),y
-    ldy bullet_index_offset
-    lda ($fe),y
-    jsr loadBullet2
-    jsr spawnEntity
-NoShoot
-    rts
-
 loadEntity
     clc
     adc entity_offset
@@ -58,7 +40,7 @@ move
     tax
     dey
     lda ($fe),y
-    jsr drawEntityOn              ; draw the thing you were on in the old position
+    jsr drawEntityOn              ; draw the thing u were on in the old position
 
 ;update the state
     ldy state_offset
@@ -114,7 +96,7 @@ EntitymoveRight
     
 FinishMove
     ldy position_offset
-    iny                         ; store the thing you are now standing on
+    iny                         ; store the thing u are now standing on
     lda ($fe),y
     dey
     tax
@@ -206,8 +188,12 @@ moveLeft
     sbc #1
     bcc MoveLeftBorder
     sta ($fe),y
+    iny 
+    lda ($fe),y
+    sec 
+    sbc #1
+    sta ($fe),y
     rts
-
 MoveLeftBorder
     ldy position_offset
     lda ($fe),y
@@ -218,6 +204,11 @@ MoveLeftBorder
     sta ($fe),y
     iny
     lda #$ff
+    sta ($fe),y
+    iny 
+    lda ($fe),y
+    sec
+    sbc #1
     sta ($fe),y
 NoMoveLeft
     rts
@@ -230,6 +221,11 @@ moveRight
     adc #1
     bcs MoveRightBorder
     sta ($fe),y
+    iny 
+    lda ($fe),y 
+    clc
+    adc #1
+    sta ($fe),y
     rts
 MoveRightBorder
     ldy position_offset
@@ -241,6 +237,11 @@ MoveRightBorder
     sta ($fe),y
     iny
     lda #0
+    sta ($fe),y
+    iny 
+    lda ($fe),y 
+    clc
+    adc #1
     sta ($fe),y
 NoMoveRight
     rts    
