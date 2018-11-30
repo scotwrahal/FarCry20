@@ -148,7 +148,7 @@ AI2_clock               byte $00
 AI2_clock_updates       byte #14
 AI2_type                byte #3
 AI2_active              byte $00
-AI2_position            byte $80, $ff
+AI2_position            byte $80, $ff, $00
 AI2_direction           byte $00
 AI2_on                  byte 0, 0
 AI2_damage              byte 0
