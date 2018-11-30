@@ -1,7 +1,26 @@
 ; checks the clock of an updatable entity and updates it if needed
-;   the entity needs to be loaded before you check the clock
+;   the entity needs to be loaded before u check the clock
 ;   returns 1 if the clock updated 0 otherwise
 checkClock
+    lda clock
+    sta holder
+    ldy clock_offset
+    lda ($fe),y
+    sec
+    cmp holder
+    beq Update    
+DontUpdate
+    lda #0
+    rts
+Update
+    ldy clock_offset
+    lda ($fe),y
+    ldy clock_update_offset
+    clc
+    adc ($fe),y
+    and #$7f
+    ldy clock_offset
+    sta ($fe),y
     lda #1
     rts
 
@@ -14,7 +33,7 @@ updateClock
     txa
     pha
     jsr $ffde               ; read time from system clock
-    lsr
+    and #$7f
     sta clock               ; store the low byte since we only really need it
     ; may want to store more time info for scoring
     pla
