@@ -15,7 +15,20 @@ SpawnAIs
     lda ($fc),y
     cmp #3
     bne AIsSpawned
+;select Spawner
+    lda $ff
+    pha
+    lda $fe
+    pha
+    jsr rnd
+    and #$03
+    jsr loadSpawner
     jsr spawnEntity
+;deselect Spawner
+    pla
+    sta $fe
+    pla 
+    sta $ff
     jmp AIsSpawned
 AIActive
     inx
@@ -24,6 +37,16 @@ AIsSpawned
     jsr drawEntity
     pla
     tax  
+    rts
+    
+loadSpawner
+    asl 
+    tay 
+    lda spawners,y
+    sta $fe
+    iny
+    lda spawners,y
+    sta $ff
     rts
     
 spawnEntity
