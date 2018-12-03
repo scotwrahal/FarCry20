@@ -106,6 +106,8 @@ handleBulletCollision
     beq BulletAI
     cmp #4
     beq BulletBullet
+;default
+    jmp BulletTerrain
     rts
 
 BulletTerrain

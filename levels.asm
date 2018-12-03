@@ -7,16 +7,7 @@
 ; helper functions for  load level
 levelLoadDone
     pla 
-    
-    jsr reset
-    
-    lda capture_point_offset
-    jsr loadEntity   
-    jsr drawCapturePoint
-    ldy color_offset
-    lda #0
-    sta ($fe),y
-    
+    jsr reset    
     rts
 
 ; helper function for load level
@@ -54,6 +45,11 @@ BoundarySkip
 
 loadLevel
     asl                 	; multiply by 2 (level address is 2 bytes)
+    sta holder
+    lda clock
+    adc #1
+    sta random1
+    lda holder
     tay
     lda level_mem,y
     sta $fd

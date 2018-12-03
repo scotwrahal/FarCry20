@@ -15,7 +15,7 @@ setBullet
     sta ($fe),y
     rts
 
-shoot   
+shoot  
     ldy direction_offset
     lda ($fe),y
     and #$08
@@ -29,6 +29,12 @@ shoot
     ldy bullet_index_offset
     lda ($fe),y
     jsr loadBullet2
+    ldy active_offset
+    lda ($fc),y
+    bne NoShoot
     jsr spawnEntity
+    lda #1
+    ldy #2
+    jsr playSong
 NoShoot
     rts    

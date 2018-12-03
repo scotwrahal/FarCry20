@@ -25,8 +25,9 @@ end_basic
     INCLUDE "input.asm"
     INCLUDE "healthbar.asm"
     INCLUDE "capturePoint.asm"
-    INCLUDE "updates.asm"    
-    
+    INCLUDE "updates.asm"  
+    INCLUDE "reset.asm"
+        
 start:
     lda #252                ; point to custom character set
     sta $9005
@@ -43,6 +44,11 @@ level_load
     lda #0                  ; this will select what level u want loaded
     jsr loadLevel
 
+    
+    lda #0
+    ldy #0
+    jsr playSong
+    
 play_loop
     jsr updateClock
     jsr input
@@ -54,8 +60,4 @@ play_loop
 setTimers
     jsr updateClock
     jsr setClocksAllEntities
-    rts
-    
-reset
-    jsr setTimers
     rts
