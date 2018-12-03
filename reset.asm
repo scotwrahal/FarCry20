@@ -1,4 +1,9 @@
-resetEntities
+reset
+    jsr setTimers
+    jsr resetAllEntities
+    rts
+
+resetAllEntities
     txa
     pha
     ldx #0
@@ -7,14 +12,7 @@ ResetEntity
     jsr loadEntity
     lda $ff
     beq EntitiesResetd
-    jsr checkClock
-    beq NotReadyForReset
-    ldy active_offset
-    lda ($fe),y
-    beq NotReadyForReset
     jsr resetEntity
-DontDraw
-NotReadyForReset
     inx
     jmp ResetEntity
 EntitiesResetd
@@ -56,9 +54,43 @@ ResetCapturePoint
 ResetMusic
     jmp resetMusic
     
+resetCapturePoint
+    ldy capture_percent_offset
+    lda #$0
+    sta ($fe),y
+
+    ldy position_offset
+    lda #0
+    sta ($fe),y
+    iny
+    lda #250
+    sta ($fe),y
+     
+    jsr drawCapturePoint
+    rts
+    
+resetMusic
+    jsr ShutDown
+resetSpawner
+resetHealthbar
+    rts
+
+resetBullet    
+resetAI
+    ldy position_offset
+    lda #$80
+    sta ($fe),y
+    iny
+    lda #$ff
+    sta ($fe),y
+    
+    ldy active_offset
+    lda #0
+    sta ($fe),y
+    rts
+    
 resetPlayer
     ldy position_offset
-    lda #2
     lda #2
     sta ($fe),y
     iny
@@ -67,5 +99,17 @@ resetPlayer
     iny
     lda #6
     sta ($fe),y 
+    
+    ldy health_offset
+    lda #$7f
+    sta ($fe),y
+    
+    ldy on_char_offset
+    lda #3
+    sta ($fe),y
+    
+    ldy on_color_offset
+    lda #5
+    sta ($fe),y
     rts
-    getFromEntityPosition
+    
