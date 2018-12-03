@@ -1,8 +1,8 @@
 Captured
     pla
-    brk
     lda #0
     jsr loadLevel
+    brk
     rts 
 
 drawCapturePoint
@@ -11,9 +11,12 @@ drawCapturePoint
     jsr drawEntityOn
     jsr moveDown
     jsr drawEntityOn
+    jsr moveDown
+    jsr drawEntityOn
     jsr moveLeft
     jsr drawEntityOn
     jsr moveUp
+    jsr drawEntityOn
     rts
     
 checkIfCapturing
