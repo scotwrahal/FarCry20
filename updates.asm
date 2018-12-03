@@ -39,6 +39,8 @@ updateEntity
     beq UpdateCapturePoint
     cmp #8 
     beq UpdateMusic
+    cmp #$ff
+    beq DrawUpdate
     rts
     
 UpdatePlayer
@@ -62,6 +64,7 @@ updatePlayer
     jsr shoot
     jsr checkCollision
     jsr handleCollision
+DrawUpdate
     jsr drawEntity
     rts
     
