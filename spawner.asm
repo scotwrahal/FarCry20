@@ -124,6 +124,16 @@ despawn
     sta ($fe),y
     jsr drawEntityOn        ; draw what it is standing on
 
+    ldy type_offset
+    lda ($fe),y
+    cmp #3
+    bne NotAIDeath
+    jsr rnd
+    and #$0f
+    bne NotAIDeath
+    jsr drawHealthpack
+
+NotAIDeath
     ldy position_offset     ; move it off the screen
     lda #$80
     sta ($fe),y

@@ -87,18 +87,7 @@ EntitymoveRight
     jmp FinishMove
     
 FinishMove
-    ldy position_offset
-    iny                         ; store the thing u are now standing on
-    lda ($fe),y
-    dey
-    tax
-    lda ($fe),y
-    jsr getFromPosition
-    ldy on_char_offset
-    sta ($fe),y
-    txa
-    ldy on_color_offset
-    sta ($fe),y
+    jsr storeOnScreenInEntity
 EndMove
     pla
     tay
@@ -236,4 +225,18 @@ MoveRightBorder
     adc #1
     sta ($fe),y
 NoMoveRight
-    rts    
+    rts 
+
+
+heal
+    ldy health_offset
+    lda ($fe),y
+    clc
+    adc #$0f
+    bpl NotOverHeal
+    lda #$7f
+NotOverHeal
+    sta ($fe),y
+    jsr removeHeal
+    rts 
+    

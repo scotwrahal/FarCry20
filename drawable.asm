@@ -236,5 +236,76 @@ drawEntityOn
     pla
     tay
     pla
-    rts   
+    rts 
+
+getFromEntityPosition 
+    ldy position_offset
+    iny                         ; store the thing u are now standing on
+    lda ($fe),y
+    dey
+    tax
+    lda ($fe),y
+    jsr getFromPosition
+    rts
+
+drawHealthpack
+    pha
+    tya
+    pha
+    txa
+    pha
+
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
     
+    ldy healthpack_offset
+    jsr drawDrawable
+    pla
+    tax
+    pla
+    tay
+    pla
+    rts 
+    
+removeHeal
+    pha
+    tya
+    pha
+    txa
+    pha
+
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y
+    
+    jsr drawGround
+    jsr storeOnScreenInEntity
+    
+    pla
+    tax
+    pla
+    tay
+    pla
+    rts 
+
+storeOnScreenInEntity 
+    ldy position_offset
+    iny
+    lda ($fe),y
+    tax
+    dey
+    lda ($fe),y   
+    jsr getFromPosition
+    ldy on_char_offset
+    sta ($fe),y
+    txa
+    ldy on_color_offset
+    sta ($fe),y
+    rts

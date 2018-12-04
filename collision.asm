@@ -7,6 +7,8 @@ checkCollision
     beq CollideTerrain
     cmp terrain1_char
     beq CollideTerrain
+    cmp healthpack_char
+    beq CollideHealth
     jmp Collide
 CollideTerrain
     ldy on_color_offset
@@ -17,8 +19,18 @@ CollideTerrain
     cmp terrain1_color
     beq CollideTerrain2
     jmp Collide
+CollideHealth
+    ldy on_color_offset
+    lda ($fe),y
+    and #$0f
+    cmp healthpack_color
+    beq CollideHealth2
+    jmp Collide
 CollideTerrain2
     lda #1              ; terrain collision
+    rts
+CollideHealth2
+    lda #3
     rts
     
 Collide
@@ -83,6 +95,8 @@ handlePlayerCollision
     pla 
     cmp #1
     beq EntityTerrain
+    cmp #3
+    beq EntityHealth
     
     lda ($fc),y
     cmp #2
@@ -99,6 +113,9 @@ handleBulletCollision
     pla 
     cmp #1
     beq BulletTerrain
+    cmp #3
+    beq BulletHealth
+    
     lda ($fc),y
     cmp #2
     beq BulletPlayer
@@ -115,6 +132,7 @@ BulletTerrain
     
 BulletBullet
     jsr copyOn
+BulletHealth
     rts
 BulletAI
 BulletPlayer
@@ -136,6 +154,9 @@ EntityPlayer
     jsr damage
 EntityTerrain
     jsr terrainCollide
+    rts
+EntityHealth
+    jsr heal
     rts
     
 terrainCollide    

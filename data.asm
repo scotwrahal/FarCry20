@@ -43,6 +43,7 @@ terrain1    word terrain1_char
 ground      word ground_char
 ground1     word ground1_char
 on_holder   word on_char
+healthpack  word healthpack_char
             word 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,26 +82,29 @@ music_player_2  word music2_track
                 word #0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-terrain_char    byte [palm_tree0 - graphics]/8+2
+terrain_char    byte [palm_tree0 - graphics]/8+chars_offset
 terrain_color   byte $00 ; black 
 
-terrain1_char   byte [shrub0 - graphics]/8+2
+terrain1_char   byte [shrub0 - graphics]/8+chars_offset
 terrain1_color  byte $00 ; black 
 
 
-ground_char     byte [shrub1 - graphics]/8+2
+ground_char     byte [shrub1 - graphics]/8+chars_offset
 ground_color    byte $05 ; green
 
-ground1_char    byte [shrub0 - graphics]/8+2
+ground1_char    byte [shrub0 - graphics]/8+chars_offset
 ground1_color   byte $05 ; green
 
 on_char         byte $00
 on_color        byte $00
 
+healthpack_char     byte [hut - graphics]/8+chars_offset
+healthpack_color    byte $02
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 template                                ; this is used for calculating offsets
 char
-player_char             byte [human - graphics]/8+2
+player_char             byte [human - graphics]/8+chars_offset
 color
 player_color            byte $06
 t_clock
@@ -116,7 +120,7 @@ player_position         byte #2, #50, #6        ; 1 tells u if u are in the top 
 direction
 player_direction        byte $80            ; bits 1111 direction 11 shooing 1 Active 1 movement
 on_char_template
-player_on_char          byte [shrub1 - graphics]/8+2
+player_on_char          byte [shrub1 - graphics]/8+chars_offset
 on_color_template
 player_on_color         byte $05
 state
@@ -124,13 +128,13 @@ player_state            byte $00
 max_state
 player_max_state        byte $03
 damage_
-player_damage           byte $7f
+player_damage           byte #31
 health
 player_health           byte $7f
 bullet_index
 player_bullet_index     byte #0
 
-AI1_char                byte [human - graphics]/8+2
+AI1_char                byte [human - graphics]/8+chars_offset
 AI1_color               byte $02
 AI1_clock               byte $00
 AI1_clock_updates       byte #7
@@ -138,14 +142,14 @@ AI1_type                byte #3
 AI1_active              byte $00    
 AI1_position            byte $80, $ff, $00
 AI1_direction           byte $00
-AI1_on                  byte [shrub1 - graphics]/8+2, $05
+AI1_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI1_state               byte $00
 AI1_max_state           byte $03
 AI1_damage              byte 2
 AI1_health              byte $7f
 AI1_bullet_index        byte #1
 
-AI2_char                byte [human - graphics]/8+2
+AI2_char                byte [human - graphics]/8+chars_offset
 AI2_color               byte $02
 AI2_clock               byte $00
 AI2_clock_updates       byte #7
@@ -153,14 +157,14 @@ AI2_type                byte #3
 AI2_active              byte $00
 AI2_position            byte $80, $ff, $00
 AI2_direction           byte $04
-AI2_on                  byte [shrub1 - graphics]/8+2, $05
+AI2_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI2_state               byte $00
 AI2_max_state           byte $03
-AI2_damage              byte 2
+AI2_damage              byte 0
 AI2_health              byte $7f
 AI2_bullet_index        byte #1
 
-AI3_char                byte [human - graphics]/8+2
+AI3_char                byte [human - graphics]/8+chars_offset
 AI3_color               byte $02
 AI3_clock               byte $00
 AI3_clock_updates       byte #7
@@ -168,14 +172,14 @@ AI3_type                byte #3
 AI3_active              byte $00
 AI3_position            byte $80, $ff, $00
 AI3_direction           byte $04
-AI3_on                  byte [shrub1 - graphics]/8+2, $05
+AI3_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI3_state               byte $00
 AI3_max_state           byte $03
-AI3_damage              byte 2
+AI3_damage              byte 0
 AI3_health              byte $7f
 AI3_bullet_index        byte #1
 
-AI4_char                byte [human - graphics]/8+2
+AI4_char                byte [human - graphics]/8+chars_offset
 AI4_color               byte $02
 AI4_clock               byte $00
 AI4_clock_updates       byte #7
@@ -183,15 +187,15 @@ AI4_type                byte #3
 AI4_active              byte $00
 AI4_position            byte $80, $ff, $00
 AI4_direction           byte $04
-AI4_on                  byte [shrub1 - graphics]/8+2, $05
+AI4_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI4_state               byte $00
 AI4_max_state           byte $03
-AI4_damage              byte 2
+AI4_damage              byte 0
 AI4_health              byte $7f
 AI4_bullet_index        byte #1
 
 
-bullet0_char            byte [bullet - graphics]/8+2
+bullet0_char            byte [bullet - graphics]/8+chars_offset
 bullet0_color           byte $00
 bullet0_clock           byte $00
 bullet0_clock_updates   byte $05
@@ -202,10 +206,10 @@ bullet0_direction       byte $40
 bullet0_on              byte 0, 0
 bullet0_state           byte $00
 bullet0_max_state       byte $01
-bullet0_damage          byte $7f
+bullet0_damage          byte #31
 bullet0_health          byte $7f
 
-bullet1_char            byte [bullet - graphics]/8+2
+bullet1_char            byte [bullet - graphics]/8+chars_offset
 bullet1_color           byte $00
 bullet1_clock           byte $00
 bullet1_clock_updates   byte $05
@@ -227,7 +231,7 @@ spawner0_type            byte #5
 spawner0_active          byte $01
 spawner0_position        byte #1, #42, #20
 spawner0_direction       byte $40
-spawner0_on              byte [hut - graphics]/8+2, $04
+spawner0_on              byte [hut - graphics]/8+chars_offset, $04
 spawner0_state           byte $00
 spawner0_max_state       byte $01
 
@@ -239,7 +243,7 @@ spawner1_type            byte $ff
 spawner1_active          byte $01
 spawner1_position        byte #01, #23, #01
 spawner1_direction       byte $40
-spawner1_on              byte [hut - graphics]/8+2, $04
+spawner1_on              byte [hut - graphics]/8+chars_offset, $04
 spawner1_state           byte $00
 spawner1_max_state       byte $01
 
@@ -251,23 +255,23 @@ spawner2_type            byte $ff
 spawner2_active          byte $01
 spawner2_position        byte #148, #204, #20
 spawner2_direction       byte $40
-spawner2_on              byte [hut - graphics]/8+2, $04
+spawner2_on              byte [hut - graphics]/8+chars_offset, $04
 spawner2_state           byte $00
 spawner2_max_state       byte $01
 
-spawner3_char            byte [hut - graphics]/8+1
+spawner3_char            byte [hut - graphics]/8+chars_offset
 spawner3_color           byte $04
 spawner3_clock           byte $00
 spawner3_clock_updates   byte $f0
 spawner3_type            byte $ff
 spawner3_active          byte $01
 spawner3_position        byte #148, #185, #1
-spawner3_direction       byte $40
-spawner3_on              byte [hut - graphics]/8+2, $04
+spawner3_direction       byte $80
+spawner3_on              byte [hut - graphics]/8+chars_offset, $04
 spawner3_state           byte $00
 spawner3_max_state       byte $01
 
-healthbar_char                byte [radioCaptured - graphics]/8+2
+healthbar_char                byte [radioCaptured - graphics]/8+chars_offset
 healthbar_color               byte $02
 healthbar_clock               byte $00
 healthbar_clock_updates       byte #10
@@ -275,13 +279,13 @@ healthbar_type                byte #6
 healthbar_active              byte $01
 healthbar_position            byte $80, $e4, $00
 healthbar_direction           byte $80
-healthbar_on                  byte [radioCaptured - graphics]/8+2, $00
+healthbar_on                  byte [radioCaptured - graphics]/8+chars_offset, $00
 healthbar_state               byte $00
 healthbar_max_state           byte $01
 healthbar_damage              byte $00
 healthbar_health              byte $7f
 
-capture_point_char                byte [radioCaptured - graphics]/8+2
+capture_point_char                byte [radioCaptured - graphics]/8+chars_offset
 capture_point_color               byte $01
 capture_point_clock               byte $00
 capture_point_clock_updates       byte #20
@@ -289,7 +293,7 @@ capture_point_type                byte #7
 capture_point_active              byte $01
 capture_point_position            byte #10, #225, $00
 capture_point_direction           byte $80
-capture_point_on                  byte [radio - graphics]/8+2, $00
+capture_point_on                  byte [radio - graphics]/8+chars_offset, $00
 capture_point_state               byte $00
 capture_point_max_state           byte $01
 capture_percent                   byte 0
@@ -406,15 +410,14 @@ song1_notes
 song1_end  
 
 
-sfx1_length    byte [sfx1_end - sfx1_notes]/2
+sfx1_length  byte [sfx1_end - sfx1_notes]/2
 sfx1_loop    byte 0
 sfx1_channel byte 3
 sfx1_notes
-    byte #4,#245
-    byte #4,#244
-    byte #4,#243
-    byte #4,#242
-    byte #4,#241
+    byte #2,#190
+    byte #2,#180
+    byte #2,#170
+    byte #2,#160
 sfx1_end
     
 
@@ -435,6 +438,7 @@ sfx1_end
 terrain_offset      byte [terrain - drawables]/2
 ground_offset       byte [ground - drawables]/2
 on_holder_offset    byte [on_holder - drawables]/2
+healthpack_offset   byte [healthpack - drawables]/2
 char_offset         byte char - template
 color_offset        byte color - template
 position_offset     byte position - template
@@ -470,3 +474,7 @@ capture_point_offset byte [capture_point  - entities]/2
 loop_offset         byte song_loop - song_template
 song_channel_offset byte song_channel - song_template
 song_notes_offset   byte song_notes - song_template
+radio_tower_char    byte [radio - graphics]/8+chars_offset
+
+
+chars_offset equ 2
