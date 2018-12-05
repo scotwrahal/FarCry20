@@ -4,7 +4,7 @@
 checkClock
     lda clock
     sta holder
-    ldy clock_offset
+    ldy #clock_offset
     lda ($fe),y
     sec
     cmp holder
@@ -13,12 +13,12 @@ DontUpdate
     lda #0
     rts
 Update
-    ldy clock_offset
+    ldy #clock_offset
     lda ($fe),y
-    ldy clock_update_offset
+    ldy #clock_update_offset
     clc
     adc ($fe),y
-    ldy clock_offset
+    ldy #clock_offset
     sta ($fe),y
     lda #1
     rts
@@ -61,7 +61,7 @@ setClock
     adc clock
     clc
     adc #1
-    ldy clock_offset
+    ldy #clock_offset
     sta ($fe),y
     rts     
     

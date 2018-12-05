@@ -9,7 +9,7 @@ UpdateEntity
     beq EntitiesUpdated
     jsr checkClock
     beq NotReadyForUpdate
-    ldy active_offset
+    ldy #active_offset
     lda ($fe),y
     beq NotReadyForUpdate
     jsr updateEntity
@@ -23,7 +23,7 @@ EntitiesUpdated
     rts
 
 updateEntity
-    ldy type_offset
+    ldy #type_offset
     lda ($fe),y
     cmp #2 
     beq UpdatePlayer

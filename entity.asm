@@ -1,7 +1,7 @@
 ; TODO make a list of functions        
 loadEntity
     clc
-    adc entity_offset
+    adc #entity_offset
     jmp loadDrawable
 
 loadEntity2
@@ -25,7 +25,7 @@ move
     pha
     lda holder
 
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y             ; load the direction into A
     lsr
     php
@@ -35,12 +35,12 @@ move
     bcc noMove
 
 ;update the state
-    ldy state_offset
+    ldy #state_offset
     lda ($fe),y
     clc
     adc #1
     sta holder
-    ldy max_state_offset
+    ldy #max_state_offset
     lda ($fe),y
     cmp holder
     bne skip
@@ -49,10 +49,10 @@ move
 skip
     lda holder
 restore
-    ldy state_offset
+    ldy #state_offset
     sta ($fe),y
 
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y
     asl                     ; shift through the bits to get the direction
     bcs EntitymoveUp
@@ -65,7 +65,7 @@ restore
 noMove
 ; set to the idle state 
     lda #0
-    ldy state_offset
+    ldy #state_offset
     sta ($fe),y
     jmp EndMove             ; if there is no direction then it doesn't move
     
@@ -98,7 +98,7 @@ EndMove
     
 ; moveUp is commented the others moves follow similar logic
 moveUp
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     sec
@@ -112,7 +112,7 @@ moveUp
     sta ($fe),y
     rts
 MoveUpBorder
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     and #$80                ; only use the top bit
     beq NoMoveUp            ; in the top cant move up
@@ -130,7 +130,7 @@ NoMoveUp
     rts
     
 moveDown
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     clc
@@ -144,7 +144,7 @@ moveDown
     sta ($fe),y
     rts
 MoveDownBorder
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     and #$80
     bne NoMoveDown
@@ -162,7 +162,7 @@ NoMoveDown
     rts
     
 moveLeft
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     sec
@@ -176,7 +176,7 @@ moveLeft
     sta ($fe),y
     rts
 MoveLeftBorder
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     and #$80
     beq NoMoveLeft
@@ -195,7 +195,7 @@ NoMoveLeft
     rts
     
 moveRight
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     clc
@@ -209,7 +209,7 @@ moveRight
     sta ($fe),y
     rts
 MoveRightBorder
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     and #$80
     bne NoMoveRight
@@ -229,7 +229,7 @@ NoMoveRight
 
 
 heal
-    ldy health_offset
+    ldy #health_offset
     lda ($fe),y
     clc
     adc #$0f

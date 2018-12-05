@@ -16,14 +16,14 @@ loadDrawable
     rts
 
 ; drawTerrain
-; A: top/bottom bit 0; = top
+; A: top/bottom bit 0; equ top
 ; X: position
 drawTerrain
     sta holder
     pha
     tya
     pha
-    ldy terrain_offset
+    ldy #terrain_offset
     jsr rnd
     and #$01
     beq DrawT
@@ -37,14 +37,14 @@ DrawT
     rts
 
 ; drawGround
-; A: top/bottom bit 0; = top
+; A: top/bottom bit 0; equ top
 ; X: position
 drawGround
     sta holder
     pha
     tya
     pha
-    ldy ground_offset
+    ldy #ground_offset
     jsr rnd
     and #$01
     beq Draw
@@ -58,7 +58,7 @@ Draw
     rts
 
 ; drawDrawable
-; A: top/bottom bit 0; = top
+; A: top/bottom bit 0; equ top
 ; X: position
 ; Y: index
 drawDrawable
@@ -87,7 +87,7 @@ drawEntity
     pha
     tya
     pha
-    ldy state_offset
+    ldy #state_offset
     lda ($fe),y
     asl
     asl
@@ -99,12 +99,12 @@ drawEntity
     adc holder
     sta holder
     pha
-    ldy char_offset
+    ldy #char_offset
     lda ($fe),y
     clc
     adc holder
     sta ($fe),y
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     tax
@@ -113,7 +113,7 @@ drawEntity
     jsr draw
     pla
     sta holder
-    ldy char_offset
+    ldy #char_offset
     lda ($fe),y
     sec
     sbc holder
@@ -126,7 +126,7 @@ drawEntity
     rts
     
 getDirection
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y
 _Up
     asl
@@ -153,7 +153,7 @@ _None
     rts
 
 ; draw
-;   A: top/bottom location 0 ; = top
+;   A: top/bottom location 0 ; equ top
 ;   X: location
 ;   $fe $ff: thing to draw
 draw
@@ -164,10 +164,10 @@ draw
     lda holder
     and #$80
     bne DrawBottom
-    ldy char_offset
+    ldy #char_offset
     lda ($fe),y
     sta $1e00,x
-    ldy color_offset
+    ldy #color_offset
     lda ($fe),y
     sta $9600,x
     jmp EndDraw
@@ -186,7 +186,7 @@ EndDraw
 
 
 ; getFromPosition returns the color and the character at a locaiton on the screen
-;   A: top/bottom location 0 ; = top
+;   A: top/bottom location 0 ; equ top
 ;   X: location
 ;   return
 ;   A: character
@@ -215,21 +215,21 @@ drawEntityOn
     txa
     pha
 
-    ldy on_char_offset
+    ldy #on_char_offset
     lda ($fe),y
     sta on_char
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fe),y
     sta on_color
 
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     tax
     dey
     lda ($fe),y
 
-    ldy on_holder_offset
+    ldy #on_holder_offset
     jsr drawDrawable
     pla
     tax
@@ -239,7 +239,7 @@ drawEntityOn
     rts 
 
 getFromEntityPosition 
-    ldy position_offset
+    ldy #position_offset
     iny                         ; store the thing u are now standing on
     lda ($fe),y
     dey
@@ -255,14 +255,14 @@ drawHealthpack
     txa
     pha
 
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     tax
     dey
     lda ($fe),y
     
-    ldy healthpack_offset
+    ldy #healthpack_offset
     jsr drawDrawable
     pla
     tax
@@ -278,7 +278,7 @@ removeHeal
     txa
     pha
 
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     tax
@@ -296,16 +296,16 @@ removeHeal
     rts 
 
 storeOnScreenInEntity 
-    ldy position_offset
+    ldy #position_offset
     iny
     lda ($fe),y
     tax
     dey
     lda ($fe),y   
     jsr getFromPosition
-    ldy on_char_offset
+    ldy #on_char_offset
     sta ($fe),y
     txa
-    ldy on_color_offset
+    ldy #on_color_offset
     sta ($fe),y
     rts

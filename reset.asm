@@ -21,7 +21,7 @@ EntitiesResetd
     rts
 
 resetEntity
-    ldy type_offset
+    ldy #type_offset
     lda ($fe),y
     cmp #2 
     beq ResetPlayer
@@ -55,11 +55,11 @@ ResetMusic
     jmp resetMusic
     
 resetCapturePoint
-    ldy capture_percent_offset
+    ldy #capture_percent_offset
     lda #$0
     sta ($fe),y
 
-    ldy position_offset
+    ldy #position_offset
     lda #0
     sta ($fe),y
     iny
@@ -77,20 +77,20 @@ resetHealthbar
 
 resetBullet    
 resetAI
-    ldy position_offset
+    ldy #position_offset
     lda #$80
     sta ($fe),y
     iny
     lda #$ff
     sta ($fe),y
     
-    ldy active_offset
+    ldy #active_offset
     lda #0
     sta ($fe),y
     rts
     
 resetPlayer
-    ldy position_offset
+    ldy #position_offset
     lda #2
     sta ($fe),y
     iny
@@ -100,15 +100,15 @@ resetPlayer
     lda #6
     sta ($fe),y 
     
-    ldy health_offset
+    ldy #health_offset
     lda #$7f
     sta ($fe),y
     
-    ldy on_char_offset
+    ldy #on_char_offset
     lda #3
     sta ($fe),y
     
-    ldy on_color_offset
+    ldy #on_color_offset
     lda #5
     sta ($fe),y
     rts

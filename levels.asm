@@ -29,10 +29,10 @@ readByte
     asl $ff                 ; get the value for the next bit
     bcs ReadGround          ; branch for terrain and ground
 ReadTerrain
-    jsr drawTerrain         ; 0 ; = terrain
+    jsr drawTerrain         ; 0 ; equ terrain
     jmp NextBit
 ReadGround
-    jsr drawGround          ; 1 ; = ground
+    jsr drawGround          ; 1 ; equ ground
 NextBit
     clc
     inx             		; increment the position
@@ -64,7 +64,7 @@ loadLevel
 load_row
     pha                     ; push A to preserve the location
     lda $fc
-    cmp level_size          ; check if u have loaded the level
+    cmp #level_size          ; check if u have loaded the level
     beq levelLoadDone       ; BREAK out of load
     pla                     ; restore the location
 

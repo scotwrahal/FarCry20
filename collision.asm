@@ -1,7 +1,7 @@
 ; Check for what is in the new location and determines if it has collided
 ; right now it only checks if it is the ground of not
 checkCollision
-    ldy on_char_offset
+    ldy #on_char_offset
     lda ($fe),y
     cmp terrain_char
     beq CollideTerrain
@@ -11,7 +11,7 @@ checkCollision
     beq CollideHealth
     jmp Collide
 CollideTerrain
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fe),y
     and #$0f
     cmp terrain_color
@@ -20,7 +20,7 @@ CollideTerrain
     beq CollideTerrain2
     jmp Collide
 CollideHealth
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fe),y
     and #$0f
     cmp healthpack_color
@@ -73,7 +73,7 @@ handleCollision
     cmp #0              ; nothing
     beq CollidedWithNothing
     pha
-    ldy type_offset
+    ldy #type_offset
     lda ($fe),y
     cmp #2              ; player collisions
     bne Handle1
@@ -165,7 +165,7 @@ terrainCollide
     pha
     tya
     pha
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y
     asl                     ; shift through the bits to get the direction
     bcs CollideMoveDown
@@ -209,12 +209,12 @@ flipEntities
     rts
     
 damage
-    ldy health_offset
+    ldy #health_offset
     lda ($fc),y
-    ldy damage_offset
+    ldy #damage_offset
     sec
     sbc ($fe),y
-    ldy health_offset
+    ldy #health_offset
     sta ($fc),y
     cmp #0
     bmi Kill
@@ -226,10 +226,10 @@ Kill
     rts 
     
 copyOn
-    ldy on_char_offset
+    ldy #on_char_offset
     lda ($fc),y
     sta ($fe),y
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fc),y
     sta ($fe),y
     rts
@@ -240,7 +240,7 @@ copyOn
     ; pha
     ; tya
     ; pha
-    ; ldy direction_offset
+    ; ldy #direction_offset
     ; lda ($fe),y
     ; sta holder
     ; asl

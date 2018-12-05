@@ -8,10 +8,10 @@ SpawnAIs
     jsr loadAI2
     lda $fd
     beq AIsSpawned          ; there are no entities to spawn
-    ldy active_offset
+    ldy #active_offset
     lda ($fc),y
     bne AIActive            ; only spawn non active entities
-    ldy type_offset
+    ldy #type_offset
     lda ($fc),y
     cmp #3
     bne AIsSpawned
@@ -50,7 +50,7 @@ loadSpawner
     rts
     
 spawnEntity
-    ldy active_offset       ; check to see if the thing u are tyring to spawn is active
+    ldy #active_offset       ; check to see if the thing u are tyring to spawn is active
     lda ($fc),y
     beq Spawn
     rts
@@ -58,7 +58,7 @@ Spawn
     lda #1                  ; make it active
     sta ($fc),y
 
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     sta ($fc),y
     iny 
@@ -69,36 +69,36 @@ Spawn
     sta ($fc),y
     
     
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fc),y
     and #$04
     ora #1
     ora ($fe),y
     sta ($fc),y
     
-    ldy on_char_offset
+    ldy #on_char_offset
     lda ($fe),y
     sta ($fc),y
     
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fe),y
     sta ($fc),y
     
-    ldy clock_offset
+    ldy #clock_offset
     lda clock
     clc
     adc #1
     sta ($fc),y
     
-    ldy state_offset
+    ldy #state_offset
     lda #0
     sta ($fc),y
     
-    ldy type_offset
+    ldy #type_offset
     lda ($fc),y
     cmp #3
     bne NotAI
-    ldy health_offset
+    ldy #health_offset
     lda AI_health
     sta ($fc),y
 NotAI
@@ -117,12 +117,12 @@ NoSpawn
     rts
     
 despawn
-    ldy active_offset       ; set it to not active
+    ldy #active_offset       ; set it to not active
     lda #0
     sta ($fe),y
     jsr drawEntityOn        ; draw what it is standing on
 
-    ldy type_offset
+    ldy #type_offset
     lda ($fe),y
     cmp #3
     bne NotAIDeath
@@ -135,10 +135,10 @@ despawn
     pha
     lda $fd
     pha
-    lda capture_point_offset
+    lda #capture_point_offset
     jsr loadEntity2             ; load the player into fc
     ;compare the character that the player is on to the capture character
-    ldy on_char_offset         
+    ldy #on_char_offset         
     lda ($fe),y
     cmp ($fc),y 
     beq OnCapturing
@@ -149,7 +149,7 @@ OnCapturing
     pla
     sta $fc
 NotAIDeath
-    ldy position_offset     ; move it off the screen
+    ldy #position_offset     ; move it off the screen
     lda #$80
     sta ($fe),y
     iny 

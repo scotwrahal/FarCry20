@@ -9,7 +9,7 @@ loadAI2
     rts
     
 checkShot
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y
     and #$08
     beq NotShooting
@@ -26,7 +26,7 @@ NotShooting
 ; then u don't have to do a bunch of moves to figure out the direction speeding it up quite significantly
 ; if we want to optimize this would be a good place to start
 setDirection
-    ldy direction_offset
+    ldy #direction_offset
     lda ($fe),y
     and #$c0
     php
@@ -35,7 +35,7 @@ setDirection
     and #$04
     sta ($fe),y
 
-    lda player_offset
+    lda #player_offset
     jsr loadEntity2
 
     plp
@@ -58,35 +58,35 @@ CheckedRowsFirst
     rts
     
 SetUp
-    ldy direction_offset
+    ldy #direction_offset
     lda #$81
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetDown
-    ldy direction_offset
+    ldy #direction_offset
     lda #$41
     ora ($fe),y
     sta ($fe),y
     rts
     
 SetLeft
-    ldy direction_offset
+    ldy #direction_offset
     lda #$21
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetRight
-    ldy direction_offset
+    ldy #direction_offset
     lda #$11
     ora ($fe),y
     sta ($fe),y
     rts
     
 setShoot
-    ldy direction_offset
+    ldy #direction_offset
     lda #$08
     ora ($fe),y
     sta ($fe),y
@@ -96,7 +96,7 @@ setShoot
 ; returns  0 if fe is in the same  as fc
 ; returns  1 if fe is to the right of fc
 checkColumns
-    ldy position_offset
+    ldy #position_offset
     iny
     iny
     lda ($fc),y
@@ -118,7 +118,7 @@ SameColumn
 ; returns  0 if fe is same  fc
 ; returns  1 if fe is below fc    
 checkRows
-    ldy position_offset
+    ldy #position_offset
     lda ($fe),y
     and #$7f
     sta holder

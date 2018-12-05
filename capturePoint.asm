@@ -20,14 +20,14 @@ drawCapturePoint
     rts
     
 checkIfCapturing
-    lda player_offset           ; load player
+    lda #player_offset           ; load player
     jsr loadEntity2
     ; compare the character that the player is on to the capture character
-    ldy on_char_offset         
+    ldy #on_char_offset         
     lda ($fe),y
     cmp ($fc),y 
     bne NotCapturing
-    ldy on_color_offset
+    ldy #on_color_offset
     lda ($fc),y
     and #$0f
     sta holder
@@ -36,14 +36,14 @@ checkIfCapturing
     cmp holder
     bne NotCapturing
 Capturing
-    ldy capture_percent_offset
+    ldy #capture_percent_offset
     lda #5                      ; this is the capture speed
     clc
     adc ($fe),y
     sta ($fe),y 
     jmp DoneUpdatingCapture
 NotCapturing   
-    ldy capture_percent_offset
+    ldy #capture_percent_offset
     lda ($fe),y
     sec
     sbc #1
@@ -57,7 +57,7 @@ DoneUpdatingCapture
 drawCaptureBar
     txa
     pha
-    ldy capture_percent_offset
+    ldy #capture_percent_offset
     lda ($fe),y             ; load the amount captured 
     bmi Captured
     lsr
@@ -67,7 +67,7 @@ drawCaptureBar
     clc
     adc #1
     tax
-    ldy position_offset
+    ldy #position_offset
     lda #$80
     sta ($fe),y
     iny

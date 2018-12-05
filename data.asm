@@ -407,53 +407,53 @@ sfx1_end
 
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
-terrain_offset      equ #[[terrain - drawables]/2]
-ground_offset       equ #[[ground - drawables]/2]
-on_holder_offset    equ #[[on_holder - drawables]/2]
-healthpack_offset   equ #[[healthpack - drawables]/2]
-entity_offset       equ #[[entities - drawables]/2]
+terrain_offset      equ [terrain - drawables]/2
+ground_offset       equ [ground - drawables]/2
+on_holder_offset    equ [on_holder - drawables]/2
+healthpack_offset   equ [healthpack - drawables]/2
+entity_offset       equ [entities - drawables]/2
 
 ; template
-char_offset             equ #[char - template]
-color_offset            equ #[color - template]
-position_offset         equ #[position - template]
-direction_offset        equ #[direction - template]
-on_char_offset          equ #[on_char_template - template]
-on_color_offset         equ #[on_color_template - template]
-clock_offset            equ #[t_clock - template]
-clock_update_offset     equ #[clock_updates - template]
-health_offset           equ #[health - template]
-capture_percent_offset  equ #[damage_ - template]
-damage_offset           equ #[damage_ - template]
-state_offset            equ #[state - template]
-max_state_offset        equ #[max_state - template]
-bullet_index_offset     equ #[bullet_index - template]
-active_offset           equ #[active - template]
-type_offset             equ #[type - template]
+char_offset             equ [char - template]
+color_offset            equ [color - template]
+position_offset         equ [position - template]
+direction_offset        equ [direction - template]
+on_char_offset          equ [on_char_template - template]
+on_color_offset         equ [on_color_template - template]
+clock_offset            equ [t_clock - template]
+clock_update_offset     equ [clock_updates - template]
+health_offset           equ [health - template]
+capture_percent_offset  equ [damage_ - template]
+damage_offset           equ [damage_ - template]
+state_offset            equ [state - template]
+max_state_offset        equ [max_state - template]
+bullet_index_offset     equ [bullet_index - template]
+active_offset           equ [active - template]
+type_offset             equ [type - template]
 
 ; entity offsets
-bullet_offset        equ #[[bullets - entities]/2]
-music_offset         equ #[[music - entities]/2]
-AI_offset            equ #[[AIs - entities]/2]
-spawner_offset       equ #[[spawners - entities]/2]
-player_offset        equ #[[player - entities]/2]
-capture_point_offset equ #[[capture_point  - entities]/2]
+bullet_offset        equ [bullets - entities]/2
+music_offset         equ [music - entities]/2
+AI_offset            equ [AIs - entities]/2
+spawner_offset       equ [spawners - entities]/2
+player_offset        equ [player - entities]/2
+capture_point_offset equ [capture_point  - entities]/2
 
 ; song template
-length_offset       equ #[song_length - song_template]
-track_offset        equ #[song_notes - song_template]
-loop_offset         equ #[song_loop - song_template]
-song_channel_offset equ #[song_channel - song_template]
-song_notes_offset   equ #[song_notes - song_template]
+length_offset       equ [song_length - song_template]
+track_offset        equ [song_notes - song_template]
+loop_offset         equ [song_loop - song_template]
+song_channel_offset equ [song_channel - song_template]
+song_notes_offset   equ [song_notes - song_template]
 
 ; music template
-tracki_offset       equ #[track_index - music_template]
-notei_offset        equ #[note_index - music_template]
-channel_offset      equ #[channel - music_template]
+tracki_offset       equ [track_index - music_template]
+notei_offset        equ [note_index - music_template]
+channel_offset      equ [channel - music_template]
 
 ;misc stuff
-level_size          equ #[level_end - level_start]
-gunshot             equ #[[sfx1 - song_memory]/2]
+level_size          equ [level_end - level_start]
+gunshot             equ [sfx1 - song_memory]/2
 
 AI_health           byte #60
 
