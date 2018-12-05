@@ -102,7 +102,6 @@ Spawn
     lda AI_health
     sta ($fc),y
 NotAI
-
     jsr flipEntities
     lda $fc
     pha
@@ -114,7 +113,6 @@ NotAI
     pla
     sta $fc
     jsr flipEntities
-
 NoSpawn
     rts
     
@@ -128,11 +126,28 @@ despawn
     lda ($fe),y
     cmp #3
     bne NotAIDeath
+    
     jsr rnd
-    and #$0f
+    and #$00
     bne NotAIDeath
+    
+    lda $fc
+    pha
+    lda $fd
+    pha
+    lda capture_point_offset
+    jsr loadEntity2             ; load the player into fc
+    ;compare the character that the player is on to the capture character
+    ldy on_char_offset         
+    lda ($fe),y
+    cmp ($fc),y 
+    beq OnCapturing
     jsr drawHealthpack
-
+OnCapturing
+    pla
+    sta $fd
+    pla
+    sta $fc
 NotAIDeath
     ldy position_offset     ; move it off the screen
     lda #$80

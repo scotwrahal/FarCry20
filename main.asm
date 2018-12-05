@@ -37,7 +37,7 @@ load_screen_colour
     sta $900f               ; load value into screen and border color register (p. 175)
 
 set_up_music
-    lda #$0f        		; load 15 (max volume) into Accumulator
+    lda #$1f        		; load 15 (max volume) into Accumulator and set aux color to white
     sta $900e       		; set max volume
 
 level_load

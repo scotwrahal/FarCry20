@@ -1,10 +1,5 @@
 graphics:
-jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
 human
-human_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
-human_down0:    byte $18, $18, $18, $3c, $5a, $58, $58, $08
-human_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
-human_right0:   byte $18, $18, $13, $3e, $58, $18, $34, $46
 human_up1:	    byte $1a, $1a, $1a, $3c, $38, $18, $18, $00
 human_down1:	byte $18, $18, $18, $3c, $5c, $58, $58, $00
 human_left1:	byte $18, $18, $c8, $7c, $1c, $18, $14, $34
@@ -13,6 +8,24 @@ human_up2:	    byte $1a, $1a, $1a, $3c, $58, $18, $18, $08
 human_down2:	byte $18, $18, $18, $3c, $5a, $58, $58, $10
 human_left2:	byte $18, $18, $c8, $78, $18, $18, $08, $18
 human_right2:	byte $18, $18, $13, $1e, $18, $18, $10, $18
+human_up0:  	byte $1a, $1a, $1a, $3c, $58, $18, $18, $10
+human_down0:    byte $18, $18, $18, $3c, $5a, $58, $58, $08
+human_left0:	byte $18, $18, $c8, $7c, $1a, $18, $2c, $62
+human_right0:   byte $18, $18, $13, $3e, $58, $18, $34, $46
+
+jaguar
+jaguar_up0:	    byte $18, $1c, $3c, $38, $18, $1a, $1c, $10
+jaguar_down0:	byte $08, $38, $58, $18, $1c, $3c, $38, $18
+jaguar_left0:	byte $40, $c2, $c2, $79, $fe, $66, $46, $85
+jaguar_right0:  byte $02, $43, $43, $9e, $7f, $66, $62, $a1
+jaguar_up1:	    byte $18, $38, $3c, $1c, $18, $58, $38, $08
+jaguar_down1:	byte $10, $1c, $1a, $18, $38, $3c, $1c, $18
+jaguar_left1:	byte $40, $c1, $c2, $39, $3e, $66, $86, $12
+jaguar_right1:  byte $02, $83, $43, $9e, $7e, $66, $65, $48
+
+
+
+
 
 bullet
 bullet_up       byte $00, $00 ,$08, $18, $18, $00, $00, $00
@@ -28,6 +41,7 @@ palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $00, $2a, $ac, $a9, $99, $5a, $3c, $1c
 shrub2:         byte $00, $2a, $ac, $a9, $99, $5a, $3c, $1c
+cross:          byte $3b, $3b, $3b, $2a, $2a    , $3b, $3b, $3b
 end_graphics
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,7 +58,6 @@ ground      word ground_char
 ground1     word ground1_char
 on_holder   word on_char
 healthpack  word healthpack_char
-            word 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE EXTEND DRAWABLE
@@ -72,14 +85,12 @@ special:
 healthbar     word healthbar_char
 capture_point word capture_point_char
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYER LIST;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; THESE ARE UPDATABLE BUT NOT DRAWABLE
 music:
 music_player_1  word music1_track
 music_player_2  word music2_track
-                word #0
+                word 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITIES DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 terrain_char    byte [palm_tree0 - graphics]/8+chars_offset
@@ -98,8 +109,8 @@ ground1_color   byte $05 ; green
 on_char         byte $00
 on_color        byte $00
 
-healthpack_char     byte [hut - graphics]/8+chars_offset
-healthpack_color    byte $02
+healthpack_char     byte [cross - graphics]/8+chars_offset
+healthpack_color    byte $0a
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UPDATABLE ENTITIES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 template                                ; this is used for calculating offsets
@@ -156,15 +167,15 @@ AI2_clock_updates       byte #7
 AI2_type                byte #3
 AI2_active              byte $00
 AI2_position            byte $80, $ff, $00
-AI2_direction           byte $04
+AI2_direction           byte $00
 AI2_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI2_state               byte $00
 AI2_max_state           byte $03
 AI2_damage              byte 0
 AI2_health              byte $7f
-AI2_bullet_index        byte #1
+AI2_bullet_index        byte #1         ; AI's will share the same bullet
 
-AI3_char                byte [human - graphics]/8+chars_offset
+AI3_char                byte [jaguar - graphics]/8+chars_offset
 AI3_color               byte $02
 AI3_clock               byte $00
 AI3_clock_updates       byte #7
@@ -174,12 +185,12 @@ AI3_position            byte $80, $ff, $00
 AI3_direction           byte $04
 AI3_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI3_state               byte $00
-AI3_max_state           byte $03
+AI3_max_state           byte $02
 AI3_damage              byte 0
 AI3_health              byte $7f
-AI3_bullet_index        byte #1
+AI3_bullet_index        byte #1 ; not used for jaguars
 
-AI4_char                byte [human - graphics]/8+chars_offset
+AI4_char                byte [jaguar - graphics]/8+chars_offset
 AI4_color               byte $02
 AI4_clock               byte $00
 AI4_clock_updates       byte #7
@@ -189,11 +200,10 @@ AI4_position            byte $80, $ff, $00
 AI4_direction           byte $04
 AI4_on                  byte [shrub1 - graphics]/8+chars_offset, $05
 AI4_state               byte $00
-AI4_max_state           byte $03
+AI4_max_state           byte $02
 AI4_damage              byte 0
 AI4_health              byte $7f
 AI4_bullet_index        byte #1
-
 
 bullet0_char            byte [bullet - graphics]/8+chars_offset
 bullet0_color           byte $00
@@ -207,7 +217,6 @@ bullet0_on              byte 0, 0
 bullet0_state           byte $00
 bullet0_max_state       byte $01
 bullet0_damage          byte #31
-bullet0_health          byte $7f
 
 bullet1_char            byte [bullet - graphics]/8+chars_offset
 bullet1_color           byte $00
@@ -221,7 +230,6 @@ bullet1_on              byte 0, 0
 bullet1_state           byte $00
 bullet1_max_state       byte $01
 bullet1_damage          byte $00
-bullet1_health          byte $7f
 
 spawner0_char            byte [hut - graphics]/8+1
 spawner0_color           byte $04
@@ -282,8 +290,6 @@ healthbar_direction           byte $80
 healthbar_on                  byte [radioCaptured - graphics]/8+chars_offset, $00
 healthbar_state               byte $00
 healthbar_max_state           byte $01
-healthbar_damage              byte $00
-healthbar_health              byte $7f
 
 capture_point_char                byte [radioCaptured - graphics]/8+chars_offset
 capture_point_color               byte $01
@@ -297,7 +303,6 @@ capture_point_on                  byte [radio - graphics]/8+chars_offset, $00
 capture_point_state               byte $00
 capture_point_max_state           byte $01
 capture_percent                   byte 0
-capture_point_health              byte $7f
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MUSIC PLAYERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 music_template
@@ -313,6 +318,7 @@ music1_active          byte #1
 channel
 music1_channel         byte #3
 
+; used for sfx
 music2_track           byte $00
 music2_index           byte $00
 music2_clock           byte $00
@@ -320,7 +326,6 @@ music2_clock_updates   byte $01
 music2_type            byte #8
 music2_active          byte #1
 music2_channel         byte #3
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; LEVEL MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -330,34 +335,33 @@ level_mem
 level_start
 level0
     byte $00, $00, $00 
-    byte $7a, $c9, $78 
-    byte $79, $c1, $f8 
-    byte $1f, $e1, $b8 
+    byte $78, $09, $78 
+    byte $7b, $c0, $f8 
+    byte $1f, $e5, $b8 
     byte $87, $f1, $f8 
-    byte $07, $79, $70 
-    byte $13, $af, $60 
-    byte $41, $ff, $e8 
-    byte $09, $5f, $90 
-    byte $41, $db, $80 
-    byte $11, $ff, $00 
-    byte $37, $76, $24 
-    byte $27, $bc, $c0 
-    byte $0e, $fa, $00 
-    byte $4a, $bc, $48 
-    byte $5f, $ef, $00 
-    byte $3f, $ff, $10 
-    byte $79, $d3, $80 
-    byte $75, $ff, $e0 
-    byte $60, $f6, $f0 
-    byte $49, $7f, $f8 
-    byte $00, $00, $00 
+    byte $07, $79, $78 
+    byte $13, $af, $78 
+    byte $41, $ff, $f8 
+    byte $08, $df, $d8 
+    byte $41, $db, $18 
+    byte $11, $ff, $10 
+    byte $37, $76, $38 
+    byte $27, $bc, $b0 
+    byte $0e, $fa, $30 
+    byte $4a, $bc, $38 
+    byte $1f, $ef, $18 
+    byte $3f, $ff, $58 
+    byte $7d, $d3, $98 
+    byte $78, $ff, $d8 
+    byte $70, $76, $f8 
+    byte $49, $9f, $f8 
+    byte $00, $40, $00 
     byte $00, $00, $00 
 level_end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SOUND MEMORY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 song_memory
-song0    word song1_length
-song1    word song0_length
+song0    word song0_length
 sfx1     word sfx1_length
          word #0
 
@@ -370,26 +374,6 @@ song_channel
 song0_channel byte 0
 song_notes
 song0_notes
-    ; duration note
-    byte #12, #130
-    byte #12, #140
-    byte #12, #150
-    byte #12, #160
-    byte #12, #170
-    byte #12, #180
-    byte #12, #190
-    byte #12, #200
-    byte #12, #210
-    byte #12, #220
-    byte #12, #230
-    byte #12, #240
-    byte #12, #250
-song0_end
-
-song1_length  byte [song1_end - song1_notes]/2
-song1_loop    byte 1
-song1_channel byte 0  
-song1_notes
     ; duration note
     byte #12, #231
     byte #12, #222
@@ -407,7 +391,7 @@ song1_notes
     byte #12, #206
     byte #12, #218
     byte #12, #206
-song1_end  
+song0_end
 
 
 sfx1_length  byte [sfx1_end - sfx1_notes]/2
@@ -419,62 +403,59 @@ sfx1_notes
     byte #2,#170
     byte #2,#160
 sfx1_end
-    
-
-;Gunshot1
-	;dc.b #240,#238,#236,#234,#232,#0,#0,#0,#0,#0,#0,#0,#0,#0,#0,#0
-	;Gunshot2
-	;dc.b #245,#244,#243,#242,#241,#0,#0,#0,#0,#0,#0,#0,#0,#0,#0,#0
-	;Death
-	;dc.b #220,#215,#210,#205,#200,#195,#190,#0,#0,#0,#0,#0,#0,#0,#0,#0
-	;Spawn
-	;dc.b #210,#215,#220,#225,#230,#235,#240,#245,#0,#0,#0,#0,#0,#0,#0,#0
-	;Jaguar
-	;dc.b #236,#238,#240,#242,#244,#242,#240,#238,#0,#0,#0,#0,#0,#0,#0,#0
 
 
 ;;;;;;;;; TODO LOOK FOR A WAY TO CALCULATE THESE and not store them
 
-terrain_offset      byte [terrain - drawables]/2
-ground_offset       byte [ground - drawables]/2
-on_holder_offset    byte [on_holder - drawables]/2
-healthpack_offset   byte [healthpack - drawables]/2
-char_offset         byte char - template
-color_offset        byte color - template
-position_offset     byte position - template
-direction_offset    byte direction - template
-on_char_offset      byte on_char_template - template
-on_color_offset     byte on_color_template - template
-clock_offset        byte t_clock - template
-clock_update_offset byte clock_updates - template
-health_offset       byte health - template
-capture_percent_offset byte damage_ - template
-damage_offset       byte damage_ - template
-entity_offset       byte [entities - drawables]/2
-bullet_offset       byte [bullets - entities]/2
-music_offset        byte [music - entities]/2
-AI_offset           byte [AIs - entities]/2
-spawner_offset      byte [spawners - entities]/2
-length_offset       byte song_length - song_template
-track_offset        byte song_notes - song_template
-state_offset        byte state - template
-max_state_offset    byte max_state - template
-level_size          byte level_end - level_start
-graphics_size       byte end_graphics - graphics
-active_offset       byte active - template
-bullet_index_offset byte bullet_index - template
-type_offset         byte type - template
-tracki_offset       byte track_index - music_template
-notei_offset        byte note_index - music_template
-channel_offset      byte channel - music_template
-entity_count        byte #4
+terrain_offset      equ #[[terrain - drawables]/2]
+ground_offset       equ #[[ground - drawables]/2]
+on_holder_offset    equ #[[on_holder - drawables]/2]
+healthpack_offset   equ #[[healthpack - drawables]/2]
+entity_offset       equ #[[entities - drawables]/2]
+
+; template
+char_offset             equ #[char - template]
+color_offset            equ #[color - template]
+position_offset         equ #[position - template]
+direction_offset        equ #[direction - template]
+on_char_offset          equ #[on_char_template - template]
+on_color_offset         equ #[on_color_template - template]
+clock_offset            equ #[t_clock - template]
+clock_update_offset     equ #[clock_updates - template]
+health_offset           equ #[health - template]
+capture_percent_offset  equ #[damage_ - template]
+damage_offset           equ #[damage_ - template]
+state_offset            equ #[state - template]
+max_state_offset        equ #[max_state - template]
+bullet_index_offset     equ #[bullet_index - template]
+active_offset           equ #[active - template]
+type_offset             equ #[type - template]
+
+; entity offsets
+bullet_offset        equ #[[bullets - entities]/2]
+music_offset         equ #[[music - entities]/2]
+AI_offset            equ #[[AIs - entities]/2]
+spawner_offset       equ #[[spawners - entities]/2]
+player_offset        equ #[[player - entities]/2]
+capture_point_offset equ #[[capture_point  - entities]/2]
+
+; song template
+length_offset       equ #[song_length - song_template]
+track_offset        equ #[song_notes - song_template]
+loop_offset         equ #[song_loop - song_template]
+song_channel_offset equ #[song_channel - song_template]
+song_notes_offset   equ #[song_notes - song_template]
+
+; music template
+tracki_offset       equ #[track_index - music_template]
+notei_offset        equ #[note_index - music_template]
+channel_offset      equ #[channel - music_template]
+
+;misc stuff
+level_size          equ #[level_end - level_start]
+gunshot             equ #[[sfx1 - song_memory]/2]
+
 AI_health           byte #60
-player_offset       byte [player - entities]/2
-capture_point_offset byte [capture_point  - entities]/2
-loop_offset         byte song_loop - song_template
-song_channel_offset byte song_channel - song_template
-song_notes_offset   byte song_notes - song_template
-radio_tower_char    byte [radio - graphics]/8+chars_offset
 
 
 chars_offset equ 2
