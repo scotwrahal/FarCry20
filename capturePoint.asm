@@ -1,10 +1,14 @@
 Captured
-    pla
-    lda #0
-    jsr loadLevel
     brk
-    rts 
-
+    lda diffuculty
+    clc
+    adc #1
+    sta diffuculty    
+    jsr loadLevel
+    pla
+    tax
+    rts
+    
 drawCapturePoint
     jsr drawEntityOn
     jsr moveRight
@@ -37,7 +41,7 @@ checkIfCapturing
     bne NotCapturing
 Capturing
     ldy #capture_percent_offset
-    lda #5                      ; this is the capture speed
+    lda captureSpeed
     clc
     adc ($fe),y
     sta ($fe),y 
@@ -58,7 +62,7 @@ drawCaptureBar
     txa
     pha
     ldy #capture_percent_offset
-    lda ($fe),y             ; load the amount captured 
+    lda ($fe),y 
     bmi Captured
     lsr
     lsr

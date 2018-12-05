@@ -1,3 +1,8 @@
+setTimers
+    jsr updateClock
+    jsr setClocksAllEntities
+    rts
+
 ; checks the clock of an updatable entity and updates it if needed
 ;   the entity needs to be loaded before u check the clock
 ;   returns 1 if the clock updated 0 otherwise

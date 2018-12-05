@@ -1,8 +1,13 @@
 reset
     jsr setTimers
-    jsr resetAllEntities
-    rts
-
+    
+    lda player_damage
+    asl 
+    sta player_bullet_damage
+    lda diffuculty
+    asl 
+    sta enemy_bullet_damage
+    
 resetAllEntities
     txa
     pha
@@ -11,16 +16,22 @@ ResetEntity
     txa
     jsr loadEntity
     lda $ff
-    beq EntitiesResetd
+    beq EntitiesReset
     jsr resetEntity
     inx
     jmp ResetEntity
-EntitiesResetd
+EntitiesReset
     pla 
     tax
     rts
 
 resetEntity
+    ldy #clock_offset
+    lda clock
+    clc 
+    adc #1
+    sta ($fe),y
+    
     ldy #type_offset
     lda ($fe),y
     cmp #2 
@@ -54,29 +65,58 @@ ResetCapturePoint
 ResetMusic
     jmp resetMusic
     
-resetCapturePoint
-    ldy #capture_percent_offset
-    lda #$0
-    sta ($fe),y
-
+resetPlayer
     ldy #position_offset
-    lda #0
+    lda #player_position1
     sta ($fe),y
     iny
-    lda #250
+    lda #player_position2
     sta ($fe),y
-     
-    jsr drawCapturePoint
+    iny
+    lda #player_position3
+    sta ($fe),y 
+    
+    ldy #health_offset
+    lda #$7f
+    sta ($fe),y
+    
+    ldy #on_char_offset
+    lda #terrain_index
+    sta ($fe),y
+    
+    ldy #on_color_offset
+    lda #green
+    sta ($fe),y
+    
+    ldy #active_offset
+    lda #1
+    sta ($fe),y
+    
+    ldy #direction_offset
+    lda $80
+    sta ($fe),y
     rts
     
-resetMusic
-    jsr ShutDown
-resetSpawner
-resetHealthbar
-    rts
-
-resetBullet    
 resetAI
+    ldy #health_offset
+    lda diffuculty
+    asl
+    asl
+    asl
+    clc
+    adc AI_health
+    bpl StoreAIHealth
+    bcc StoreAIHealth 
+    lda #$f7
+StoreAIHealth
+    sta ($fe),y
+    
+    ldy #damage_offset
+    lda diffuculty 
+    lsr
+    sta ($fe),y
+    
+resetBullet    
     ldy #position_offset
     lda #$80
     sta ($fe),y
@@ -88,28 +128,33 @@ resetAI
     lda #0
     sta ($fe),y
     rts
-    
-resetPlayer
+
+resetCapturePoint
+    ldy #capture_percent_offset
+    lda #0
+    sta ($fe),y
+
     ldy #position_offset
-    lda #2
+    lda #capture_position1
     sta ($fe),y
     iny
-    lda #50
-    sta ($fe),y
-    iny
-    lda #6
-    sta ($fe),y 
-    
-    ldy #health_offset
-    lda #$7f
+    lda #capture_position2
     sta ($fe),y
     
-    ldy #on_char_offset
-    lda #3
+    ldy #clock_update_offset
+    lda diffuculty
+    asl
+    asl
+    clc
+    adc #15
     sta ($fe),y
     
-    ldy #on_color_offset
-    lda #5
-    sta ($fe),y
+    jsr drawCapturePoint
+    rts
+    
+resetMusic
+    jsr ShutDown
+resetSpawner
+resetHealthbar
     rts
     

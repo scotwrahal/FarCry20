@@ -24,9 +24,6 @@ jaguar_left1:	byte $40, $c1, $c2, $39, $3e, $66, $86, $12
 jaguar_right1:  byte $02, $83, $43, $9e, $7e, $66, $65, $48
 
 
-
-
-
 bullet
 bullet_up       byte $00, $00 ,$08, $18, $18, $00, $00, $00
 bullet_down     byte $00, $00 ,$00, $18, $18, $10, $00, $00
@@ -41,14 +38,44 @@ palm_tree0:     byte $00, $7c, $b2, $28, $48, $08, $0c, $1f
 shrub0:         byte $00, $4c, $28, $1d, $2a, $1c, $08, $1c
 shrub1:         byte $00, $2a, $ac, $a9, $99, $5a, $3c, $1c
 shrub2:         byte $00, $2a, $ac, $a9, $99, $5a, $3c, $1c
-cross:          byte $3b, $3b, $3b, $2a, $2a    , $3b, $3b, $3b
+cross:          byte $3b, $3b, $3b, $2a, $2a, $3b, $3b, $3b
+
+
+LEVEL:
+LE:     dc.b $00, $00, $00, $8e, $88, $8c, $88, $ee
+VE:     dc.b $00, $00, $00, $ae, $a8, $ac, $a8, $4e
+L:      dc.b $00, $00, $00, $80, $84, $80, $84, #e0
+one:    dc.b $00, $00, $10, $30, $10, $10, $10, $38 
+two:    dc.b $00, $00, $10, $28, $08, $10, $20, $38
+three:  dc.b $00, $00, $30, $08, $30, $08, $08, $30
+four:   dc.b $00, $00, $20, $28, $28, $38, $08, $08
+five:   dc.b $00, $00, $38, $20, $30, $08, $08, $30
+six:    dc.b $00, $00, $18, $20, $30, $28, $28, $10
+seven:  dc.b $00, $00, $38, $08, $08, $10, $10, $10
+eight:  dc.b $00, $00, $38, $28, $38, $38, $28, $38
+nine:   dc.b $00, $00, $38, $28, $38, $08, $08, $38
+zero:   dc.b $00, $00, $10, $28, $28, $28, $28, $10
 end_graphics
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DATA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 holder          byte $00
 clock           byte $00
-random1         byte $55         
-random2         byte $cc
+random1         byte $55
+
+diffuculty      byte #0
+AI_health       byte #3
+captureSpeed    byte #5
+
+capture_position1   equ 0
+capture_position2   equ 250
+
+player_position1    equ 2
+player_position2    equ 50
+player_position3    equ 6
+
+player_speed        equ 8
+human_AI_speed      equ 11
+jaguar_speed        equ 9
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 drawables:
@@ -66,10 +93,10 @@ entities:
 player      word player_char
 
 AIs:
-AI1         word AI1_char
+AI1         word AI3_char
 AI2         word AI2_char
-AI3         word AI3_char
-AI4         word AI4_char
+AI3         word AI4_char
+AI4         word AI1_char
 
 bullets:
 bullet0     word bullet0_char
@@ -121,7 +148,7 @@ player_color            byte $06
 t_clock
 player_clock            byte $00
 clock_updates
-player_clock_updates    byte $08
+player_clock_updates    byte #player_speed
 type 
 player_type             byte #2
 active
@@ -139,7 +166,7 @@ player_state            byte $00
 max_state
 player_max_state        byte $03
 damage_
-player_damage           byte #31
+player_damage           byte #8
 health
 player_health           byte $7f
 bullet_index
@@ -148,7 +175,7 @@ player_bullet_index     byte #0
 AI1_char                byte [human - graphics]/8+chars_offset
 AI1_color               byte $02
 AI1_clock               byte $00
-AI1_clock_updates       byte #7
+AI1_clock_updates       byte #human_AI_speed
 AI1_type                byte #3
 AI1_active              byte $00    
 AI1_position            byte $80, $ff, $00
@@ -163,7 +190,7 @@ AI1_bullet_index        byte #1
 AI2_char                byte [human - graphics]/8+chars_offset
 AI2_color               byte $02
 AI2_clock               byte $00
-AI2_clock_updates       byte #7
+AI2_clock_updates       byte #human_AI_speed
 AI2_type                byte #3
 AI2_active              byte $00
 AI2_position            byte $80, $ff, $00
@@ -178,7 +205,7 @@ AI2_bullet_index        byte #1         ; AI's will share the same bullet
 AI3_char                byte [jaguar - graphics]/8+chars_offset
 AI3_color               byte $02
 AI3_clock               byte $00
-AI3_clock_updates       byte #7
+AI3_clock_updates       byte #jaguar_speed
 AI3_type                byte #3
 AI3_active              byte $00
 AI3_position            byte $80, $ff, $00
@@ -193,7 +220,7 @@ AI3_bullet_index        byte #1 ; not used for jaguars
 AI4_char                byte [jaguar - graphics]/8+chars_offset
 AI4_color               byte $02
 AI4_clock               byte $00
-AI4_clock_updates       byte #7
+AI4_clock_updates       byte #jaguar_speed
 AI4_type                byte #3
 AI4_active              byte $00
 AI4_position            byte $80, $ff, $00
@@ -216,6 +243,7 @@ bullet0_direction       byte $40
 bullet0_on              byte 0, 0
 bullet0_state           byte $00
 bullet0_max_state       byte $01
+player_bullet_damage
 bullet0_damage          byte #31
 
 bullet1_char            byte [bullet - graphics]/8+chars_offset
@@ -229,6 +257,7 @@ bullet1_direction       byte $40
 bullet1_on              byte 0, 0
 bullet1_state           byte $00
 bullet1_max_state       byte $01
+enemy_bullet_damage
 bullet1_damage          byte $00
 
 spawner0_char            byte [hut - graphics]/8+1
@@ -454,8 +483,9 @@ channel_offset      equ [channel - music_template]
 ;misc stuff
 level_size          equ [level_end - level_start]
 gunshot             equ [sfx1 - song_memory]/2
+terrain_index       equ [shrub0 - graphics]/8 + chars_offset
+level_index         equ [LEVEL - graphics]/8 + chars_offset
 
-AI_health           byte #60
-
+green equ 5
 
 chars_offset equ 2

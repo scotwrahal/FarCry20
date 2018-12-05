@@ -41,10 +41,8 @@ set_up_music
     sta $900e       		; set max volume
 
 level_load
-    lda #0                  ; this will select what level u want loaded
     jsr loadLevel
 
-    
     lda #0
     ldy #0
     jsr playSong
@@ -54,10 +52,3 @@ play_loop
     jsr input
     jsr updateEntities
     jmp play_loop
-    
-    
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SUBROUTINES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-setTimers
-    jsr updateClock
-    jsr setClocksAllEntities
-    rts

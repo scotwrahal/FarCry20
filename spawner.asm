@@ -55,6 +55,11 @@ spawnEntity
     beq Spawn
     rts
 Spawn
+    jsr flipEntities
+    jsr resetEntity
+    jsr flipEntities
+    
+    ldy #active_offset
     lda #1                  ; make it active
     sta ($fc),y
 
@@ -83,25 +88,7 @@ Spawn
     ldy #on_color_offset
     lda ($fe),y
     sta ($fc),y
-    
-    ldy #clock_offset
-    lda clock
-    clc
-    adc #1
-    sta ($fc),y
-    
-    ldy #state_offset
-    lda #0
-    sta ($fc),y
-    
-    ldy #type_offset
-    lda ($fc),y
-    cmp #3
-    bne NotAI
-    ldy #health_offset
-    lda AI_health
-    sta ($fc),y
-NotAI
+
     jsr flipEntities
     lda $fc
     pha
@@ -117,9 +104,6 @@ NoSpawn
     rts
     
 despawn
-    ldy #active_offset       ; set it to not active
-    lda #0
-    sta ($fe),y
     jsr drawEntityOn        ; draw what it is standing on
 
     ldy #type_offset
@@ -128,7 +112,7 @@ despawn
     bne NotAIDeath
     
     jsr rnd
-    and #$00
+    and #$01
     bne NotAIDeath
     
     lda $fc
@@ -149,10 +133,5 @@ OnCapturing
     pla
     sta $fc
 NotAIDeath
-    ldy #position_offset     ; move it off the screen
-    lda #$80
-    sta ($fe),y
-    iny 
-    lda #$ff
-    sta ($fe),y
+    jsr resetEntity
     rts

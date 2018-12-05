@@ -34,7 +34,7 @@ shoot
     bne NoShoot
     jsr spawnEntity
     lda #1
-    ldy #2
+    ldy #gunshot
     jsr playSong
 NoShoot
     rts    
