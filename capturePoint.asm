@@ -1,5 +1,4 @@
 Captured
-    brk
     lda diffuculty
     clc
     adc #1

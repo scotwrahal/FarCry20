@@ -1,3 +1,4 @@
+; loads the Ath bullet entity into fc (Ath mean the number in A)
 loadBullet2
     asl 
     tay
@@ -7,10 +8,11 @@ loadBullet2
     lda bullets,y
     sta $fd
     rts
-    
+
+; sets the bullet to always be moving
 setBullet
-    lda #1
     ldy #direction_offset
+    lda #MoveMask
     ora ($fe),y
     sta ($fe),y
     rts
