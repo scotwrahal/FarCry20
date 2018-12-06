@@ -64,28 +64,28 @@ CheckRows
 
 SetUp
     ldy #direction_offset
-    lda #[UpMask & MoveMask]
+    lda #[UpMask + MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetDown
     ldy #direction_offset
-    lda #[DownMask & MoveMask]
+    lda #[DownMask + MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
     
 SetLeft
     ldy #direction_offset
-    lda #[LeftMask & MoveMask]
+    lda #[LeftMask + MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetRight
     ldy #direction_offset
-    lda #[RightMask & MoveMask]
+    lda #[RightMask + MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
