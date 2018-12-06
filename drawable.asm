@@ -236,6 +236,59 @@ drawEntityOn
     pla
     tay
     pla
+    rts
+    
+drawLevel
+    pha
+    tya
+    pha
+    txa
+    pha
+
+    lda #6 ; this is the color for the level thing
+    sta on_color
+    
+    lda #level_index
+    sta on_char
+    
+    lda #$00    ; set the top bit
+    ldx #levelDisplayStart
+    ldy #on_holder_offset
+    jsr drawDrawable
+    ldy on_char
+    iny
+    sty on_char
+    ldy #on_holder_offset
+    lda #$00    ; set the top bit
+    ldx #[levelDisplayStart+1]
+    jsr drawDrawable
+    ldy on_char
+    iny
+    sty on_char
+    ldy #on_holder_offset
+    lda #$00    ; set the top bit
+    ldx #[levelDisplayStart+2]
+    jsr drawDrawable
+    ldy diffuculty
+    iny
+LevelPickLoop
+    ldx on_char
+    inx
+    stx on_char
+    dey
+    bne LevelPickLoop
+DrawLevelNumber
+    ldy #on_holder_offset
+    lda #$00    ; set the top bit
+    ldx #[levelDisplayStart+3]
+    jsr drawDrawable
+    
+    
+    pla
+    tax
+    pla
+    tay
+    pla
     rts 
 
 getFromEntityPosition 

@@ -27,6 +27,7 @@ end_basic
     INCLUDE "capturePoint.asm"
     INCLUDE "updates.asm"  
     INCLUDE "reset.asm"
+    INCLUDE "symbols.asm"
         
 start:
     lda #252                ; point to custom character set
@@ -42,13 +43,9 @@ set_up_music
 
 level_load
     jsr loadLevel
-
-    lda #0
-    ldy #0
-    jsr playSong
     
 play_loop
-    jsr updateClock
     jsr input
     jsr updateEntities
+    jsr updateClock
     jmp play_loop

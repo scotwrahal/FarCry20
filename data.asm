@@ -44,7 +44,7 @@ cross:          byte $3b, $3b, $3b, $2a, $2a, $3b, $3b, $3b
 LEVEL:
 LE:     dc.b $00, $00, $00, $8e, $88, $8c, $88, $ee
 VE:     dc.b $00, $00, $00, $ae, $a8, $ac, $a8, $4e
-L:      dc.b $00, $00, $00, $80, $84, $80, $84, #e0
+L:      dc.b $00, $00, $00, $80, $84, $80, $84, $e0
 one:    dc.b $00, $00, $10, $30, $10, $10, $10, $38 
 two:    dc.b $00, $00, $10, $28, $08, $10, $20, $38
 three:  dc.b $00, $00, $30, $08, $30, $08, $08, $30
@@ -77,6 +77,8 @@ player_speed        equ 8
 human_AI_speed      equ 11
 jaguar_speed        equ 9
 
+levelDisplayStart   equ 9
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DRAWABLE ENTITY LIST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 drawables:
 terrain     word terrain_char
@@ -93,10 +95,10 @@ entities:
 player      word player_char
 
 AIs:
-AI1         word AI3_char
+AI1         word AI1_char
 AI2         word AI2_char
-AI3         word AI4_char
-AI4         word AI1_char
+AI3         word AI3_char
+AI4         word AI4_char
 
 bullets:
 bullet0     word bullet0_char

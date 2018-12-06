@@ -1,97 +1,103 @@
+; loads the Ath AI entity into fc (Ath mean the number in A)
 loadAI2
-    tay
     asl
+    tay
     lda AIs,y
     sta $fc
     iny
     lda AIs,y
     sta $fd
     rts
-    
+
+; checks to see if the entity is trying to shoot
+; the entity to be checked is stored in ($fe)
 checkShot
     ldy #direction_offset
     lda ($fe),y
-    and #$08
+    and #ShootMask      
     beq NotShooting
     lda ($fe),y
-    and #$04
+    and #UnableToShootMask
     bne NotShooting
     lda ($fe),y
-    and #$fe
+    and #InvertedUnableMask
     sta ($fe),y
 NotShooting
     rts
-    
-; this could probably be condensed if we keep track of x and y
-; then u don't have to do a bunch of moves to figure out the direction speeding it up quite significantly
-; if we want to optimize this would be a good place to start
+
+; sets the entitys position to be towards the player
+; the entity to be set is stored in ($fe)
 setDirection
     ldy #direction_offset
     lda ($fe),y
-    and #$c0
+    ; save if the entity was moving up or down
+    and #UpDownMask
     php
-
+    
+    ; reset the direction except the part that says if you can shoot
     lda ($fe),y
-    and #$04
+    and #UnableToShootMask
     sta ($fe),y
 
+    ; load the player into fc
     lda #player_offset
     jsr loadEntity2
 
+    ; check if it was moving up or down to alternate between up/down
     plp
-    beq CheckRowsFirst
+    beq CheckRows
+    
+    ; all of these branches return from the function
+CheckColumns    
     jsr checkColumns
     bmi SetLeft
     bne SetRight
-    jsr setShoot
+    jsr setShoot    ; if you are equal then try to shoot
 
-CheckRowsFirst
+CheckRows
     jsr checkRows
     bmi SetUp
     bne SetDown
     jsr setShoot
-
-    jsr checkColumns
-    bmi SetLeft
-    bne SetRight
-CheckedRowsFirst
-    rts
     
+    jmp CheckColumns ; since you can't be ontop of them then you won't get stuck
+
 SetUp
     ldy #direction_offset
-    lda #$81
+    lda #[UpMask & MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetDown
     ldy #direction_offset
-    lda #$41
+    lda #[DownMask & MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
     
 SetLeft
     ldy #direction_offset
-    lda #$21
+    lda #[LeftMask & MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
 
 SetRight
     ldy #direction_offset
-    lda #$11
+    lda #[RightMask & MoveMask]
     ora ($fe),y
     sta ($fe),y
     rts
     
 setShoot
     ldy #direction_offset
-    lda #$08
+    lda #ShootMask
     ora ($fe),y
     sta ($fe),y
     rts
 
+; checks the position of the entities in the fc and fe and returns as follows
 ; returns -1 if fe is to the left  of fc
 ; returns  0 if fe is in the same  as fc
 ; returns  1 if fe is to the right of fc
@@ -106,24 +112,24 @@ checkColumns
     lda #1
     rts
 LeftColumn
-    lda #$ff
+    lda #$ff    ; -1
     rts
 SameColumn
     lda #0
     rts
-
     
     
+; checks the position of the entities in the fc and fe and returns as follows  
 ; returns -1 if fe is above fc
 ; returns  0 if fe is same  fc
-; returns  1 if fe is below fc    
+; returns  1 if fe is below fc   
 checkRows
     ldy #position_offset
     lda ($fe),y
-    and #$7f
+    and #RowMask
     sta holder
     lda ($fc),y
-    and #$7f
+    and #RowMask
     cmp holder
     bmi UpRow
     beq SameRow
@@ -131,7 +137,7 @@ DownRow
     lda #1
     rts
 UpRow
-    lda #$ff
+    lda #$ff    ; -1
     rts
 SameRow
     lda #0

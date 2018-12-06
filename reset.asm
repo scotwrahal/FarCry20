@@ -5,7 +5,6 @@ reset
     asl 
     sta player_bullet_damage
     lda diffuculty
-    asl 
     sta enemy_bullet_damage
     
 resetAllEntities

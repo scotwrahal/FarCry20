@@ -6,8 +6,12 @@
 
 ; helper functions for  load level
 levelLoadDone
-    pla 
-    jmp reset
+    pla
+    jsr drawLevel
+    jsr reset
+    lda #0
+    ldy #0
+    jmp playSong
 
 ; helper function for load level
 loadByte
